@@ -1,0 +1,25 @@
+{
+  "name": "wiz-editor-examples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WizTeam/wiz-editor-examples.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WizTeam/wiz-editor-examples/issues"
+  },
+  "homepage": "https://github.com/WizTeam/wiz-editor-examples#readme",
+  "dependencies": {
+    "wiz-editor": "^0.0.1-beta.10"
+  },
+  "devDependencies": {
+    "watch": "^1.0.2"
+  }
+}

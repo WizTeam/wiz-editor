@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import './App.css';
 import * as WizEditor from 'wiz-editor/client';
 
+//
 function App() {
 
   const editorRef = useRef();
@@ -11,9 +12,7 @@ function App() {
       return;
     }
 
-    console.log('-------------------------------- init Editor');
-
-    const WsServerUrl = `ws://${window.location.host.replace('3000', '9000')}`;
+    const WsServerUrl = `ws://${window.location.host}`;
     const docId = '_e9kD3NTs';
     const user = {
       userId: `${new Date().valueOf()}`,

@@ -1,0 +1,1 @@
+require('wiz-editor/server');

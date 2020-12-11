@@ -10,12 +10,13 @@
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4",
-    "wiz-editor": "^0.0.1-beta.7"
+    "wiz-editor": "^0.0.1-beta.10"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "watch": "cra-build-watch",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
