@@ -1,9 +1,10 @@
 # wiz-editor-examples
 
+clone / download code
 
-1. clone / download code
+## start react demo
 
-2. start react demo
+1. install & start
 
 ```
 cd react-demo
@@ -11,7 +12,7 @@ npm install
 npm start
 ```
 
-3. open browser
+2. open browser
 
 ```
 localhost:9000
