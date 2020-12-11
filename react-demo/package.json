@@ -13,11 +13,13 @@
     "wiz-editor": "*"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "watch": "cra-build-watch",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+
+    "start": "npm-run-all  --parallel server watch ",
+    "server": "node ./server -s ./build",
+    "watch": "cra-build-watch"
   },
   "eslintConfig": {
     "extends": [

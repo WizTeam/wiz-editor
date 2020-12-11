@@ -40,6 +40,8 @@ function App() {
             border: 'solid 1px #ccc',
             margin: 8,
             overflow: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
           }}>
           Editor001
         </div>
