@@ -1,0 +1,7 @@
+node_modules
+client/dist
+env.sh
+start.sh
+yarn*.*
+.log
+dist/
