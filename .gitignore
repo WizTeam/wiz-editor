@@ -5,3 +5,5 @@ start.sh
 yarn*.*
 .log
 dist/
+*/.eslintcache
+package-lock.json
