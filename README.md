@@ -10,3 +10,9 @@ cd react-demo
 npm install
 npm start
 ```
+
+3. open browser
+
+```
+localhost:9000
+```
