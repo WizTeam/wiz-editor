@@ -22,6 +22,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wiz-editor": "^0.0.1-beta.13"
+    "wiz-editor": "^0.0.1-beta.17"
   }
 }
