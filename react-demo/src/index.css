@@ -11,3 +11,75 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+#status {
+  min-height: 24px;
+  display: none;
+}
+
+.space {
+  flex: 1;
+}
+
+
+#header {
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  height: 40px;
+}
+
+#toolbar {
+  justify-content: center;
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+}
+
+.tools * {
+  box-sizing: border-box;
+}
+
+.tools .toolbar-button {
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.56);
+  margin: 0 4px;
+}
+
+.tools .toolbar-button.icon-button {
+  width: 32px;
+  height: 32px;
+}
+
+.tools .toolbar-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.tools .toolbar-button svg {
+  fill: currentColor;
+}
+
+.tools .split-line {
+  width: 1px;
+  height: 32px;
+  background-color: #eee;
+  margin: 0 8px;
+}
+
+#addPage {
+  color: #448aff;
+}
+
+#curUserNames {
+  font-weight: bold;
+}
+#otherUserNames {
+  color: #afafaf;
+  font-size: 14px;
+  margin-left: 24px;
+}
