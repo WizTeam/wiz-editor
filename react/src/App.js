@@ -22,6 +22,74 @@ async function fakeGetAccessTokenFromServer(userId, docId) {
   const ret = await res.json();
   return ret.token;
 }
+
+
+const NAMES = [
+  '龚光杰',
+  '褚师弟',
+  '容子矩',
+  '干光豪',
+  '葛光佩',
+  '郁光标',
+  '吴光胜',
+  '唐光雄',
+  '枯荣大师',
+  '本因大师',
+  '本观',
+  '本相',
+  '本参',
+  '本尘',
+  '玄愧',
+  '玄念',
+  '玄净',
+  '慧真',
+  '慧观',
+  '慧净',
+  '慧方',
+  '慧镜',
+  '慧轮',
+  '虚清',
+  '虚湛',
+  '虚渊',
+  '摘星子',
+  '摩云子',
+  '天狼子',
+  '出尘子',
+  '段延庆',
+  '叶二娘',
+  '岳老三',
+  '云中鹤',
+];
+
+const ALL_USERS = [];
+
+NAMES.forEach((name) => {
+  const user = {
+    iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
+    text: name,
+    id: name,
+    data: name,
+  };
+  ALL_USERS.push(user);
+});
+
+async function fakeGetMentionItems(keywords) {
+  WizEditor.assert(keywords !== undefined);
+  console.log(keywords);
+  if (!keywords) {
+    return ALL_USERS;
+  }
+  return ALL_USERS.filter((user) => user.text.toLowerCase().indexOf(keywords.toLowerCase()) !== -1);
+}
+
+function handleMentionInserted(boxData) {
+  console.log(`mention ${JSON.stringify(boxData)} inserted`);
+}
+
+function handleMentionClicked(boxData) {
+  alert(`you clicked ${boxData.text} (${boxData.mentionId})`);
+}
+
 //
 function App() {
 
@@ -95,7 +163,10 @@ function App() {
         onError: handleError,
         onStatusChanged: handleStatusChanged,
         onReauth: fakeGetAccessTokenFromServer,
-      },
+        onGetMentionItems: fakeGetMentionItems,
+        onMentionInserted: handleMentionInserted,
+        onMentionClicked: handleMentionClicked,
+        },
     };
     editorRef.current = WizEditor.createEditor(editorContainerRef.current, options, auth);
   }
