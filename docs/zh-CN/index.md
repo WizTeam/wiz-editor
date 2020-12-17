@@ -138,12 +138,13 @@ const docId = 'my-test-doc-id';
 
 ## 扩展编辑器功能
 
-### 自定义inline形的模块（box）
+## 自定义@xxx提醒用户功能呢
+
+[增加插入提醒功能](./mention.md)
+
+### 自定义inline的模块（box）
+
+[自定义box说明](./box.md)
 
 ### 自定义block
-
-1. [增加插入提醒功能](./mention.md)
-2. [增加插入日历事件功能](./calendar.md)
-3. [增加插入日期功能](./date.md)
-1. [增加插入label功能](./label.md)
 

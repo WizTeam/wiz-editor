@@ -17,7 +17,7 @@ const pluginsArray = [
 ];
 
 const common = {
-  entry: './src/label_box.ts',
+  entry: './src/box_label.ts',
   module: {
     rules: [
       {

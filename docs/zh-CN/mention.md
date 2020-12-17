@@ -1,6 +1,15 @@
 
 # 增加提醒（@xxx人）功能
 
+运行demo
+
+```sh
+cd h5
+npm run mention
+```
+
+[查看源码](../../h5/src/mention.ts)
+
 wiz-editor内置了提醒功能。如果需要使用这个功能，那么在初始化编辑起的时候，至少需要提供一个方法，用来获取用户列表。
 下面是一个演示例子：
 
@@ -115,4 +124,5 @@ const options = {
 
 上面的代码，可以通过在h5例子下面，运行npm run mention来查看效果。
 
-[查看源码](../../h5/src/mention.ts)
+
+wiz-editor内置的editor，通过box来实现。具体原理，请参考[box](./box.md)。

@@ -153,7 +153,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
 }
 
 // 文档id
-const docId = 'my-test-doc-id';
+const docId = 'my-test-doc-id-mention';
 
 (async function loadDocument() {
   // 验证身份，获取accessToken

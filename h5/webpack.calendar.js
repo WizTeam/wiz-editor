@@ -17,7 +17,7 @@ const pluginsArray = [
 ];
 
 const common = {
-  entry: './src/box.ts',
+  entry: './src/box_calendar.ts',
   module: {
     rules: [
       {

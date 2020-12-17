@@ -7,14 +7,14 @@
     "start": "npm-run-all  --parallel server watch",
     "simple": "npm-run-all  --parallel server watch-simple",
     "mention": "npm-run-all  --parallel server watch-mention",
-    "box": "npm-run-all  --parallel server watch-box",
+    "calendar": "npm-run-all  --parallel server watch-calendar",
     "date": "npm-run-all  --parallel server watch-date",
     "label": "npm-run-all  --parallel server watch-label",
     "server": "node ./server -s ./dist --enable-fake-token-api",
     "watch": "webpack --watch --config webpack.dev.js",
     "watch-simple": "webpack --watch --config webpack.simple.js",
     "watch-mention": "webpack --watch --config webpack.mention.js",
-    "watch-box": "webpack --watch --config webpack.box.js",
+    "watch-calendar": "webpack --watch --config webpack.calendar.js",
     "watch-date": "webpack --watch --config webpack.date.js",
     "watch-label": "webpack --watch --config webpack.label.js"
   },
@@ -33,6 +33,6 @@
   "license": "ISC",
   "dependencies": {
     "jose": "^3.4.0",
-    "wiz-editor": "^0.0.1-beta.20"
+    "wiz-editor": "^0.0.1-beta.21"
   }
 }
