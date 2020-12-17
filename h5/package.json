@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm-run-all  --parallel server watch ",
-    "server": "node ./server -s ./dist",
+    "server": "node ./server -s ./dist --enable-fake-token-api",
     "watch": "webpack --watch --config webpack.dev.js"
   },
   "devDependencies": {
@@ -22,6 +22,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wiz-editor": "^0.0.1-beta.17"
+    "jose": "^3.4.0",
+    "wiz-editor": "^0.0.1-beta.18"
   }
 }
