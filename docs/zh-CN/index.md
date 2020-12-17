@@ -164,3 +164,6 @@ const docId = 'my-test-doc-id';
 
 ### 自定义block
 
+## 服务端适配
+
+[wiz-editor 服务端适配](./server.md)
