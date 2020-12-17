@@ -34,6 +34,21 @@ npm start
 localhost:9000
 ```
 
+## 更多demo
+
+### 无ui编辑器
+
+```
+npm run simple
+```
+
+### 扩展编辑器功能
+
+1. [自定义提醒功能](./mention.md)
+2. [自定义插入日历事件](./calendar.md)
+3. [自定义插入当前日期](./date.md)
+4. [自定义插入label](./label.md)
+
 ## 在自己的项目中使用wiz-editor
 
 ### 通过npm安装wiz-editor
