@@ -7,7 +7,7 @@
 1. 安装和运行
 
 ```sh
-cd react-demo
+cd react
 npm install
 npm start
 ```

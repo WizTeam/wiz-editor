@@ -9,7 +9,7 @@ clone / download code
 1. install & start
 
 ```
-cd react-demo
+cd react
 npm install
 npm start
 ```

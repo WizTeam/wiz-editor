@@ -6,18 +6,19 @@
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.5.0",
+    "jose": "^3.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4",
-    "wiz-editor": "*"
+    "wiz-editor": "^0.0.1-beta.21"
   },
   "scripts": {
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "npm-run-all  --parallel server watch ",
-    "server": "node ./server -s ./build",
+    "server": "node ./server -s ./build --enable-fake-token-api",
     "watch": "cra-build-watch"
   },
   "eslintConfig": {

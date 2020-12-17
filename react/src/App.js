@@ -13,6 +13,15 @@ graph TD;
     B-->D;
     C-->D;
 `;
+
+// 定义AppID，AppSecret, AppDomain。在自带的测试服务器中，下面三个key不要更改
+const AppId = '_LC1xOdRp';
+
+async function fakeGetAccessTokenFromServer(userId, docId) {
+  const res = await fetch(`http://${window.location.host}/token/${AppId}/${docId}/${userId}`);
+  const ret = await res.json();
+  return ret.token;
+}
 //
 function App() {
 
@@ -62,7 +71,18 @@ function App() {
     setDirty(dirty);
   }
 
-  function loadDocument(docId) {
+  async function loadDocument(docId) {
+
+    const token = await fakeGetAccessTokenFromServer(user.userId, docId);
+
+    // 生成编辑服务需要的认证信息
+    const auth = {
+      appId: AppId,
+      userId: user.userId,
+      docId,
+      token,
+    };
+
     const WsServerUrl = `ws://${window.location.host}`;
     const options = {
       // lang: LANGS.ZH_CN,class
@@ -74,9 +94,10 @@ function App() {
         onLoad: handleLoad,
         onError: handleError,
         onStatusChanged: handleStatusChanged,
+        onReauth: fakeGetAccessTokenFromServer,
       },
     };
-    editorRef.current = WizEditor.createEditor(editorContainerRef.current, options, docId);
+    editorRef.current = WizEditor.createEditor(editorContainerRef.current, options, auth);
   }
 
   useEffect(() => {
@@ -113,12 +134,11 @@ function App() {
   }
 
   function handleTable() {
-    editorRef.current.undo();
+    editorRef.current.insertTable(-2, 5, 3);
   }
 
   function handleTag() {
-    const data = editorRef.current.createBoxData(WizEditor.BOX_TYPE.TAG, null, { text: `tag-${tagCount += 1}` });
-    editorRef.current.insertBox(data);
+    editorRef.current.insertBox(WizEditor.BOX_TYPE.TAG, null, { text: `tag-${(tagCount += 1)}` });
   }
 
   function handleImage() {
