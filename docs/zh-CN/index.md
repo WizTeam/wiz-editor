@@ -39,6 +39,7 @@ localhost:9000
 ### 无ui编辑器
 
 ```
+cd h5
 npm run simple
 ```
 
@@ -72,7 +73,7 @@ const WsServerUrl = window.location.protocol !== 'https:'
   ? `ws://${window.location.host}`
   : `wss://${window.location.host}`;
 
-// 定义一个用户。该用户应该是有应用服务器自动获取当前用户身份
+// 定义一个用户。该用户应该是由应用服务器自动获取当前用户身份
 // 编辑服务需要提供用户id以及用户的显示名。
 const user = {
   userId: `${new Date().valueOf()}`,
@@ -85,12 +86,12 @@ const options = {
   user,
 };
 
-// 从应用服务器获取一个AccessToken。应用服务器许需要负责验证用户对文档的访问权限。
+// 从应用服务器获取一个AccessToken。应用服务器需要负责验证用户对文档的访问权限。
 // accessToken采用gwt规范，里面应该包含用户的userId，文档的docId，以及编辑应用的AppId。
-// 下面是一个演示例子。在正常强况下，AccessToken应该通过用户自己的应用服务器生成。
-// 因为在前段使用GWT加密规范的时候，必须在https协议下面的网页才可以使用。为了演示，
-// 我们的自带的测试服务器会提供一个虚拟的token生成功能。（启动服务的时候，需要指定--enable-fake-token-api 参数）
-// 
+// 下面是一个演示例子。在正常情况下，AccessToken应该通过用户自己的应用服务器生成。
+// 因为在前端使用GWT加密规范的时候，必须在https协议下面的网页才可以使用。为了演示，
+// 我们自带的测试服务器会提供一个虚拟的token生成功能。（启动服务的时候，需要指定--enable-fake-token-api 参数）
+// 请勿在正式服务器上面，启用这个参数。
 
 async function fakeGetAccessTokenFromServer(userId: string, docId: string): Promise<string> {
   //
@@ -153,7 +154,7 @@ const docId = 'my-test-doc-id';
 
 ## 扩展编辑器功能
 
-## 自定义@xxx提醒用户功能呢
+## 自定义@xxx提醒用户功能
 
 [增加插入提醒功能](./mention.md)
 

@@ -8,7 +8,7 @@ box类型，在html里面，由一个span标签包含，可以在这个span里�
 ## box定义：
 
 ```ts
-export interface Box {
+interface Box {
   prefix?: string;
   suggestPlaceholder?: string;
   createNode: (data: BoxData) => BoxNode,
@@ -30,7 +30,7 @@ prefix可以是一个或者多个字符，也可以没有。如果没有prefix�
 在用户继续输入内容的时候，auto suggest会自动过滤items，如果没有找到匹配的items，则会显示这个placeholder。
 
 ### createNode：（必要）
-用来想编辑器描述如何创建一个box。该方法返回BoxNode类型。
+用来向编辑器描述如何创建一个box。该方法返回BoxNode类型。
 
 ```ts
 

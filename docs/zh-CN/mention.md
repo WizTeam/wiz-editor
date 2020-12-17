@@ -67,6 +67,7 @@ NAMES.forEach((name) => {
 });
 
 // 模拟从用户的应用服务器获取用户列表。如果没有关键字，默认返回全部数据
+// 在用户输入过程中，会不断的调用该方法。应用应该通过keywords进行过滤
 async function fakeGetMentionItems(keywords: string): Promise<BoxItemData[]> {
   assert(keywords !== undefined);
   console.log(keywords);
@@ -95,7 +96,7 @@ const options = {
 就可以在用户输入@的时候，出现一个下拉列表，并提醒用户选择一个用户进行提醒。
 
 业务程序可能会需要在用户创建一个提醒，或者点击提醒的时候进行相应的处理。
-例如，您可以在创建一个提醒的时候，通过消息系统，向相关用户发送一条消息。
+例如，您可以在创建一个提醒的时候，通过企业的消息系统，向相关用户发送一条消息。
 
 同样，可以在创建编辑器的时候，设置相应的回调方法：
 
