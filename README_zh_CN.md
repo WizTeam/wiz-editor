@@ -6,7 +6,7 @@
 
 1. 安装和运行
 
-```
+```sh
 cd react-demo
 npm install
 npm start
@@ -22,7 +22,7 @@ localhost:9000
 
 1. 安装和运行
 
-```
+```sh
 cd h5
 npm install
 npm start
@@ -41,7 +41,7 @@ npm i wiz-editor
 
 ### 在项目中使用wiz-editor
 
-```
+```js
 import {
   createEditor,
   Editor,
