@@ -1,5 +1,7 @@
 # wiz-editor-examples
 
+[Chinese Version](./README_zh_CN.md)
+
 clone / download code
 
 ## run react demo

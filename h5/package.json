@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm-run-all  --parallel server watch ",
+    "start": "npm-run-all  --parallel server watch",
+    "simple": "npm-run-all  --parallel server watch-simple",
     "server": "node ./server -s ./dist --enable-fake-token-api",
-    "watch": "webpack --watch --config webpack.dev.js"
+    "watch": "webpack --watch --config webpack.dev.js",
+    "watch-simple": "webpack --watch --config webpack.simple.js"
   },
   "devDependencies": {
     "html-webpack-plugin": "^4.5.0",
