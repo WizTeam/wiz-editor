@@ -1,6 +1,6 @@
 # wiz-editor-examples
 
-[Chinese Version](./README_zh_CN.md)
+[Chinese Version](./docs/zh-CN/index.md)
 
 clone / download code
 
