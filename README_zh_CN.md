@@ -34,9 +34,9 @@ npm start
 localhost:9000
 ```
 
-## 在自己的项目中wiz-editor使用说明
+## 在自己的项目中使用wiz-editor
 
-### 通过npm按章wiz-editor
+### 通过npm安装wiz-editor
 npm i wiz-editor
 
 ### 在项目中使用wiz-editor
@@ -135,7 +135,7 @@ const docId = 'my-test-doc-id';
 上面的代码，可以通过在h5例子下面，运行npm run simple来查看效果。
 
 
-### 增加提醒（@xx人）功能
+### 增加提醒（@xxx人）功能
 
 wiz-editor内置了提醒功能。如果需要使用这个功能，那么在初始化编辑起的时候，至少需要提供一个方法，用来获取用户列表。
 下面是一个演示例子：
