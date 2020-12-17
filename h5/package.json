@@ -9,12 +9,14 @@
     "mention": "npm-run-all  --parallel server watch-mention",
     "box": "npm-run-all  --parallel server watch-box",
     "date": "npm-run-all  --parallel server watch-date",
+    "label": "npm-run-all  --parallel server watch-label",
     "server": "node ./server -s ./dist --enable-fake-token-api",
     "watch": "webpack --watch --config webpack.dev.js",
     "watch-simple": "webpack --watch --config webpack.simple.js",
     "watch-mention": "webpack --watch --config webpack.mention.js",
     "watch-box": "webpack --watch --config webpack.box.js",
-    "watch-date": "webpack --watch --config webpack.date.js"
+    "watch-date": "webpack --watch --config webpack.date.js",
+    "watch-label": "webpack --watch --config webpack.label.js"
   },
   "devDependencies": {
     "html-webpack-plugin": "^4.5.0",

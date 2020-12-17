@@ -7,9 +7,10 @@ import {
   boxUtils,
   BoxData,
   BoxNode,
+  BoxTemplateData,
   BoxTextChild,
   Editor,
-  BoxTemplateData,
+  BoxItemData,
   BOX_TYPE,
 } from 'wiz-editor/client';
 
@@ -23,52 +24,73 @@ hideElement('header');
 hideElement('toolbar');
 
 
-// -------------------create a custom date item----------
-const DATE_BOX_TYPE = 'date';
+// -------------------create a custom label item----------
+const LABEL_BOX_TYPE = 'label';
 
-interface DateBoxData extends BoxData {
-  text: string;
+interface LabelBoxData extends BoxData {
+  color: string;
 };
 
 function createNode(data: BoxData): BoxNode {
   //
-  const { text } = data as DateBoxData;
+  const { color } = data as LabelBoxData;
   //
   return {
-    classes: ['box-mention'],
+    classes: [`label-${color}`, 'label'],
     children: [{
       type: 'text',
-      text,
+      text: color,
     } as BoxTextChild],
   };
 }
 
 function handleBoxInserted(editor: Editor, data: BoxData): void {
-  const dateData = data as DateBoxData;
-  console.log('date box inserted:', dateData);
+  const calendarData = data as LabelBoxData;
+  console.log('label box inserted:', calendarData);
 }
 
 function handleBoxClicked(editor: Editor, data: BoxData): void {
-  const dateData = data as DateBoxData;
-  alert(`date clicked: ${dateData.text}`);
+  const calendarData = data as LabelBoxData;
+  alert(`label clicked: ${calendarData.color}`);
 }
 
-async function createBoxData(editor: Editor): Promise<BoxTemplateData | null> {
+async function getItems(editor: Editor, keywords: string): Promise<BoxItemData[]> {
+  console.log(keywords);
+  return [{
+    iconUrl: '',
+    text: 'red',
+    id: 'red',
+    data: '',
+  }, {
+    iconUrl: '',
+    text: 'green',
+    id: 'green',
+    data: '',
+  }, {
+    iconUrl: '',
+    text: 'blue',
+    id: 'blue',
+    data: '',
+  }];
+}
+
+function createBoxDataFromItem(editor: Editor, item: BoxItemData): BoxTemplateData {
+  const color = item.id;
   return {
-    text: new Date().toLocaleDateString(),
+    color,
   };
 }
 
-
-const dateBox = {
-  prefix: 'dd',
+const labelBox = {
+  prefix: 'll',
   createNode,
+  getItems,
+  createBoxDataFromItem,
   handleBoxInserted,
   handleBoxClicked,
-  createBoxData,
 };
 
-boxUtils.registerBoxType(DATE_BOX_TYPE as BOX_TYPE, dateBox);
+boxUtils.registerBoxType(LABEL_BOX_TYPE as BOX_TYPE, labelBox);
 
 // 定义AppID，AppSecret, AppDomain。在自带的测试服务器中，下面三个key不要更改
 const AppId = '_LC1xOdRp';
@@ -134,7 +156,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
 }
 
 // 文档id
-const docId = 'my-test-doc-id';
+const docId = 'my-test-doc-id-2';
 
 (async function loadDocument() {
   // 验证身份，获取accessToken
