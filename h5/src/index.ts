@@ -181,17 +181,7 @@ const NAMES = [
   '云中鹤',
 ];
 
-const ALL_USERS = [{
-  iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/e89745c0-3f7a-11eb-8f21-01eb48012b63.jpeg',
-  text: 'Steve',
-  id: 'weishijun@wiz.cn',
-  data: '',
-}, {
-  iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
-  text: 'zTree',
-  id: 'zqg@wiz.cn',
-  data: '',
-}];
+const ALL_USERS: BoxItemData[] = [];
 
 NAMES.forEach((name) => {
   const user = {

@@ -6,9 +6,11 @@
   "scripts": {
     "start": "npm-run-all  --parallel server watch",
     "simple": "npm-run-all  --parallel server watch-simple",
+    "mention": "npm-run-all  --parallel server watch-mention",
     "server": "node ./server -s ./dist --enable-fake-token-api",
     "watch": "webpack --watch --config webpack.dev.js",
-    "watch-simple": "webpack --watch --config webpack.simple.js"
+    "watch-simple": "webpack --watch --config webpack.simple.js",
+    "watch-mention": "webpack --watch --config webpack.mention.js"
   },
   "devDependencies": {
     "html-webpack-plugin": "^4.5.0",
