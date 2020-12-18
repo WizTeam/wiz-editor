@@ -2,21 +2,7 @@
 
 直接从git clone或者下载代码，解压缩到磁盘。
 
-## 运行react 例子
-
-1. 安装和运行
-
-```sh
-cd react
-npm install
-npm start
-```
-
-2. 打开浏览器
-
-```
-localhost:9000
-```
+注意：**需要nodejs 14或者更高的版本**
 
 ## 运行原生js例子
 
