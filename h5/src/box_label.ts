@@ -115,12 +115,12 @@ const options = {
   user,
 };
 
-// 从应用服务器获取一个AccessToken。应用服务器许需要负责验证用户对文档的访问权限。
-// accessToken采用gwt规范，里面应该包含用户的userId，文档的docId，以及编辑应用的AppId。
-// 下面是一个演示例子。在正常强况下，AccessToken应该通过用户自己的应用服务器生成。
-// 因为在前段使用GWT加密规范的时候，必须在https协议下面的网页才可以使用。为了演示，
-// 我们的自带的测试服务器会提供一个虚拟的token生成功能。（启动服务的时候，需要指定--enable-fake-token-api 参数）
-// 
+// 从应用服务器获取一个AccessToken。应用服务器需要负责验证用户对文档的访问权限。
+// accessToken采用jwt规范，里面应该包含用户的userId，文档的docId，以及编辑应用的AppId。
+// 下面是一个演示例子。在正常情况下，AccessToken应该通过用户自己的应用服务器生成。
+// 因为在前端使用JWT加密规范的时候，必须在https协议下面的网页才可以使用。为了演示，
+// 我们自带的测试服务器会提供一个虚拟的token生成功能。（启动服务的时候，需要指定--enable-fake-token-api 参数）
+// 请勿在正式服务器上面，启用这个参数。
 
 async function fakeGetAccessTokenFromServer(userId: string, docId: string): Promise<string> {
   //
