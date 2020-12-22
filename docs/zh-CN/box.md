@@ -12,12 +12,12 @@ interface Box {
   prefix?: string;
   suggestPlaceholder?: string;
   createNode: (data: BoxData) => BoxNode,
-  getItems?: (editor: Editor, keywords: string) => Promise<BoxItemData[]>;
-  createBoxDataFromItem?: (editor: Editor, item: BoxItemData) => BoxTemplateData;
+  getItems?: (editor: Editor, keywords: string) => Promise<AutoSuggestData[]>;
+  createBoxDataFromItem?: (editor: Editor, item: AutoSuggestData) => BoxTemplateData;
   createBoxData?: (editor: Editor) => Promise<BoxTemplateData | null>;
   handleBoxInserted?: (editor: Editor, data: BoxData) => void;
   handleBoxClicked?: (editor: Editor, data: BoxData) => void;
-  handleBoxItemSelected?: (editor: Editor, item: BoxItemData) => void;
+  handleBoxItemSelected?: (editor: Editor, item: AutoSuggestData) => void;
 };
 ```
 
@@ -65,7 +65,7 @@ interface BoxNode {
 如果用户继续输入内容，那么编辑器会不断调用这个方法（传入的keywords不同）。该方法应该根据keywords，返回相应的数据。
 
 ```ts
-interface BoxItemData {
+interface AutoSuggestData {
   iconUrl: string;
   text: string;
   id: string;

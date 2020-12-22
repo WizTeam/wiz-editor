@@ -53,7 +53,7 @@ const NAMES = [
   '云中鹤',
 ];
 
-const ALL_USERS: BoxItemData[] = [];
+const ALL_USERS: AutoSuggestData[] = [];
 
 // 生成用户列表数据
 NAMES.forEach((name) => {
@@ -68,7 +68,7 @@ NAMES.forEach((name) => {
 
 // 模拟从用户的应用服务器获取用户列表。如果没有关键字，默认返回全部数据
 // 在用户输入过程中，会不断的调用该方法。应用应该通过keywords进行过滤
-async function fakeGetMentionItems(keywords: string): Promise<BoxItemData[]> {
+async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]> {
   assert(keywords !== undefined);
   console.log(keywords);
   if (!keywords) {

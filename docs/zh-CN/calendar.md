@@ -63,7 +63,7 @@ async function getItems(editor: Editor, keywords: string) {
   }];
 }
 
-function handleBoxItemSelected(editor: Editor, item: BoxItemData): void {
+function handleBoxItemSelected(editor: Editor, item: AutoSuggestData): void {
   //
   const pos = editor.saveCaretPos();
   //

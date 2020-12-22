@@ -41,7 +41,7 @@ function handleBoxClicked(editor: Editor, data: BoxData): void {
   alert(`label clicked: ${calendarData.color}`);
 }
 
-async function getItems(editor: Editor, keywords: string): Promise<BoxItemData[]> {
+async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
   console.log(keywords);
   return [{
     iconUrl: '',
@@ -61,7 +61,7 @@ async function getItems(editor: Editor, keywords: string): Promise<BoxItemData[]
   }];
 }
 
-function createBoxDataFromItem(editor: Editor, item: BoxItemData): BoxTemplateData {
+function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTemplateData {
   const color = item.id;
   return {
     color,
