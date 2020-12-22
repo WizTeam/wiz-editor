@@ -150,7 +150,7 @@ const docId = 'my-test-doc-id';
 
 ### 自定义右键菜单
 
-[自定义box演示](./custom-context-menu.md)
+[自定义右键菜单](./custom-context-menu.md)
 
 ### 自定义block
 
