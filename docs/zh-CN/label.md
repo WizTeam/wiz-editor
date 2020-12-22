@@ -68,6 +68,12 @@ function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTempla
   };
 }
 
+function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData): HTMLElement {
+  const div = document.createElement('div');
+  div.setAttribute('style', `background-color: ${suggestData.text}; border-radius: 10px; width: 100%; height: 24px`);
+  return div;
+}
+
 const labelBox = {
   prefix: 'll',
   createNode,
@@ -75,10 +81,11 @@ const labelBox = {
   createBoxDataFromItem,
   handleBoxInserted,
   handleBoxClicked,
+  renderAutoSuggestItem,
 };
 
 boxUtils.registerBoxType(LABEL_BOX_TYPE as BOX_TYPE, labelBox);
 ```
 
-在这个例子中，演示了如何通过item，来插入一个不同的box。
+在这个例子中，演示了如何通过item，来插入一个不同的box。同时还演示了，如果自定义渲染下拉框里面的每一个item。
 
