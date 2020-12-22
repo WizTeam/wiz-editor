@@ -10,9 +10,10 @@ import {
   BoxTemplateData,
   BoxTextChild,
   Editor,
-  BoxItemData,
+  AutoSuggestData,
   BOX_TYPE,
 } from 'wiz-editor/client';
+import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
 function hideElement(id: string) {
   const elem = document.getElementById(id);
@@ -54,7 +55,7 @@ function handleBoxClicked(editor: Editor, data: BoxData): void {
   alert(`label clicked: ${calendarData.color}`);
 }
 
-async function getItems(editor: Editor, keywords: string): Promise<BoxItemData[]> {
+async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
   console.log(keywords);
   return [{
     iconUrl: '',
@@ -74,11 +75,17 @@ async function getItems(editor: Editor, keywords: string): Promise<BoxItemData[]
   }];
 }
 
-function createBoxDataFromItem(editor: Editor, item: BoxItemData): BoxTemplateData {
+function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTemplateData {
   const color = item.id;
   return {
     color,
   };
+}
+
+function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData): HTMLElement {
+  const div = document.createElement('div');
+  div.setAttribute('style', `background-color: ${suggestData.text}; border-radius: 10px; width: 100%; height: 24px`);
+  return div;
 }
 
 const labelBox = {
@@ -88,6 +95,7 @@ const labelBox = {
   createBoxDataFromItem,
   handleBoxInserted,
   handleBoxClicked,
+  renderAutoSuggestItem,
 };
 
 boxUtils.registerBoxType(LABEL_BOX_TYPE as BOX_TYPE, labelBox);
@@ -128,6 +136,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
     userId,
     docId,
     appId: AppId,
+    permission: 'w',
   };
 
   const fromHexString = (hexString: string) => {
@@ -163,11 +172,12 @@ const docId = 'my-test-doc-id-box-label';
   const token = await fakeGetAccessTokenFromServer(user.userId, docId);
 
   // 生成编辑服务需要的认证信息
-  const auth = {
+  const auth: AuthMessage = {
     appId: AppId,
     userId: user.userId,
     docId,
     token,
+    permission: 'w',
   };
 
   // 创建编辑器并加载文档

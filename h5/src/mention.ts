@@ -4,9 +4,10 @@ import EncryptJWT from 'jose/jwt/encrypt';
 import {
   createEditor,
   assert,
-  BoxItemData,
+  AutoSuggestData,
   MentionBoxData,
 } from 'wiz-editor/client';
+import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
 function hideElement(id: string) {
   const elem = document.getElementById(id);
@@ -71,7 +72,7 @@ const NAMES = [
   '云中鹤',
 ];
 
-const ALL_USERS: BoxItemData[] = [];
+const ALL_USERS: AutoSuggestData[] = [];
 
 NAMES.forEach((name) => {
   const user = {
@@ -84,7 +85,7 @@ NAMES.forEach((name) => {
 });
 
 
-async function fakeGetMentionItems(keywords: string): Promise<BoxItemData[]> {
+async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]> {
   assert(keywords !== undefined);
   console.log(keywords);
   if (!keywords) {
@@ -125,6 +126,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
     userId,
     docId,
     appId: AppId,
+    permission: 'w',
   };
 
   const fromHexString = (hexString: string) => {
@@ -160,11 +162,12 @@ const docId = 'my-test-doc-id-mention';
   const token = await fakeGetAccessTokenFromServer(user.userId, docId);
 
   // 生成编辑服务需要的认证信息
-  const auth = {
+  const auth: AuthMessage = {
     appId: AppId,
     userId: user.userId,
     docId,
     token,
+    permission: 'w',
   };
 
   // 创建编辑器并加载文档

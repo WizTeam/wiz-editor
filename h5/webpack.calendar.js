@@ -49,7 +49,7 @@ const common = {
   },
   plugins: pluginsArray,
   output: {
-    filename: 'libs/bundle.js',
+    filename: 'libs/[name].[contenthash].js',
     path: path.resolve(__dirname, `./dist`),
     globalObject: 'this',
   },

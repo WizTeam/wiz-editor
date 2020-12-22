@@ -11,112 +11,246 @@ import {
   boxUtils,
   assert,
   genId,
-  BoxItemData,
+  AutoSuggestData,
   MentionBoxData,
   BoxNode,
   BoxData,
   BoxImageChild,
   BoxTextChild,
+  BlockElement,
+  BoxTemplateData,
+  blockUtils,
+  docData2Text,
+  MenuItemData,
+  SelectionDetail,
 } from 'wiz-editor/client';
+import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
 const AppId = '_LC1xOdRp';
 const AppSecret = '714351167e39568ba734339cc6b997b960ed537153b68c1f7d52b1e87c3be24a';
 const AppDomain = 'wiz.cn';
 
+let currentEditor: Editor | null;
+
 // -------------------create a custom calendar item----------
-const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4008-11eb-8f21-01eb48012b63.jpeg';
-const CALENDAR_BOX_TYPE = 'calendar';
+(() => {
+  const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4008-11eb-8f21-01eb48012b63.jpeg';
+  const CALENDAR_BOX_TYPE = 'calendar';
 
-interface CalendarBoxData extends BoxData {
-  text: string;
-};
-
-function createNode(data: BoxData): BoxNode {
-  //
-  const { text } = data as CalendarBoxData;
-  //
-  return {
-    classes: ['box-mention'],
-    children: [{
-      type: 'image',
-      src: CALENDAR_IMAGE_URL,
-      attributes: {
-        class: '.calendar_image',
-      },
-    } as BoxImageChild, {
-      type: 'text',
-      text,
-    } as BoxTextChild],
+  interface CalendarBoxData extends BoxData {
+    text: string;
   };
-}
 
-function handleBoxInserted(editor: Editor, data: BoxData): void {
-  const calendarData = data as CalendarBoxData;
-  console.log('calendar box inserted:', calendarData);
-}
-
-function handleBoxClicked(editor: Editor, data: BoxData): void {
-  const calendarData = data as CalendarBoxData;
-  alert(`calendar clicked: ${calendarData.text}`);
-}
-
-async function getItems(editor: Editor, keywords: string) {
-  console.log(keywords);
-  return [{
-    iconUrl: CALENDAR_IMAGE_URL,
-    text: 'Select one event...',
-    id: 'selectEvent',
-    data: '',
-  }, {
-    iconUrl: CALENDAR_IMAGE_URL,
-    text: 'Create one event...',
-    id: 'createEvent',
-    data: '',
-  }];
-}
-
-function handleBoxItemSelected(editor: Editor, item: BoxItemData): void {
-  //
-  const pos = editor.saveCaretPos();
-  //
-  if (item.id === 'selectEvent') {
-    alert('select one event');
+  function createNode(data: BoxData): BoxNode {
     //
-  } else if (item.id === 'createEvent') {
-    alert('create one event');
+    const { text } = data as CalendarBoxData;
     //
+    return {
+      classes: ['box-mention'],
+      children: [{
+        type: 'image',
+        src: CALENDAR_IMAGE_URL,
+        attributes: {
+          class: '.calendar_image',
+        },
+      } as BoxImageChild, {
+        type: 'text',
+        text,
+      } as BoxTextChild],
+    };
   }
-  //
-  if (!editor.tryRestoreCaretPos(pos)) {
-    return;
+
+  function handleBoxInserted(editor: Editor, data: BoxData,
+    block: BlockElement, pos: number): void {
+    assert(pos >= 0);
+    const calendarData = data as CalendarBoxData;
+    console.log('calendar box inserted:', calendarData);
   }
-  //
-  editor.insertBox(CALENDAR_BOX_TYPE as BOX_TYPE, null, {
-    text: new Date().toLocaleDateString(),
-  }, {
-    deletePrefix: true,
-  });
-}
 
-const calendarBox = {
-  prefix: '//',
-  createNode,
-  getItems,
-  handleBoxItemSelected,
-  handleBoxInserted,
-  handleBoxClicked,
-};
+  function handleBoxClicked(editor: Editor, data: BoxData): void {
+    const calendarData = data as CalendarBoxData;
+    alert(`calendar clicked: ${calendarData.text}`);
+  }
 
-boxUtils.registerBoxType(CALENDAR_BOX_TYPE as BOX_TYPE, calendarBox);
+  async function getItems(editor: Editor, keywords: string) {
+    console.log(keywords);
+    return [{
+      iconUrl: CALENDAR_IMAGE_URL,
+      text: 'Select one event...',
+      id: 'selectEvent',
+      data: '',
+    }, {
+      iconUrl: CALENDAR_IMAGE_URL,
+      text: 'Create one event...',
+      id: 'createEvent',
+      data: '',
+    }];
+  }
+
+  function handleBoxItemSelected(editor: Editor, item: AutoSuggestData): void {
+    //
+    const pos = editor.saveCaretPos();
+    //
+    if (item.id === 'selectEvent') {
+      alert('select one event');
+      //
+    } else if (item.id === 'createEvent') {
+      alert('create one event');
+      //
+    }
+    //
+    if (!editor.tryRestoreCaretPos(pos)) {
+      return;
+    }
+    //
+    editor.insertBox(CALENDAR_BOX_TYPE as BOX_TYPE, null, {
+      text: new Date().toLocaleDateString(),
+    }, {
+      deletePrefix: true,
+    });
+  }
+
+  const calendarBox = {
+    prefix: '//',
+    createNode,
+    getItems,
+    handleBoxItemSelected,
+    handleBoxInserted,
+    handleBoxClicked,
+  };
+
+  boxUtils.registerBoxType(CALENDAR_BOX_TYPE as BOX_TYPE, calendarBox);
+})();
+
+(() => {
+  const DATE_BOX_TYPE = 'date';
+
+  interface DateBoxData extends BoxData {
+    text: string;
+  };
+
+  function createNode(data: BoxData): BoxNode {
+    //
+    const { text } = data as DateBoxData;
+    //
+    return {
+      classes: ['box-mention'],
+      children: [{
+        type: 'text',
+        text,
+      } as BoxTextChild],
+    };
+  }
+
+  function handleBoxInserted(editor: Editor, data: BoxData,
+    block: BlockElement, pos: number): void {
+    assert(pos >= 0);
+    const dateData = data as DateBoxData;
+    console.log('date box inserted:', dateData);
+  }
+
+  function handleBoxClicked(editor: Editor, data: BoxData): void {
+    const dateData = data as DateBoxData;
+    alert(`date clicked: ${dateData.text}`);
+  }
+
+  async function createBoxData(editor: Editor): Promise<BoxTemplateData | null> {
+    assert(editor);
+    return {
+      text: new Date().toLocaleDateString(),
+    };
+  }
+
+  const dateBox = {
+    prefix: 'dd',
+    createNode,
+    handleBoxInserted,
+    handleBoxClicked,
+    createBoxData,
+  };
+
+  boxUtils.registerBoxType(DATE_BOX_TYPE as BOX_TYPE, dateBox);
+})();
+
+(() => {
+  const LABEL_BOX_TYPE = 'label';
+
+  interface LabelBoxData extends BoxData {
+    color: string;
+  };
+
+  function createNode(data: BoxData): BoxNode {
+    //
+    const { color } = data as LabelBoxData;
+    //
+    return {
+      classes: [`label-${color}`, 'label'],
+      children: [{
+        type: 'text',
+        text: color,
+      } as BoxTextChild],
+    };
+  }
+
+  function handleBoxInserted(editor: Editor, data: BoxData,
+    block: BlockElement, pos: number): void {
+    console.log(`insert at ${pos}`);
+    const calendarData = data as LabelBoxData;
+    console.log('label box inserted:', calendarData);
+  }
+
+  function handleBoxClicked(editor: Editor, data: BoxData): void {
+    const calendarData = data as LabelBoxData;
+    alert(`label clicked: ${calendarData.color}`);
+  }
+  async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
+    console.log(keywords);
+    return [{
+      iconUrl: '',
+      text: 'red',
+      id: 'red',
+      data: '',
+    }, {
+      iconUrl: '',
+      text: 'green',
+      id: 'green',
+      data: '',
+    }, {
+      iconUrl: '',
+      text: 'blue',
+      id: 'blue',
+      data: '',
+    }];
+  }
+
+  function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTemplateData {
+    const color = item.id;
+    return {
+      color,
+    };
+  }
+
+  const labelBox = {
+    prefix: 'll',
+    createNode,
+    getItems,
+    createBoxDataFromItem,
+    handleBoxInserted,
+    handleBoxClicked,
+  };
+
+  boxUtils.registerBoxType(LABEL_BOX_TYPE as BOX_TYPE, labelBox);
+})();
 
 // this code should run on your server
-async function fakeGetAccessTokenFromServer(userId: string, docId: string): Promise<string> {
+// eslint-disable-next-line max-len
+async function fakeGetAccessTokenFromServer(userId: string, docId: string, permission: AuthPermission): Promise<string> {
   //
   const data = {
     userId,
     docId,
     appId: AppId,
-    created: new Date().valueOf(),
+    permission,
   };
 
   const fromHexString = (hexString: string) => {
@@ -133,7 +267,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
       .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
       .setIssuedAt()
       .setIssuer(AppDomain)
-      .setExpirationTime('120s')
+      .setExpirationTime('1d')
       .encrypt(key);
 
     return accessToken;
@@ -144,6 +278,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
   }
 }
 
+// --------------------------- mention data ----------------
 const NAMES = [
   '龚光杰',
   '褚师弟',
@@ -181,7 +316,17 @@ const NAMES = [
   '云中鹤',
 ];
 
-const ALL_USERS: BoxItemData[] = [];
+const ALL_USERS = [{
+  iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/e89745c0-3f7a-11eb-8f21-01eb48012b63.jpeg',
+  text: 'Steve',
+  id: 'weishijun@wiz.cn',
+  data: '',
+}, {
+  iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
+  text: 'zTree',
+  id: 'zqg@wiz.cn',
+  data: '',
+}];
 
 NAMES.forEach((name) => {
   const user = {
@@ -193,7 +338,7 @@ NAMES.forEach((name) => {
   ALL_USERS.push(user);
 });
 
-async function fakeGetMentionItems(keywords: string): Promise<BoxItemData[]> {
+async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]> {
   assert(keywords !== undefined);
   console.log(keywords);
   if (!keywords) {
@@ -202,16 +347,54 @@ async function fakeGetMentionItems(keywords: string): Promise<BoxItemData[]> {
   return ALL_USERS.filter((user) => user.text.toLowerCase().indexOf(keywords.toLowerCase()) !== -1);
 }
 
-function handleMentionInserted(boxData: MentionBoxData) {
-  console.log(`mention ${JSON.stringify(boxData)} inserted`);
+function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos: number) {
+  console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
+  const leftText = blockUtils.toText(block, 0, pos);
+  const rightText = blockUtils.toText(block, pos + 1, -1);
+  alert(`context text:\n\n${leftText}\n\n${rightText}`);
 }
 
 function handleMentionClicked(boxData: MentionBoxData) {
   alert(`you clicked ${boxData.text} (${boxData.mentionId})`);
 }
 
+// -------------------tags data --------------------------------------
+
+const ALL_TAGS = [
+  'Editor',
+  'WizNote',
+  'Apple',
+  'Software',
+  '协同编辑',
+  'Web Editor',
+];
+
+async function fakeGetTags(keywords: string): Promise<string[]> {
+  assert(keywords !== undefined);
+  console.log(keywords);
+  if (!keywords) {
+    return ALL_TAGS;
+  }
+  return ALL_TAGS.filter((tag) => tag.toLowerCase().indexOf(keywords.toLowerCase()) !== -1);
+}
+
+function handleTagInserted(tag: string, block: BlockElement, pos: number) {
+  console.log(`tag ${tag} inserted at ${pos}`);
+}
+
+function handleTagClicked(tag: string) {
+  alert(`you clicked tag ${tag}`);
+}
+
+// function handleRenderAutoSuggestItem(suggestData: AutoSuggestData) {
+//   const div = document.createElement('div');
+//   div.innerText = suggestData.text;
+//   return div;
+// }
+// ---------------------------------------------------------
+
 const urlQuery = new URLSearchParams(window.location.search);
-const pageId = urlQuery.get('id') || '_e9kD3NTs';
+const pageId = urlQuery.get('id') || '_1cTj9vG1';
 console.log(`pageGuid: ${pageId}`);
 
 const WsServerUrl = window.location.protocol !== 'https:'
@@ -221,11 +404,6 @@ const WsServerUrl = window.location.protocol !== 'https:'
 const user = {
   userId: `${new Date().valueOf()}`,
   displayName: NAMES[new Date().valueOf() % NAMES.length],
-};
-
-const user2 = {
-  userId: `${new Date().valueOf() + 10}`,
-  displayName: NAMES[(new Date().valueOf() + 10) % NAMES.length],
 };
 
 const MermaidText = `
@@ -245,7 +423,8 @@ function replaceUrl(docId: string) {
 }
 
 function handleSave(docId: string, data: any) {
-  const text = JSON.stringify(data, null, 2);
+  console.log(JSON.stringify(data, null, 2));
+  const text = docData2Text(data);
   console.log('------------------- document text --------------------');
   console.log(text);
   console.log('------------------------------------------------------');
@@ -282,11 +461,314 @@ function handleStatusChanged(docId: string, dirty: boolean): void {
   }
 }
 
-async function loadDocument(docId: string) {
+function handleMenuItemClicked(item: MenuItemData) {
+  console.log(item);
+  assert(currentEditor);
+  if (item.id === 'get-selected-text') {
+    alert(`selected text: ${currentEditor.getSelectedText()}`);
+  } else if (item.id === 'add-border') {
+    currentEditor.applyTextCustomStyle('style-border');
+  } else if (item.id === 'add-strikethrough') {
+    currentEditor.applyTextCustomStyle('style-strikethrough');
+  }
+}
+
+function handleGetContextMenuItems(detail: SelectionDetail): MenuItemData[] {
+  if (detail.collapsed) {
+    return [];
+  }
+  const ret: MenuItemData[] = [];
+  ret.push({
+    id: 'get-selected-text',
+    text: '获取选中文字',
+    shortCut: '',
+    disabled: false,
+    onClick: handleMenuItemClicked,
+  }, {
+    id: 'test id 2',
+    text: '自定义样式',
+    shortCut: '',
+    disabled: false,
+    subMenu: [
+      {
+        id: 'add-border',
+        text: '添加边框',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      },
+      {
+        id: 'add-strikethrough',
+        text: '添加删除线',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      },
+    ],
+  });
+  return ret;
+}
+
+const DocTemplate = `{
+  "blocks": [
+    {
+      "text": [
+        {
+          "insert": "模版临时解决方案，后期将会直接内置该功能"
+        }
+      ],
+      "id": "_MUdYmTuv",
+      "type": "heading",
+      "level": 1
+    },
+    {
+      "text": [
+        {
+          "insert": "新建一篇文档"
+        }
+      ],
+      "id": "_yuwdR7WT",
+      "type": "list",
+      "level": 1,
+      "ordered": true,
+      "start": 1,
+      "groupId": "_sUejxRZs"
+    },
+    {
+      "text": [
+        {
+          "insert": "按照要求进行编辑，然后将其中的某些内容替换成key，通过{{key}}定义需要替换的内容"
+        }
+      ],
+      "id": "_RxT4EdqB",
+      "type": "list",
+      "start": 2,
+      "groupId": "_sUejxRZs",
+      "level": 1,
+      "ordered": true
+    },
+    {
+      "text": [
+        {
+          "insert": "保存内容，获得文档json数据。这个json数据，就可以当成模版。"
+        }
+      ],
+      "id": "_oDSmf_a_",
+      "type": "list",
+      "start": 3,
+      "groupId": "_sUejxRZs",
+      "level": 1,
+      "ordered": true
+    },
+    {
+      "text": [
+        {
+          "insert": "下次新建文档的时候，将模版以及参数传递给编辑器。编辑器将会自动使用模版创建一篇新的文档。"
+        }
+      ],
+      "id": "_7Ee5ClSH",
+      "type": "list",
+      "start": 4,
+      "groupId": "_sUejxRZs",
+      "level": 1,
+      "ordered": true
+    },
+    {
+      "text": [
+        {
+          "insert": "-------"
+        }
+      ],
+      "id": "_Lc_8Z0Aa",
+      "type": "text"
+    },
+    {
+      "text": [
+        {
+          "insert": "可以在任意地方输入参数，{{name}}，例如在表格里面替换内容："
+        }
+      ],
+      "id": "_cf9WSoXB",
+      "type": "text"
+    },
+    {
+      "text": [],
+      "id": "_qADk96wH",
+      "type": "table",
+      "rows": 3,
+      "cols": 5,
+      "cells": [
+        "_LBncC1fo",
+        "_vOwxKHeb",
+        "_6xLp_apS",
+        "_4cxKjIyq",
+        "_3fdf6Hb8",
+        "_oO1q7tAB",
+        "_ICwtzI38",
+        "_zCC0Nzzl",
+        "_khqRZt0R",
+        "_dNukpoEh",
+        "_AOYNeNAV",
+        "_JDAkqWsg",
+        "_WXWDUNmd",
+        "_Eyk3EoQV",
+        "_1w9JKDes"
+      ]
+    },
+    {
+      "text": [
+        {
+          "insert": "----"
+        }
+      ],
+      "id": "_COBJGEZE",
+      "type": "text"
+    },
+    {
+      "text": [
+        {
+          "insert": "这是临时解决方案。"
+        }
+      ],
+      "id": "_6Pid_fVK",
+      "type": "text"
+    }
+  ],
+  "comments": {},
+  "_1w9JKDes": [
+    {
+      "text": [
+        {
+          "insert": "{{date}}"
+        }
+      ],
+      "id": "_uBS6PZu9",
+      "type": "text"
+    }
+  ],
+  "_3fdf6Hb8": [
+    {
+      "text": [],
+      "id": "_XRRZ4qH1",
+      "type": "text"
+    }
+  ],
+  "_4cxKjIyq": [
+    {
+      "text": [],
+      "id": "_wF9uyc9S",
+      "type": "text"
+    }
+  ],
+  "_6xLp_apS": [
+    {
+      "text": [],
+      "id": "_Q1MWcLOg",
+      "type": "text"
+    }
+  ],
+  "_AOYNeNAV": [
+    {
+      "text": [],
+      "id": "_u6eVoaJ5",
+      "type": "text"
+    }
+  ],
+  "_Eyk3EoQV": [
+    {
+      "text": [
+        {
+          "insert": "{{personal}}"
+        }
+      ],
+      "id": "_xEeEwFSj",
+      "type": "text"
+    }
+  ],
+  "_ICwtzI38": [
+    {
+      "text": [],
+      "id": "_H2tMwXFb",
+      "type": "text"
+    }
+  ],
+  "_JDAkqWsg": [
+    {
+      "text": [],
+      "id": "_xSMX75bj",
+      "type": "text"
+    }
+  ],
+  "_LBncC1fo": [
+    {
+      "text": [],
+      "id": "_MYTXF6HG",
+      "type": "text"
+    }
+  ],
+  "_WXWDUNmd": [
+    {
+      "text": [
+        {
+          "insert": "{{company}}"
+        }
+      ],
+      "id": "_Nao1rp8b",
+      "type": "text"
+    }
+  ],
+  "_dNukpoEh": [
+    {
+      "text": [],
+      "id": "_MmFTp7Oa",
+      "type": "text"
+    }
+  ],
+  "_khqRZt0R": [
+    {
+      "text": [],
+      "id": "_KfwuRTaV",
+      "type": "text"
+    }
+  ],
+  "_oO1q7tAB": [
+    {
+      "text": [],
+      "id": "_pYvTIiNy",
+      "type": "text"
+    }
+  ],
+  "_vOwxKHeb": [
+    {
+      "text": [],
+      "id": "_04JLC_GS",
+      "type": "text"
+    }
+  ],
+  "_zCC0Nzzl": [
+    {
+      "text": [],
+      "id": "_kx0_IpFb",
+      "type": "text"
+    }
+  ]
+}`;
+
+const DocTemplateKeys = {
+  name: '我是名字',
+  company: '我知科技',
+  personal: 'Steve',
+  date: new Date().toLocaleDateString(),
+};
+
+async function loadDocument(docId: string, template?: any,
+  templateValues?: { [index : string]: string}) {
   const options = {
     lang: LANGS.ZH_CN,
     serverUrl: WsServerUrl,
     user,
+    template,
+    templateValues,
     callbacks: {
       onSave: handleSave,
       onRemoteUserChanged: handleRemoteUserChanged,
@@ -297,63 +779,34 @@ async function loadDocument(docId: string) {
       onGetMentionItems: fakeGetMentionItems,
       onMentionInserted: handleMentionInserted,
       onMentionClicked: handleMentionClicked,
+      onGetTagItems: fakeGetTags,
+      onTagInserted: handleTagInserted,
+      onTagClicked: handleTagClicked,
+      onGetContextMenuItems: handleGetContextMenuItems,
+      // onRenderAutoSuggestItem: handleRenderAutoSuggestItem,
     },
   };
 
-  const options2 = {
-    // lang: LANGS.ZH_CN,
-    serverUrl: WsServerUrl,
-    user: user2,
-    callbacks: {
-      onSave: handleSave,
-      onRemoteUserChanged: handleRemoteUserChanged,
-      onLoad: handleLoad,
-      onError: handleError,
-      onStatusChanged: handleStatusChanged,
-      onReauth: fakeGetAccessTokenFromServer,
-      onGetMentionItems: fakeGetMentionItems,
-    },
-  };
-
-  const token = await fakeGetAccessTokenFromServer(user.userId, docId);
-  const auth = {
+  const token = await fakeGetAccessTokenFromServer(user.userId, docId, 'w');
+  const auth: AuthMessage = {
     appId: AppId,
     userId: user.userId,
+    permission: 'w',
     docId,
     token,
   };
 
   const editor = createEditor(document.getElementById('editor') as HTMLElement, options, auth);
-  let editor2: Editor | null = null;
-  async function startOtherUser() {
-    const main = document.querySelector('#main');
-    if (!main) {
-      return;
-    }
-    if (main.classList.contains('both-user')) {
-      main.classList.remove('both-user');
-      return;
-    }
-    main?.classList.add('both-user');
-    if (!editor2) {
-      const token2 = await fakeGetAccessTokenFromServer(user2.userId, docId);
-      const auth2 = {
-        appId: AppId,
-        userId: user2.userId,
-        docId,
-        token: token2,
-      };
-      editor2 = createEditor(document.getElementById('editor2') as HTMLElement, options2, auth2);
-    }
-  }
+  currentEditor = editor;
   //
-  document.getElementById('otherUser')?.addEventListener('click', () => {
-    startOtherUser();
-  });
-
   document.getElementById('addPage')?.addEventListener('click', () => {
     const id = genId();
     loadDocument(id);
+  });
+
+  document.getElementById('addPageTemplate')?.addEventListener('click', () => {
+    const id = genId();
+    loadDocument(id, JSON.parse(DocTemplate), DocTemplateKeys);
   });
 
   document.getElementById('undo')?.addEventListener('click', () => {
@@ -372,30 +825,27 @@ async function loadDocument(docId: string) {
     editor.executeTextCommand('italic');
   });
   document.getElementById('link')?.addEventListener('click', () => {
-    editor.executeTextCommand('link', {
-      link: '',
-    });
+    editor.executeTextCommand('link', {});
   });
 
-  let tagCount = 0;
-  document.getElementById('tag')?.addEventListener('click', () => {
-    editor.insertBox(BOX_TYPE.TAG, null, { text: `tag-${(tagCount += 1)}` });
-  });
-  document.getElementById('image')?.addEventListener('click', () => {
-    editor.insertEmbed(null, -2, EMBED_TYPE.IMAGE, {
-      src: 'https://wcdn.wiz.cn/apple-icon.png?v=1',
-    });
+  (document.getElementById('image') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+    assert(event);
+    assert(event.target);
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      Array.from(input.files).forEach((file) => {
+        editor.insertImage(null, file, -2);
+      });
+    }
+    // editor.insertEmbed(null, -2, EMBED_TYPE.IMAGE, {
+    //   src: 'https://wcdn.wiz.cn/apple-icon.png?v=1',
+    // });
   });
   document.getElementById('mermaid')?.addEventListener('click', () => {
     editor.insertMermaid(-2, MermaidText);
   });
-  document.getElementById('unlink')?.addEventListener('click', () => {
-    editor.executeTextCommand('unlink');
-  });
   document.getElementById('comment')?.addEventListener('click', () => {
-    editor.executeTextCommand('comment', {
-      commentId: '12345',
-    });
+    editor.executeTextCommand('comment');
   });
 
   const buttons = document.querySelectorAll('.tools .toolbar-button');
@@ -404,9 +854,6 @@ async function loadDocument(docId: string) {
       event.preventDefault();
     });
   });
-  setTimeout(() => {
-    startOtherUser();
-  }, 1000);
 }
 
 loadDocument(pageId);

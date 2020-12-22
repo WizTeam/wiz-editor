@@ -5,6 +5,7 @@ import {
   createEditor,
   assert,
 } from 'wiz-editor/client';
+import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
 function hideElement(id: string) {
   const elem = document.getElementById(id);
@@ -51,6 +52,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
     userId,
     docId,
     appId: AppId,
+    permission: 'w',
   };
 
   const fromHexString = (hexString: string) => {
@@ -86,11 +88,12 @@ const docId = 'my-test-doc-id-simple';
   const token = await fakeGetAccessTokenFromServer(user.userId, docId);
 
   // 生成编辑服务需要的认证信息
-  const auth = {
+  const auth: AuthMessage = {
     appId: AppId,
     userId: user.userId,
     docId,
     token,
+    permission: 'w',
   };
 
   // 创建编辑器并加载文档
