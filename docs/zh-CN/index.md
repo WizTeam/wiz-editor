@@ -152,6 +152,10 @@ const docId = 'my-test-doc-id';
 
 [自定义右键菜单](./custom-context-menu.md)
 
+### 自定义文字样式
+
+[自定义文字样式](./custom-style.md)
+
 ### 自定义block
 
 ## 服务端
