@@ -514,250 +514,52 @@ const DocTemplate = `{
     {
       "text": [
         {
-          "insert": "模版临时解决方案，后期将会直接内置该功能"
+          "insert": "{{meet-name}} 会议"
         }
       ],
-      "id": "_MUdYmTuv",
+      "id": "_HNsxMNUe",
       "type": "heading",
       "level": 1
     },
     {
       "text": [
         {
-          "insert": "新建一篇文档"
+          "insert": "参会人: {{names}}"
         }
       ],
-      "id": "_yuwdR7WT",
-      "type": "list",
-      "level": 1,
-      "ordered": true,
-      "start": 1,
-      "groupId": "_sUejxRZs"
-    },
-    {
-      "text": [
-        {
-          "insert": "按照要求进行编辑，然后将其中的某些内容替换成key，通过{{key}}定义需要替换的内容"
-        }
-      ],
-      "id": "_RxT4EdqB",
-      "type": "list",
-      "start": 2,
-      "groupId": "_sUejxRZs",
-      "level": 1,
-      "ordered": true
-    },
-    {
-      "text": [
-        {
-          "insert": "保存内容，获得文档json数据。这个json数据，就可以当成模版。"
-        }
-      ],
-      "id": "_oDSmf_a_",
-      "type": "list",
-      "start": 3,
-      "groupId": "_sUejxRZs",
-      "level": 1,
-      "ordered": true
-    },
-    {
-      "text": [
-        {
-          "insert": "下次新建文档的时候，将模版以及参数传递给编辑器。编辑器将会自动使用模版创建一篇新的文档。"
-        }
-      ],
-      "id": "_7Ee5ClSH",
-      "type": "list",
-      "start": 4,
-      "groupId": "_sUejxRZs",
-      "level": 1,
-      "ordered": true
-    },
-    {
-      "text": [
-        {
-          "insert": "-------"
-        }
-      ],
-      "id": "_Lc_8Z0Aa",
+      "id": "_iSAuPm5m",
       "type": "text"
     },
     {
       "text": [
         {
-          "insert": "可以在任意地方输入参数，{{name}}，例如在表格里面替换内容："
+          "insert": "会议日期: {{date}}"
         }
       ],
-      "id": "_cf9WSoXB",
-      "type": "text"
-    },
-    {
-      "text": [],
-      "id": "_qADk96wH",
-      "type": "table",
-      "rows": 3,
-      "cols": 5,
-      "cells": [
-        "_LBncC1fo",
-        "_vOwxKHeb",
-        "_6xLp_apS",
-        "_4cxKjIyq",
-        "_3fdf6Hb8",
-        "_oO1q7tAB",
-        "_ICwtzI38",
-        "_zCC0Nzzl",
-        "_khqRZt0R",
-        "_dNukpoEh",
-        "_AOYNeNAV",
-        "_JDAkqWsg",
-        "_WXWDUNmd",
-        "_Eyk3EoQV",
-        "_1w9JKDes"
-      ]
-    },
-    {
-      "text": [
-        {
-          "insert": "----"
-        }
-      ],
-      "id": "_COBJGEZE",
+      "id": "_AgSRfkl_",
       "type": "text"
     },
     {
       "text": [
         {
-          "insert": "这是临时解决方案。"
+          "insert": "会议内容:"
         }
       ],
-      "id": "_6Pid_fVK",
+      "id": "_t_xqxWwU",
       "type": "text"
-    }
-  ],
-  "comments": {},
-  "_1w9JKDes": [
-    {
-      "text": [
-        {
-          "insert": "{{date}}"
-        }
-      ],
-      "id": "_uBS6PZu9",
-      "type": "text"
-    }
-  ],
-  "_3fdf6Hb8": [
+    },
     {
       "text": [],
-      "id": "_XRRZ4qH1",
+      "id": "_YZddVF5R",
       "type": "text"
     }
   ],
-  "_4cxKjIyq": [
-    {
-      "text": [],
-      "id": "_wF9uyc9S",
-      "type": "text"
-    }
-  ],
-  "_6xLp_apS": [
-    {
-      "text": [],
-      "id": "_Q1MWcLOg",
-      "type": "text"
-    }
-  ],
-  "_AOYNeNAV": [
-    {
-      "text": [],
-      "id": "_u6eVoaJ5",
-      "type": "text"
-    }
-  ],
-  "_Eyk3EoQV": [
-    {
-      "text": [
-        {
-          "insert": "{{personal}}"
-        }
-      ],
-      "id": "_xEeEwFSj",
-      "type": "text"
-    }
-  ],
-  "_ICwtzI38": [
-    {
-      "text": [],
-      "id": "_H2tMwXFb",
-      "type": "text"
-    }
-  ],
-  "_JDAkqWsg": [
-    {
-      "text": [],
-      "id": "_xSMX75bj",
-      "type": "text"
-    }
-  ],
-  "_LBncC1fo": [
-    {
-      "text": [],
-      "id": "_MYTXF6HG",
-      "type": "text"
-    }
-  ],
-  "_WXWDUNmd": [
-    {
-      "text": [
-        {
-          "insert": "{{company}}"
-        }
-      ],
-      "id": "_Nao1rp8b",
-      "type": "text"
-    }
-  ],
-  "_dNukpoEh": [
-    {
-      "text": [],
-      "id": "_MmFTp7Oa",
-      "type": "text"
-    }
-  ],
-  "_khqRZt0R": [
-    {
-      "text": [],
-      "id": "_KfwuRTaV",
-      "type": "text"
-    }
-  ],
-  "_oO1q7tAB": [
-    {
-      "text": [],
-      "id": "_pYvTIiNy",
-      "type": "text"
-    }
-  ],
-  "_vOwxKHeb": [
-    {
-      "text": [],
-      "id": "_04JLC_GS",
-      "type": "text"
-    }
-  ],
-  "_zCC0Nzzl": [
-    {
-      "text": [],
-      "id": "_kx0_IpFb",
-      "type": "text"
-    }
-  ]
+  "comments": {}
 }`;
 
-const DocTemplateKeys = {
-  name: '我是名字',
-  company: '我知科技',
-  personal: 'Steve',
+const DocTemplateValues = {
+  'meet-name': 'XXX',
+  names: 'Steve， zTree, OldHu',
   date: new Date().toLocaleDateString(),
 };
 
@@ -806,7 +608,7 @@ async function loadDocument(docId: string, template?: any,
 
   document.getElementById('addPageTemplate')?.addEventListener('click', () => {
     const id = genId();
-    loadDocument(id, JSON.parse(DocTemplate), DocTemplateKeys);
+    loadDocument(id, JSON.parse(DocTemplate), DocTemplateValues);
   });
 
   document.getElementById('undo')?.addEventListener('click', () => {
