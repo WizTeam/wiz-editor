@@ -354,7 +354,6 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string, permi
   const key = fromHexString(AppSecret);
 
   try {
-    throw 1;
     const accessToken = await new EncryptJWT(data)
       .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
       .setIssuedAt()
