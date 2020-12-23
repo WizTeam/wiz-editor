@@ -122,6 +122,90 @@ let currentEditor: Editor | null;
   boxUtils.registerBoxType(CALENDAR_BOX_TYPE as BOX_TYPE, calendarBox);
 })();
 
+// -------------------- project list
+(() => {
+  const PROJECT_BOX_TYPE = 'project';
+
+  interface ProjectBoxData extends BoxData {
+    projectId: string;
+    projectName: string;
+  };
+
+  function createNode(data: BoxData): BoxNode {
+    //
+    const { projectName } = data as ProjectBoxData;
+    //
+    return {
+      classes: ['box-mention'],
+      children: [{
+        type: 'text',
+        text: projectName,
+      } as BoxTextChild],
+    };
+  }
+
+  function handleBoxInserted(editor: Editor, data: BoxData,
+    block: BlockElement, pos: number): void {
+    assert(pos >= 0);
+    const projectData = data as ProjectBoxData;
+    console.log('project box inserted:', projectData);
+  }
+
+  function handleBoxClicked(editor: Editor, data: BoxData): void {
+    const projectData = data as ProjectBoxData;
+    alert(`calendar clicked: ${projectData.projectName}`);
+  }
+
+  const PROJECT_LIST: {
+    projectId: string;
+    projectName: string;
+  }[] = [];
+  for (let i = 0; i < 10; i++) {
+    PROJECT_LIST.push({
+      projectId: `${i}`,
+      projectName: `项目${i}`,
+    });
+  }
+
+  async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
+    if (!keywords) {
+      return PROJECT_LIST.map((project) => ({
+        iconUrl: '',
+        text: project.projectName,
+        id: project.projectId,
+        data: project,
+      }));
+    }
+    //
+    return PROJECT_LIST
+      .filter((project) => project.projectName.indexOf(keywords) !== -1)
+      .map((project) => ({
+        iconUrl: '',
+        text: project.projectName,
+        id: project.projectId,
+        data: project,
+      }));
+  }
+
+  function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTemplateData {
+    const data: ProjectBoxData = item.data;
+    return {
+      projectId: data.projectId,
+      projectName: data.projectName,
+    };
+  }
+
+  const projectBox = {
+    createNode,
+    getItems,
+    handleBoxInserted,
+    handleBoxClicked,
+    createBoxDataFromItem,
+  };
+
+  boxUtils.registerBoxType(PROJECT_BOX_TYPE as BOX_TYPE, projectBox);
+})();
+
 (() => {
   const DATE_BOX_TYPE = 'date';
 
@@ -230,6 +314,12 @@ let currentEditor: Editor | null;
     };
   }
 
+  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData): HTMLElement {
+    const div = document.createElement('div');
+    div.setAttribute('style', `background-color: ${suggestData.text}; border-radius: 10px; width: 100%; height: 24px`);
+    return div;
+  }
+
   const labelBox = {
     prefix: 'll',
     createNode,
@@ -237,6 +327,7 @@ let currentEditor: Editor | null;
     createBoxDataFromItem,
     handleBoxInserted,
     handleBoxClicked,
+    renderAutoSuggestItem,
   };
 
   boxUtils.registerBoxType(LABEL_BOX_TYPE as BOX_TYPE, labelBox);
@@ -263,6 +354,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string, permi
   const key = fromHexString(AppSecret);
 
   try {
+    throw 1;
     const accessToken = await new EncryptJWT(data)
       .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
       .setIssuedAt()
@@ -394,7 +486,7 @@ function handleTagClicked(tag: string) {
 // ---------------------------------------------------------
 
 const urlQuery = new URLSearchParams(window.location.search);
-const pageId = urlQuery.get('id') || '_1cTj9vG1';
+const pageId = urlQuery.get('id') || '_ryPQGWt6';
 console.log(`pageGuid: ${pageId}`);
 
 const WsServerUrl = window.location.protocol !== 'https:'
@@ -645,6 +737,11 @@ async function loadDocument(docId: string, template?: any,
   });
   document.getElementById('mermaid')?.addEventListener('click', () => {
     editor.insertMermaid(-2, MermaidText);
+  });
+  document.getElementById('project')?.addEventListener('click', () => {
+    editor.insertBox('project' as any, null, {}, {
+      showAutoSuggest: true,
+    });
   });
   document.getElementById('comment')?.addEventListener('click', () => {
     editor.executeTextCommand('comment');
