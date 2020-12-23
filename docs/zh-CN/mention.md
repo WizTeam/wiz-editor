@@ -101,8 +101,13 @@ const options = {
 同样，可以在创建编辑器的时候，设置相应的回调方法：
 
 ```ts
-function handleMentionInserted(boxData: MentionBoxData) {
-  console.log(`mention ${JSON.stringify(boxData)} inserted`);
+function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos: number) {
+  console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
+  // 提醒前面的文字
+  const leftText = blockUtils.toText(block, 0, pos);
+  // 提醒后面的文字
+  const rightText = blockUtils.toText(block, pos + 1, -1);
+  alert(`context text:\n\n${leftText}\n\n${rightText}`);
 }
 
 function handleMentionClicked(boxData: MentionBoxData) {

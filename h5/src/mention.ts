@@ -6,6 +6,8 @@ import {
   assert,
   AutoSuggestData,
   MentionBoxData,
+  blockUtils,
+  BlockElement,
 } from 'wiz-editor/client';
 import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
@@ -94,8 +96,11 @@ async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]>
   return ALL_USERS.filter((user) => user.text.toLowerCase().indexOf(keywords.toLowerCase()) !== -1);
 }
 
-function handleMentionInserted(boxData: MentionBoxData) {
-  console.log(`mention ${JSON.stringify(boxData)} inserted`);
+function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos: number) {
+  console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
+  const leftText = blockUtils.toText(block, 0, pos);
+  const rightText = blockUtils.toText(block, pos + 1, -1);
+  alert(`context text:\n\n${leftText}\n\n${rightText}`);
 }
 
 function handleMentionClicked(boxData: MentionBoxData) {
