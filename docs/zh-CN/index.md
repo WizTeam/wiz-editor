@@ -156,6 +156,10 @@ const docId = 'my-test-doc-id';
 
 [自定义文字样式](./custom-style.md)
 
+### 自定义模版
+
+[自定义文档模版](./custom-template.md)
+
 ### 自定义block
 
 ## 服务端
