@@ -112,6 +112,6 @@ startServer(options);
 {
   "appId": "应用Id",
   "docId": "文档Id",
-  "data": "文本数据",
+  "data": "文本数据"
 }
 ```
