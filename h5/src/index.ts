@@ -442,7 +442,8 @@ function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos
   console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
   const leftText = blockUtils.toText(block, 0, pos);
   const rightText = blockUtils.toText(block, pos + 1, -1);
-  alert(`context text:\n\n${leftText}\n\n${rightText}`);
+  const anchorId = `M${boxData.id}`;
+  alert(`anchor id: ${anchorId}\n\ncontext text:\n\n${leftText}\n\n${rightText}`);
 }
 
 function handleMentionClicked(boxData: MentionBoxData) {
