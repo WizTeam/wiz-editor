@@ -103,3 +103,15 @@ startServer(options);
     }
 }
 ```
+
+#### webhook推送的内容
+
+服务器会在每次文档在设定的时间间隔未修改时，将文档转为文本格式，并Post到指定URL，Post过去的数据结构为：
+
+```json
+{
+  appId: 应用Id,
+  docId: 文档Id,
+  data: 文本数据
+}
+```
