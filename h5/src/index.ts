@@ -26,6 +26,7 @@ import {
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
+
 const AppId = '_LC1xOdRp';
 const AppSecret = '714351167e39568ba734339cc6b997b960ed537153b68c1f7d52b1e87c3be24a';
 const AppDomain = 'wiz.cn';
@@ -408,12 +409,12 @@ const NAMES = [
 ];
 
 const ALL_USERS = [{
-  iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/e89745c0-3f7a-11eb-8f21-01eb48012b63.jpeg',
+  iconUrl: 'https://www.wiz.cn/wp-content/new-uploads/e89745c0-3f7a-11eb-8f21-01eb48012b63.jpeg',
   text: 'Steve',
   id: 'weishijun@wiz.cn',
   data: '',
 }, {
-  iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
+  iconUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   text: 'zTree',
   id: 'zqg@wiz.cn',
   data: '',
@@ -421,7 +422,7 @@ const ALL_USERS = [{
 
 NAMES.forEach((name) => {
   const user = {
-    iconUrl: 'http://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
+    iconUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
     text: name,
     id: name,
     data: name,
@@ -493,7 +494,8 @@ const WsServerUrl = window.location.protocol !== 'https:'
   ? `ws://${window.location.host}`
   : `wss://${window.location.host}`;
 
-const user = {
+const user: EditorUser = {
+  avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: `${new Date().valueOf()}`,
   displayName: NAMES[new Date().valueOf() % NAMES.length],
 };
