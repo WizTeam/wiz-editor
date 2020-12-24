@@ -46,16 +46,8 @@ body {
   align-self: flex-start;
 }
 
-#editor-frame2 {
-  display: none;
-}
-
 #main.both-user .editor-frame {
   width: 50%;
-}
-
-#main.both-user #editor-frame2 {
-  display: flex;
 }
 
 .demo-editor {
@@ -183,6 +175,12 @@ body {
   text-decoration-color: red;
 }
 
+.editor-main:fullscreen {
+  zoom: 1.5;
+  overflow-y: auto;
+  max-width: 1024px;
+}
+
     </style>
   </head>
   <body>
@@ -218,9 +216,20 @@ body {
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M20 2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 20H4v-4h4v4zm0-6H4v-4h4v4zm0-6H4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4zm6 12h-4v-4h4v4zm0-6h-4v-4h4v4zm0-6h-4V4h4v4z"/></svg>
       </div>
       <div class="toolbar-button icon-button" title="插入图片" style="position: relative;">
-        <input type='file' id="image" style="position: absolute; width: 100%; height: 100%; z-index: 1; border: none; color: transparent; opacity: 0;"/>
+        <input type='file' accept="image/*" id="image" style="position: absolute; width: 100%; height: 100%; z-index: 1; border: none; color: transparent; opacity: 0;"/>
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M4 4h7V2H4c-1.1 0-2 .9-2 2v7h2V4zm6 9l-4 5h12l-3-4-2.03 2.71L10 13zm7-4.5c0-.83-.67-1.5-1.5-1.5S14 7.67 14 8.5s.67 1.5 1.5 1.5S17 9.33 17 8.5zM20 2h-7v2h7v7h2V4c0-1.1-.9-2-2-2zm0 18h-7v2h7c1.1 0 2-.9 2-2v-7h-2v7zM4 13H2v7c0 1.1.9 2 2 2h7v-2H4v-7z"/></svg>
       </div>
+
+      <div class="toolbar-button icon-button" title="插入录音" style="position: relative;">
+        <input type='file' accept="audio/*" id="audio" style="position: absolute; width: 100%; height: 100%; z-index: 1; border: none; color: transparent; opacity: 0;"/>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6zm-2 16c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"></path></svg>
+      </div>
+
+      <div class="toolbar-button icon-button" title="插入视频" style="position: relative;">
+        <input type='file' accept="video/*" id="video" style="position: absolute; width: 100%; height: 100%; z-index: 1; border: none; color: transparent; opacity: 0;"/>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M5.76 10H20v8H4V6.47M22 4h-4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4z"></path></svg>
+      </div>
+      
       <div id="mermaid" class="toolbar-button icon-button" title="插入 mermaid 流程图">
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M15 7v4h1v2h-3V5h2l-3-4-3 4h2v8H8v-2.07c.7-.37 1.2-1.08 1.2-1.93 0-1.21-.99-2.2-2.2-2.2-1.21 0-2.2.99-2.2 2.2 0 .85.5 1.56 1.2 1.93V13c0 1.11.89 2 2 2h3v3.05c-.71.37-1.2 1.1-1.2 1.95 0 1.22.99 2.2 2.2 2.2 1.21 0 2.2-.98 2.2-2.2 0-.85-.49-1.58-1.2-1.95V15h3c1.11 0 2-.89 2-2v-2h1V7h-4z"/></svg>
       </div>
@@ -236,6 +245,13 @@ body {
 
       <div class='split-line'></div>
 
+      <div id="fullscreen" class="toolbar-button icon-button" title="全凭演示">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path></svg>
+      </div>
+      
+
+      <div class='split-line'></div>
+
       <div id="docStatus" class="toolbar-button icon-button" title="状态">
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
           <circle cx="12" cy="12" r="12" fill="currentColor" />
@@ -245,8 +261,7 @@ body {
     </div>
     <div id="main-layer">
       <div id="main">
-        <div id="editor-frame1" class="editor-frame"><div id="editor" class="demo-editor"></div></div>
-        <div id="editor-frame2" class="editor-frame"><div id="editor2" class="demo-editor"></div></div>
+        <div id="editor-frame" class="editor-frame"><div id="editor" class="demo-editor"></div></div>
       </div>
     </div>
   </body>

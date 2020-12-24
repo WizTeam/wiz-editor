@@ -443,7 +443,7 @@ function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos
   const leftText = blockUtils.toText(block, 0, pos);
   const rightText = blockUtils.toText(block, pos + 1, -1);
   const anchorId = `M${boxData.id}`;
-  alert(`anchor id: ${anchorId}\n\ncontext text:\n\n${leftText}\n\n${rightText}`);
+  console.log(`anchor id: ${anchorId}, context text:\n\n${leftText}\n\n${rightText}`);
 }
 
 function handleMentionClicked(boxData: MentionBoxData) {
@@ -486,7 +486,7 @@ function handleTagClicked(tag: string) {
 // ---------------------------------------------------------
 
 const urlQuery = new URLSearchParams(window.location.search);
-const pageId = urlQuery.get('id') || '_ryPQGWt6';
+const pageId = urlQuery.get('id') || '_Lm3bYjj7';
 console.log(`pageGuid: ${pageId}`);
 
 const WsServerUrl = window.location.protocol !== 'https:'
@@ -731,10 +731,30 @@ async function loadDocument(docId: string, template?: any,
         editor.insertImage(null, file, -2);
       });
     }
-    // editor.insertEmbed(null, -2, EMBED_TYPE.IMAGE, {
-    //   src: 'https://wcdn.wiz.cn/apple-icon.png?v=1',
-    // });
   });
+
+  (document.getElementById('audio') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+    assert(event);
+    assert(event.target);
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      Array.from(input.files).forEach((file) => {
+        editor.insertAudio(null, file, -2);
+      });
+    }
+  });
+
+  (document.getElementById('video') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+    assert(event);
+    assert(event.target);
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      Array.from(input.files).forEach((file) => {
+        editor.insertVideo(null, file, -2);
+      });
+    }
+  });
+
   document.getElementById('mermaid')?.addEventListener('click', () => {
     editor.insertMermaid(-2, MermaidText);
   });
@@ -745,6 +765,10 @@ async function loadDocument(docId: string, template?: any,
   });
   document.getElementById('comment')?.addEventListener('click', () => {
     editor.executeTextCommand('comment');
+  });
+
+  document.getElementById('fullscreen')?.addEventListener('click', () => {
+    editor.rootElement.requestFullscreen();
   });
 
   const buttons = document.querySelectorAll('.tools .toolbar-button');
