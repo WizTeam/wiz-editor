@@ -110,8 +110,8 @@ startServer(options);
 
 ```json
 {
-  appId: 应用Id,
-  docId: 文档Id,
-  data: 文本数据
+  "appId": "应用Id",
+  "docId": "文档Id",
+  "data": "文本数据",
 }
 ```
