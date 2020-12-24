@@ -60,3 +60,46 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
 ```
 
 企业应用的前端，需要调用该Api，获取到用户的accessToken，然后再创建编辑器。
+
+
+## 启动服务
+
+```js
+const { startServer } = require('wiz-editor/server');
+const path = require('path');
+
+const options = {
+  enableFakeTokenApi: true,
+  serveStatic: true,
+  staticDir: path.resolve('./dist'),
+  storage: {
+    webhook: {
+      enable: true,
+      latestVersionDelay: 20,
+      latestVersionURL: 'http://localhost:9000', // 推送文档内容到搜索引擎
+    },
+  },
+};
+
+console.log(options);
+
+startServer(options);
+```
+
+### 启动服务选项
+
+```js
+{
+    port: 9000, // 服务端口
+    serveStatic: true, // 是否发布静态网页服务
+    staticDir: "/public/www", // 如果发布静态网页，则在此设置路径
+    allowCORS: false, // 是否允许跨域。如果允许跨域，则网页需要使用https。如果无法使用https（例如开发环境），可以使用代理
+    storage: {
+        webhook : {
+            enable: false,    // 是否启用webhook
+            latestVersionDelay: 30, // 停止文档编辑操作多长时间后，发送最新版本给webhook地址
+            latestVersionURL: "http://localhost" // webhook地址
+        },
+    }
+}
+```

@@ -107,7 +107,9 @@ function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos
   const leftText = blockUtils.toText(block, 0, pos);
   // 提醒后面的文字
   const rightText = blockUtils.toText(block, pos + 1, -1);
-  alert(`context text:\n\n${leftText}\n\n${rightText}`);
+  // 定位锚点，可以用来给在文档中定位该提醒
+  const anchorId = `M${boxData.id}`;
+  alert(`anchor id: ${anchorId}\n\ncontext text:\n\n${leftText}\n\n${rightText}`);
 }
 
 function handleMentionClicked(boxData: MentionBoxData) {
