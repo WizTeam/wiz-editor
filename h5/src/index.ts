@@ -23,6 +23,7 @@ import {
   docData2Text,
   MenuItemData,
   SelectionDetail,
+  SelectedBlock,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -657,6 +658,16 @@ const DocTemplateValues = {
   date: new Date().toLocaleDateString(),
 };
 
+function handleCommentInserted(commentId: string, commentDocText: string, commentText: string, selectedBlock: SelectedBlock): void {
+  console.log(`comment created: ${commentText}`);
+  assert(selectedBlock);
+}
+
+function handleCommentReplied(toUserId: string, orgCommentText: string, commentText: string): void {
+  assert(commentText);
+  console.log(`comment replied to ${toUserId}: ${commentText}`);
+}
+
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
   const options = {
@@ -679,6 +690,8 @@ async function loadDocument(docId: string, template?: any,
       onTagInserted: handleTagInserted,
       onTagClicked: handleTagClicked,
       onGetContextMenuItems: handleGetContextMenuItems,
+      onCommentInserted: handleCommentInserted,
+      onCommentReplied: handleCommentReplied,
       // onRenderAutoSuggestItem: handleRenderAutoSuggestItem,
     },
   };
@@ -695,90 +708,104 @@ async function loadDocument(docId: string, template?: any,
   const editor = createEditor(document.getElementById('editor') as HTMLElement, options, auth);
   currentEditor = editor;
   //
-  document.getElementById('addPage')?.addEventListener('click', () => {
-    const id = genId();
-    loadDocument(id);
-  });
-
-  document.getElementById('addPageTemplate')?.addEventListener('click', () => {
-    const id = genId();
-    loadDocument(id, JSON.parse(DocTemplate), DocTemplateValues);
-  });
-
-  document.getElementById('undo')?.addEventListener('click', () => {
-    editor.undo();
-  });
-  document.getElementById('redo')?.addEventListener('click', () => {
-    editor.redo();
-  });
-  document.getElementById('table')?.addEventListener('click', () => {
-    editor.insertTable(-2, 5, 3);
-  });
-  document.getElementById('bold')?.addEventListener('click', () => {
-    editor.executeTextCommand('bold');
-  });
-  document.getElementById('italic')?.addEventListener('click', () => {
-    editor.executeTextCommand('italic');
-  });
-  document.getElementById('link')?.addEventListener('click', () => {
-    editor.executeTextCommand('link', {});
-  });
-
-  (document.getElementById('image') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
-    assert(event);
-    assert(event.target);
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      Array.from(input.files).forEach((file) => {
-        editor.insertImage(null, file, -2);
-      });
-    }
-  });
-
-  (document.getElementById('audio') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
-    assert(event);
-    assert(event.target);
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      Array.from(input.files).forEach((file) => {
-        editor.insertAudio(null, file, -2);
-      });
-    }
-  });
-
-  (document.getElementById('video') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
-    assert(event);
-    assert(event.target);
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      Array.from(input.files).forEach((file) => {
-        editor.insertVideo(null, file, -2);
-      });
-    }
-  });
-
-  document.getElementById('mermaid')?.addEventListener('click', () => {
-    editor.insertMermaid(-2, MermaidText);
-  });
-  document.getElementById('project')?.addEventListener('click', () => {
-    editor.insertBox('project' as any, null, {}, {
-      showAutoSuggest: true,
-    });
-  });
-  document.getElementById('comment')?.addEventListener('click', () => {
-    editor.executeTextCommand('comment');
-  });
-
-  document.getElementById('fullscreen')?.addEventListener('click', () => {
-    editor.rootElement.requestFullscreen();
-  });
-
-  const buttons = document.querySelectorAll('.tools .toolbar-button');
-  buttons.forEach((button) => {
-    button.addEventListener('mousedown', (event) => {
-      event.preventDefault();
-    });
-  });
 }
+
+document.getElementById('addPage')?.addEventListener('click', () => {
+  const id = genId();
+  loadDocument(id);
+});
+
+document.getElementById('addPageTemplate')?.addEventListener('click', () => {
+  const id = genId();
+  loadDocument(id, JSON.parse(DocTemplate), DocTemplateValues);
+});
+
+document.getElementById('undo')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.undo();
+});
+document.getElementById('redo')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.redo();
+});
+document.getElementById('table')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.insertTable(-2, 5, 3);
+});
+document.getElementById('bold')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.executeTextCommand('bold');
+});
+document.getElementById('italic')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.executeTextCommand('italic');
+});
+document.getElementById('link')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.executeTextCommand('link', {});
+});
+
+(document.getElementById('image') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+  assert(event);
+  assert(event.target);
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    Array.from(input.files).forEach((file) => {
+      assert(currentEditor);
+      currentEditor.insertImage(null, file, -2);
+    });
+  }
+});
+
+(document.getElementById('audio') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+  assert(event);
+  assert(event.target);
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    Array.from(input.files).forEach((file) => {
+      assert(currentEditor);
+      currentEditor.insertAudio(null, file, -2);
+    });
+  }
+});
+
+(document.getElementById('video') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+  assert(event);
+  assert(event.target);
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    Array.from(input.files).forEach((file) => {
+      assert(currentEditor);
+      currentEditor.insertVideo(null, file, -2);
+    });
+  }
+});
+
+document.getElementById('mermaid')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.insertMermaid(-2, MermaidText);
+});
+document.getElementById('project')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.insertBox('project' as any, null, {}, {
+    showAutoSuggest: true,
+  });
+});
+document.getElementById('comment')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.executeTextCommand('comment');
+});
+
+document.getElementById('fullscreen')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.rootElement.requestFullscreen();
+});
+
+const buttons = document.querySelectorAll('.tools .toolbar-button');
+buttons.forEach((button) => {
+  button.addEventListener('mousedown', (event) => {
+    event.preventDefault();
+  });
+});
 
 loadDocument(pageId);

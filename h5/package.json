@@ -33,6 +33,6 @@
   "license": "ISC",
   "dependencies": {
     "jose": "^3.4.0",
-    "wiz-editor": "^0.0.1-beta.30"
+    "wiz-editor": "^0.0.1-beta.33"
   }
 }
