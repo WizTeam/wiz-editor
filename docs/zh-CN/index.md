@@ -144,6 +144,10 @@ const docId = 'my-test-doc-id';
 
 [增加插入提醒功能](./mention.md)
 
+## 响应评论消息
+
+[响应评论消息](./comment.md)
+
 ### 自定义inline的模块（box）
 
 [自定义box说明](./box.md)
