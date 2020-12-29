@@ -32,7 +32,7 @@ interface LabelBoxData extends BoxData {
   color: string;
 };
 
-function createNode(data: BoxData): BoxNode {
+function createNode(editor: Editor, data: BoxData): BoxNode {
   //
   const { color } = data as LabelBoxData;
   //

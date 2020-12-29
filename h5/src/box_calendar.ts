@@ -33,7 +33,7 @@ interface CalendarBoxData extends BoxData {
   text: string;
 };
 
-function createNode(data: BoxData): BoxNode {
+function createNode(editor: Editor, data: BoxData): BoxNode {
   //
   const { text } = data as CalendarBoxData;
   //
@@ -79,7 +79,7 @@ async function getItems(editor: Editor, keywords: string) {
 
 function handleBoxItemSelected(editor: Editor, item: AutoSuggestData): void {
   //
-  const pos = editor.saveCaretPos();
+  const pos = editor.saveSelectionState();
   //
   if (item.id === 'selectEvent') {
     alert('select one event');
@@ -89,7 +89,7 @@ function handleBoxItemSelected(editor: Editor, item: AutoSuggestData): void {
     //
   }
   //
-  if (!editor.tryRestoreCaretPos(pos)) {
+  if (!editor.restoreSelectionState(pos)) {
     return;
   }
   //

@@ -43,7 +43,7 @@ let currentEditor: Editor | null;
     text: string;
   };
 
-  function createNode(data: BoxData): BoxNode {
+  function createNode(editor: Editor, data: BoxData): BoxNode {
     //
     const { text } = data as CalendarBoxData;
     //
@@ -91,7 +91,7 @@ let currentEditor: Editor | null;
 
   function handleBoxItemSelected(editor: Editor, item: AutoSuggestData): void {
     //
-    const pos = editor.saveCaretPos();
+    const pos = editor.saveSelectionState();
     //
     if (item.id === 'selectEvent') {
       alert('select one event');
@@ -101,7 +101,7 @@ let currentEditor: Editor | null;
       //
     }
     //
-    if (!editor.tryRestoreCaretPos(pos)) {
+    if (!editor.restoreSelectionState(pos)) {
       return;
     }
     //
@@ -133,7 +133,7 @@ let currentEditor: Editor | null;
     projectName: string;
   };
 
-  function createNode(data: BoxData): BoxNode {
+  function createNode(editor: Editor, data: BoxData): BoxNode {
     //
     const { projectName } = data as ProjectBoxData;
     //
@@ -215,7 +215,7 @@ let currentEditor: Editor | null;
     text: string;
   };
 
-  function createNode(data: BoxData): BoxNode {
+  function createNode(editor: Editor, data: BoxData): BoxNode {
     //
     const { text } = data as DateBoxData;
     //
@@ -265,7 +265,7 @@ let currentEditor: Editor | null;
     color: string;
   };
 
-  function createNode(data: BoxData): BoxNode {
+  function createNode(editor: Editor, data: BoxData): BoxNode {
     //
     const { color } = data as LabelBoxData;
     //
@@ -785,6 +785,17 @@ document.getElementById('mermaid')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.insertMermaid(-2, MermaidText);
 });
+
+document.getElementById('math')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.executeTextCommand('inline-math');
+});
+
+document.getElementById('math-block')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.executeTextCommand('math');
+});
+
 document.getElementById('project')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.insertBox('project' as any, null, {}, {

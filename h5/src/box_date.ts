@@ -31,7 +31,7 @@ interface DateBoxData extends BoxData {
   text: string;
 };
 
-function createNode(data: BoxData): BoxNode {
+function createNode(editor: Editor, data: BoxData): BoxNode {
   //
   const { text } = data as DateBoxData;
   //
