@@ -55,6 +55,7 @@ function handleButtonClick(event: Event) {
 function createElement(editor: Editor, data: EmbedData): EmbedElement {
   assert(data);
   const div = document.createElement('div');
+  div.style.display = 'inline';
   const child = document.createElement('div');
   div.appendChild(child);
   //
