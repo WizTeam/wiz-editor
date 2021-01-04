@@ -4,7 +4,7 @@ import EncryptJWT from 'jose/jwt/encrypt';
 import {
   BOX_TYPE,
   EditorUser,
-  EMBED_TYPE,
+  BLOCK_TYPE,
   LANGS,
   createEditor,
   Editor,
@@ -24,9 +24,11 @@ import {
   MenuItemData,
   SelectionDetail,
   SelectedBlock,
+  selectionUtils,
+  CommandStatus,
+  TextCommand,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
-
 
 const AppId = '_LC1xOdRp';
 const AppSecret = '714351167e39568ba734339cc6b997b960ed537153b68c1f7d52b1e87c3be24a';
@@ -488,7 +490,7 @@ function handleTagClicked(tag: string) {
 // ---------------------------------------------------------
 
 const urlQuery = new URLSearchParams(window.location.search);
-const pageId = urlQuery.get('id') || '_Lm3bYjj7';
+const pageId = urlQuery.get('id') || '_ny9Adsk2';
 console.log(`pageGuid: ${pageId}`);
 
 const WsServerUrl = window.location.protocol !== 'https:'
@@ -560,26 +562,76 @@ function handleMenuItemClicked(item: MenuItemData) {
   console.log(item);
   assert(currentEditor);
   if (item.id === 'get-selected-text') {
+    const doc = selectionUtils.selectionToDoc(currentEditor, currentEditor.getSelectionDetail(), { keepComments: true });
+    console.log(doc);
     alert(`selected text: ${currentEditor.getSelectedText()}`);
   } else if (item.id === 'add-border') {
     currentEditor.applyTextCustomStyle('style-border');
   } else if (item.id === 'add-strikethrough') {
     currentEditor.applyTextCustomStyle('style-strikethrough');
+  } else if (item.id === 'toHeading2') {
+    currentEditor.executeBlockCommand('toHeading2');
+  } else if (item.id === 'toOrderedList') {
+    currentEditor.executeBlockCommand('toOrderedList');
+  } else if (item.id === 'toUnorderedList') {
+    currentEditor.executeBlockCommand('toUnorderedList');
+  } else if (item.id === 'list/indent') {
+    currentEditor.executeBlockCommand('list/indent');
+  } else if (item.id === 'list/outdent') {
+    currentEditor.executeBlockCommand('list/outdent');
   }
 }
 
 function handleGetContextMenuItems(detail: SelectionDetail): MenuItemData[] {
-  if (detail.collapsed) {
-    return [];
-  }
   const ret: MenuItemData[] = [];
+  if (detail.collapsed) {
+    ret.push({
+      id: 'toHeading2',
+      text: '转换为 标题二（demo）',
+      shortCut: '',
+      disabled: false,
+      onClick: handleMenuItemClicked,
+    }, {
+      id: 'toOrderedList',
+      text: '转换为 有序列表（demo）',
+      shortCut: '',
+      disabled: false,
+      onClick: handleMenuItemClicked,
+    }, {
+      id: 'toUnorderedList',
+      text: '转换为 无序列表（demo）',
+      shortCut: '',
+      disabled: false,
+      onClick: handleMenuItemClicked,
+    });
+
+    assert(detail.startBlock);
+    const type = blockUtils.getBlockType(detail.startBlock);
+    if (type === BLOCK_TYPE.LIST) {
+      ret.push({
+        id: 'list/indent',
+        text: '列表增加缩进（demo）',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      }, {
+        id: 'list/outdent',
+        text: '列表减少缩进（demo）',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      });
+    }
+    return ret;
+  }
   ret.push({
     id: 'get-selected-text',
     text: '获取选中文字',
     shortCut: '',
     disabled: false,
     onClick: handleMenuItemClicked,
-  }, {
+  },
+  {
     id: 'test id 2',
     text: '自定义样式',
     shortCut: '',
@@ -649,7 +701,10 @@ const DocTemplate = `{
       "type": "text"
     }
   ],
-  "comments": {}
+  "comments": {},
+  "meta": {
+    "kbGuid": "123456"
+  }
 }`;
 
 const DocTemplateValues = {
@@ -668,6 +723,53 @@ function handleCommentReplied(toUserId: string, orgCommentText: string, commentT
   console.log(`comment replied to ${toUserId}: ${commentText}`);
 }
 
+function handleCommandStatusChanged(status: CommandStatus): void {
+  // console.log(status);
+  const toolbar = document.querySelector('#toolbar');
+  assert(toolbar);
+  const styleButtons = toolbar.querySelectorAll('button[id^=style-]');
+  Array.from(styleButtons).forEach((button: Element) => {
+    assert(button instanceof HTMLButtonElement);
+    // eslint-disable-next-line no-param-reassign
+    button.disabled = status.textStyle === 'disabled';
+    if (status[button.id] === true) {
+      button.classList.add('active');
+    } else {
+      button.classList.remove('active');
+    }
+  });
+  Object.entries(status).forEach(([key, value]) => {
+    const button = document.getElementById(key) as HTMLButtonElement;
+    if (button) {
+      //
+      if (value === 'disabled' || value === undefined) {
+        button.disabled = true;
+      } else if (value !== undefined) {
+        button.disabled = false;
+      }
+    }
+    //
+  });
+  //
+  const disabledInsertBox = status.insertBox === 'disabled';
+  const disabledInsertBlock = status.insertBlock === 'disabled';
+  const disableInsertComplexBlock = status.insertComplexBlock === 'disabled' || disabledInsertBlock;
+  //
+  (document.getElementById('table') as HTMLButtonElement).disabled = disableInsertComplexBlock;
+  (document.getElementById('layout') as HTMLButtonElement).disabled = disableInsertComplexBlock;
+  (document.getElementById('code') as HTMLButtonElement).disabled = disableInsertComplexBlock;
+  //
+  (document.getElementById('mermaid') as HTMLButtonElement).disabled = disabledInsertBlock;
+  (document.getElementById('image-button') as HTMLButtonElement).disabled = disabledInsertBlock;
+  (document.getElementById('video-button') as HTMLButtonElement).disabled = disabledInsertBlock;
+  (document.getElementById('audio-button') as HTMLButtonElement).disabled = disabledInsertBlock;
+  (document.getElementById('office-button') as HTMLButtonElement).disabled = disabledInsertBlock;
+  (document.getElementById('math-block') as HTMLButtonElement).disabled = disabledInsertBlock;
+
+  (document.getElementById('math') as HTMLButtonElement).disabled = disabledInsertBox;
+  (document.getElementById('project') as HTMLButtonElement).disabled = disabledInsertBox;
+}
+
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
   const options = {
@@ -676,6 +778,7 @@ async function loadDocument(docId: string, template?: any,
     user,
     template,
     templateValues,
+    placeholder: '请输入笔记正文',
     callbacks: {
       onSave: handleSave,
       onRemoteUserChanged: handleRemoteUserChanged,
@@ -693,6 +796,7 @@ async function loadDocument(docId: string, template?: any,
       onCommentInserted: handleCommentInserted,
       onCommentReplied: handleCommentReplied,
       // onRenderAutoSuggestItem: handleRenderAutoSuggestItem,
+      onCommandStatusChanged: handleCommandStatusChanged,
     },
   };
 
@@ -724,22 +828,39 @@ document.getElementById('undo')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.undo();
 });
+
 document.getElementById('redo')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.redo();
 });
+
 document.getElementById('table')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.insertTable(-2, 5, 3);
 });
-document.getElementById('bold')?.addEventListener('click', () => {
+
+document.getElementById('code')?.addEventListener('click', () => {
   assert(currentEditor);
-  currentEditor.executeTextCommand('bold');
+  currentEditor.insertCode(-2, 'int i = 0;');
 });
-document.getElementById('italic')?.addEventListener('click', () => {
+
+document.getElementById('layout')?.addEventListener('click', () => {
   assert(currentEditor);
-  currentEditor.executeTextCommand('italic');
+  currentEditor.insertLayout(-2, 2);
 });
+
+const toolbar = document.querySelector('#toolbar');
+assert(toolbar);
+const styleButtons = toolbar.querySelectorAll('button[id^=style-]');
+Array.from(styleButtons).forEach((button: Element) => {
+  assert(button instanceof HTMLButtonElement);
+  button.addEventListener('click', () => {
+    assert(currentEditor);
+    const command = button.id as TextCommand;
+    currentEditor.executeTextCommand(command);
+  });
+});
+
 document.getElementById('link')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.executeTextCommand('link', {});
@@ -777,6 +898,18 @@ document.getElementById('link')?.addEventListener('click', () => {
     Array.from(input.files).forEach((file) => {
       assert(currentEditor);
       currentEditor.insertVideo(null, file, -2);
+    });
+  }
+});
+
+(document.getElementById('office') as HTMLInputElement)?.addEventListener('change', (event: Event): void => {
+  assert(event);
+  assert(event.target);
+  const input = event.target as HTMLInputElement;
+  if (input.files && input.files.length > 0) {
+    Array.from(input.files).forEach((file) => {
+      assert(currentEditor);
+      currentEditor.insertOffice(null, file, -2);
     });
   }
 });
