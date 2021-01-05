@@ -1,4 +1,4 @@
-# 创建自定义的 embed block
+# 创建自定义的 complex block
 
 wiz-editor支持增加自定义的complex类型的block。这种block类似与表格，code这样的block。
 这种block里面，又包含了一个或者多个container，每一个container里面，都可以进行独立编辑，
