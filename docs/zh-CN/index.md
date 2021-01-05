@@ -162,7 +162,9 @@ const docId = 'my-test-doc-id';
 ### 自定义block
 
 [编辑器结构](./editor-structure.md)
+
 [自定义Embed类型block](./embed-block.md)
+
 [自定义Complex类型block](./complex-block.md)
 
 ## 服务端
