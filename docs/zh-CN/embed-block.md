@@ -39,5 +39,91 @@ const buttonsEmbed = {
 embedUtils.registerEmbed('buttons' as EMBED_TYPE, buttonsEmbed);
 ```
 
+demo
+
+![embed-block](./assets/embed-block.png)
+
+```ts
+// -------------------custom embed block----------------
+
+(() => {
+  interface EmbedButtonsData extends EmbedData {
+    count?: number;
+  }
+
+  function handleButtonClick(event: Event) {
+    const button = event.target as HTMLButtonElement;
+    alert(`you clicked button ${button.innerText}`);
+  };
+  //
+
+  function createElement(editor: Editor, data: EmbedData): EmbedElement {
+    assert(data);
+    const div = document.createElement('div');
+    const child = document.createElement('div');
+    div.appendChild(child);
+    //
+    const buttonsData = data as EmbedButtonsData;
+    const count = buttonsData.count || 10;
+    //
+    div.setAttribute('data-count', `${count}`);
+    //
+    for (let i = 0; i < count; i++) {
+      const button = document.createElement('button');
+      button.innerText = `button-${i}`;
+      button.onclick = handleButtonClick;
+      child.appendChild(button);
+    }
+    //
+    return div as unknown as EmbedElement;
+  }
+
+  function saveData(editor: Editor, embed: EmbedElement): EmbedData {
+    assert(embed instanceof HTMLDivElement);
+    const count = Number.parseInt(embed.getAttribute('data-count') || '10', 10);
+    return {
+      count,
+    };
+  }
+
+  function updateData(editor: Editor, embed: EmbedElement, data: EmbedData): void {
+    assert(embed instanceof HTMLHRElement);
+    assert(data);
+    //
+    assert(embed.children.length === 1);
+    const child = embed.children[0];
+    child.innerHTML = '';
+    //
+    const buttonsData = data;
+    const count = buttonsData.count || 10;
+    //
+    for (let i = 0; i < count; i++) {
+      const button = document.createElement('button');
+      button.innerText = `button-${i}`;
+      button.onclick = handleButtonClick;
+      child.appendChild(button);
+    }
+  }
+
+  const buttonsEmbed = {
+    createElement,
+    saveData,
+    updateData,
+  };
+
+  embedUtils.registerEmbed('buttons' as EMBED_TYPE, buttonsEmbed);
+})();
+
+...
+
+document.getElementById('buttons')?.addEventListener('click', () => {
+  assert(currentEditor);
+  const count = (Date.now() % 5) + 5;
+  currentEditor.insertEmbed(null, -2, 'buttons' as any, {
+    count,
+  });
+});
+```
+
 [查看例子](../../h5/src/index.ts)
 
