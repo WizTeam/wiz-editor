@@ -147,8 +147,9 @@ export interface Embed {
 ```
 
 #### 例子
-[自定义complex block](./complex-block.md)
-[自定义embed block](./embed-block.md)
+
+1. [自定义complex block](./complex-block.md)
+2. [自定义embed block](./embed-block.md)
 
 ### 扩展box
 
