@@ -34,6 +34,6 @@
   "dependencies": {
     "jose": "^3.4.0",
     "mime": "^1.6.0",
-    "wiz-editor": "^0.0.1-beta.41"
+    "wiz-editor": "^0.0.1-beta.50"
   }
 }

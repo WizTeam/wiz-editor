@@ -116,3 +116,4 @@ boxUtils.registerBoxType('some_box_type' as BOX_TYPE, someBox);
 1. [增加插入日历事件功能](./calendar.md) （通过用户选择的item，创建不同的box）
 2. [增加插入日期功能](./date.md) （通过快捷指令，输入当前日期）
 3. [增加插入label功能](./label.md) （通过用户选择，插入不同的label）
+4. [自定义box输入界面](./custom-suggest.md) （允许用户输入插入box的数据）
