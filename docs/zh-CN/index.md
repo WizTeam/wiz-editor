@@ -140,11 +140,13 @@ const docId = 'my-test-doc-id';
 
 ## 扩展编辑器功能
 
-## 自定义@xxx提醒用户功能
+[编辑器结构](./editor-structure.md)
+
+### 自定义@xxx提醒用户功能
 
 [增加插入提醒功能](./mention.md)
 
-## 响应评论消息
+### 响应评论消息
 
 [响应评论消息](./comment.md)
 
@@ -165,6 +167,10 @@ const docId = 'my-test-doc-id';
 [自定义文档模版](./custom-template.md)
 
 ### 自定义block
+
+[编辑器结构](./editor-structure.md)
+[自定义Embed类型block](./embed-block.md)
+[自定义Complex类型block](./complex-block.md)
 
 ## 服务端
 
