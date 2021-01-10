@@ -6,6 +6,7 @@
   "scripts": {
     "start": "npm-run-all  --parallel server watch",
     "simple": "npm-run-all  --parallel server watch-simple",
+    "custom": "npm-run-all  --parallel server watch-custom",
     "mention": "npm-run-all  --parallel server watch-mention",
     "calendar": "npm-run-all  --parallel server watch-calendar",
     "date": "npm-run-all  --parallel server watch-date",
@@ -13,6 +14,7 @@
     "server": "node ./server -s ./dist --enable-fake-token-api",
     "watch": "webpack --watch --config webpack.dev.js",
     "watch-simple": "webpack --watch --config webpack.simple.js",
+    "watch-custom": "webpack --watch --config webpack.custom.js",
     "watch-mention": "webpack --watch --config webpack.mention.js",
     "watch-calendar": "webpack --watch --config webpack.calendar.js",
     "watch-date": "webpack --watch --config webpack.date.js",

@@ -125,5 +125,5 @@ document.getElementById('buttons')?.addEventListener('click', () => {
 });
 ```
 
-[查看例子](../../h5/src/index.ts)
+[查看例子](../../h5/src/custom.ts)
 
