@@ -21,7 +21,7 @@ import {
   BoxTemplateData,
   blockUtils,
   docData2Text,
-  MenuItemData,
+  CommandItemData,
   SelectionDetail,
   SelectedBlock,
   selectionUtils,
@@ -43,6 +43,7 @@ import {
   CommandParams,
   ContainerData,
   Block,
+  AutoSuggestOptions,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -330,7 +331,7 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
 
 // -------------------create a custom calendar item----------
 (() => {
-  const CALENDAR_BOX_TYPE = 'calendar';
+  const CALENDAR_BOX_TYPE = 'custom-calendar';
 
   interface CalendarBoxData extends BoxData {
     text: string;
@@ -362,9 +363,10 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
     console.log('calendar box inserted:', calendarData);
   }
 
-  function handleBoxClicked(editor: Editor, data: BoxData): void {
+  function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
     const calendarData = data as CalendarBoxData;
     alert(`calendar clicked: ${calendarData.text}`);
+    assert(block);
   }
 
   async function getItems(editor: Editor, keywords: string) {
@@ -446,9 +448,10 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
     console.log('project box inserted:', projectData);
   }
 
-  function handleBoxClicked(editor: Editor, data: BoxData): void {
+  function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
     const projectData = data as ProjectBoxData;
     alert(`calendar clicked: ${projectData.projectName}`);
+    assert(block);
   }
 
   const PROJECT_LIST: {
@@ -533,10 +536,11 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
   }
 
   // 响应box被点击事件
-  function handleBoxClicked(editor: Editor, data: BoxData): void {
+  function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
     assert(data);
     const boxData = data as CustomSuggestBoxData;
     alert(`custom suggest clicked: ${boxData.text}`);
+    assert(block);
   }
 
   // 获取item。只需要返回一个item（我们会自定义这个item的渲染）
@@ -563,8 +567,9 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
   }
 
   // 渲染下拉框。 我们只有一个item，在这里返回item的内容
-  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData): HTMLElement {
+  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData, options: AutoSuggestOptions): HTMLElement {
     assert(suggestData);
+    assert(options);
     const div = document.createElement('div');
     div.style.minHeight = '100px';
     div.style.minWidth = '300px';
@@ -653,9 +658,10 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
     console.log('date box inserted:', dateData);
   }
 
-  function handleBoxClicked(editor: Editor, data: BoxData): void {
+  function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
     const dateData = data as DateBoxData;
     alert(`date clicked: ${dateData.text}`);
+    assert(block);
   }
 
   async function createBoxData(editor: Editor): Promise<BoxTemplateData | null> {
@@ -666,7 +672,7 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
   }
 
   const dateBox = {
-    prefix: 'dd',
+    prefix: '/date',
     createNode,
     handleBoxInserted,
     handleBoxClicked,
@@ -703,9 +709,10 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
     console.log('label box inserted:', calendarData);
   }
 
-  function handleBoxClicked(editor: Editor, data: BoxData): void {
+  function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
     const calendarData = data as LabelBoxData;
     alert(`label clicked: ${calendarData.color}`);
+    assert(block);
   }
   async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
     console.log(keywords);
@@ -734,7 +741,8 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
     };
   }
 
-  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData): HTMLElement {
+  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData, options: AutoSuggestOptions): HTMLElement {
+    assert(options);
     const div = document.createElement('div');
     div.setAttribute('style', `background-color: ${suggestData.text}; border-radius: 10px; width: 100%; height: 24px`);
     return div;
@@ -974,7 +982,7 @@ function handleStatusChanged(docId: string, dirty: boolean): void {
   }
 }
 
-function handleMenuItemClicked(item: MenuItemData) {
+function handleMenuItemClicked(event: Event, item: CommandItemData) {
   console.log(item);
   assert(currentEditor);
   if (item.id === 'get-selected-text') {
@@ -998,8 +1006,12 @@ function handleMenuItemClicked(item: MenuItemData) {
   }
 }
 
-function handleGetContextMenuItems(detail: SelectionDetail): MenuItemData[] {
-  const ret: MenuItemData[] = [];
+function handleGetContextMenuItems(block: BlockElement, detail: SelectionDetail): CommandItemData[] {
+  if (!blockUtils.isTextTypeBlock(block)) {
+    return [];
+  }
+  //
+  const ret: CommandItemData[] = [];
   if (detail.collapsed) {
     ret.push({
       id: 'toHeading2',
@@ -1052,7 +1064,7 @@ function handleGetContextMenuItems(detail: SelectionDetail): MenuItemData[] {
     text: '自定义样式',
     shortCut: '',
     disabled: false,
-    subMenu: [
+    subItems: [
       {
         id: 'add-border',
         text: '添加边框',
@@ -1189,6 +1201,11 @@ function handleCommandStatusChanged(status: CommandStatus): void {
   (document.getElementById('custom-suggest') as HTMLButtonElement).disabled = disabledInsertBox;
 }
 
+function handleCheckboxChanged(text: string, blockData: BlockData, mentions: BoxData[], calendars: BoxData[]) {
+  // TODO: create / modify messages
+  console.log(`checkbox changed: ${text}, ${JSON.stringify(blockData)}, ${JSON.stringify(mentions)}, ${JSON.stringify(calendars)}`);
+}
+
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
   const options = {
@@ -1216,6 +1233,7 @@ async function loadDocument(docId: string, template?: any,
       onCommentReplied: handleCommentReplied,
       // onRenderAutoSuggestItem: handleRenderAutoSuggestItem,
       onCommandStatusChanged: handleCommandStatusChanged,
+      onCheckboxChanged: handleCheckboxChanged,
     },
   };
 
@@ -1256,6 +1274,11 @@ document.getElementById('redo')?.addEventListener('click', () => {
 document.getElementById('table')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.insertTable(-2, 5, 3);
+});
+
+document.getElementById('checkbox')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.insertCheckbox(null, -2, false, '');
 });
 
 document.getElementById('code')?.addEventListener('click', () => {
