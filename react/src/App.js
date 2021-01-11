@@ -149,6 +149,7 @@ function App() {
       userId: user.userId,
       docId,
       token,
+      permission: 'w',
     };
 
     const WsServerUrl = `ws://${window.location.host}`;

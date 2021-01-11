@@ -11,14 +11,14 @@
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4",
-    "wiz-editor": "^0.0.1-beta.22"
+    "wiz-editor": "^0.0.1-beta.55"
   },
   "scripts": {
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start": "npm-run-all  --parallel server watch",
-    "server": "node ./server -s ./build --enable-fake-token-api",
+    "server": "node ./server --enable-fake-token-api",
     "watch": "cra-build-watch"
   },
   "eslintConfig": {

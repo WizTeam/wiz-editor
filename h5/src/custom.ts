@@ -46,6 +46,7 @@ import {
   Block,
   AutoSuggestOptions,
   domUtils,
+  getCurrentCommandBlock,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -56,6 +57,8 @@ const AppDomain = 'wiz.cn';
 let currentEditor: Editor | null;
 
 // -------------------custom embed block----------------
+
+const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4008-11eb-8f21-01eb48012b63.jpeg';
 
 (() => {
   interface EmbedButtonsData extends EmbedData {
@@ -116,7 +119,28 @@ let currentEditor: Editor | null;
     }
   }
 
+  function handleInsertEmbed() {
+    const block = getCurrentCommandBlock();
+    assert(block);
+    const container = containerUtils.getParentContainer(block);
+    const index = containerUtils.getBlockIndex(block);
+    currentEditor?.insertEmbed(container, index + 1, 'buttons' as any, {
+      count: 5,
+    });
+  }
+
+  function getEmbedOptions() {
+    return {
+      menuItems: [{
+        id: '',
+        text: 'Buttons',
+        onClick: handleInsertEmbed,
+      }],
+    };
+  }
+
   const buttonsEmbed = {
+    getEmbedOptions,
     createElement,
     saveData,
     updateData,
@@ -129,7 +153,7 @@ const TEST_BLOCK_TYPE = 'test';
 // ------------------ create a custom complex block -------
 (() => {
   interface TestComplexBlockTemplateData {
-    imgSrc: string;
+    imgSrc?: string;
   };
 
   interface TestComplexBlockData extends TestComplexBlockTemplateData, BlockData {
@@ -148,6 +172,7 @@ const TEST_BLOCK_TYPE = 'test';
     //
     return {
       children,
+      imgSrc: CALENDAR_IMAGE_URL,
       ...options,
     };
   }
@@ -161,7 +186,7 @@ const TEST_BLOCK_TYPE = 'test';
     blockContent.style.display = 'flex';
     blockContent.style.alignItems = 'end';
     const img = document.createElement('img');
-    img.src = blockData.imgSrc;
+    img.src = blockData.imgSrc || CALENDAR_IMAGE_URL;
     blockContent.appendChild(img);
     //
     assert(blockData.children);
@@ -222,7 +247,7 @@ const TEST_BLOCK_TYPE = 'test';
     if (oldData.imgSrc !== newData.imgSrc) {
       //
       const image = getChildImage(block);
-      image.src = newData.imgSrc;
+      image.src = newData.imgSrc || CALENDAR_IMAGE_URL;
     }
   }
 
@@ -273,10 +298,29 @@ const TEST_BLOCK_TYPE = 'test';
     return null;
   }
 
+  function handleInsertTestComplexBlock() {
+    const block = getCurrentCommandBlock();
+    assert(block);
+    assert(currentEditor);
+    const container = containerUtils.getParentContainer(block);
+    const index = containerUtils.getBlockIndex(block);
+    const blockData = blockUtils.createBlockData(currentEditor, TEST_BLOCK_TYPE as any);
+    currentEditor?.insertBlock(container, index + 1, TEST_BLOCK_TYPE as any, blockData, {
+      fromUndo: false,
+      localAction: true,
+      focusToBlock: true,
+    });
+  }
+
   function getBlockOptions(): BlockOptions {
     return {
       textBlock: false,
       complexBlock: true,
+      menuItems: [{
+        id: '',
+        text: 'Test Complex Block',
+        onClick: handleInsertTestComplexBlock,
+      }],
     };
   }
 
@@ -328,8 +372,6 @@ const TEST_BLOCK_TYPE = 'test';
 
   blockUtils.registerBlockType(TEST_BLOCK_TYPE as any, TestComplex);
 })();
-
-const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4008-11eb-8f21-01eb48012b63.jpeg';
 
 // -------------------create a custom calendar item----------
 (() => {

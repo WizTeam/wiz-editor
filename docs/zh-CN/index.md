@@ -124,6 +124,7 @@ const docId = 'my-test-doc-id';
     userId: user.userId,
     docId,
     token,
+    permission: 'w',
   };
 
   // 创建编辑器并加载文档
