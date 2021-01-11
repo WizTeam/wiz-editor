@@ -45,6 +45,7 @@ import {
   ContainerData,
   Block,
   AutoSuggestOptions,
+  domUtils,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -421,9 +422,8 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
 })();
 
 // -------------------- project list
+const PROJECT_BOX_TYPE = 'project';
 (() => {
-  const PROJECT_BOX_TYPE = 'project';
-
   interface ProjectBoxData extends BoxData {
     projectId: string;
     projectName: string;
@@ -451,8 +451,8 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
 
   function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
     const projectData = data as ProjectBoxData;
-    alert(`calendar clicked: ${projectData.projectName}`);
     assert(block);
+    editor.editBox(projectData, block);
   }
 
   const PROJECT_LIST: {
@@ -467,23 +467,14 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
   }
 
   async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
-    if (!keywords) {
-      return PROJECT_LIST.map((project) => ({
-        iconUrl: '',
-        text: project.projectName,
-        id: project.projectId,
-        data: project,
-      }));
-    }
+    assert(keywords !== undefined);
     //
-    return PROJECT_LIST
-      .filter((project) => project.projectName.indexOf(keywords) !== -1)
-      .map((project) => ({
-        iconUrl: '',
-        text: project.projectName,
-        id: project.projectId,
-        data: project,
-      }));
+    return [{
+      iconUrl: '',
+      text: '',
+      id: '',
+      data: '',
+    }];
   }
 
   function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTemplateData {
@@ -494,12 +485,71 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
     };
   }
 
+  async function createBoxData(editor: Editor) {
+    assert(editor);
+    return {
+      projectId: '',
+      projectName: 'Please select a project',
+    };
+  }
+
+  // 渲染下拉框。 我们只有一个item，在这里返回item的内容
+  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData, options: AutoSuggestOptions): HTMLElement {
+    assert(suggestData);
+    assert(options);
+    assert(options.data);
+    assert(options.data.boxData);
+    const boxData = options.data.boxData as ProjectBoxData;
+    const boxElem = editor.getBoxById(boxData.id);
+    assert(boxElem);
+    const block = containerUtils.getParentBlock(boxElem);
+    assert(block);
+    //
+    const div = document.createElement('div');
+    domUtils.addClass(div, 'editor-project-box');
+    div.onclick = (event) => {
+      event.stopPropagation();
+    };
+    //
+    const projectSelect = domUtils.createElement('select', ['project-control'], div) as HTMLSelectElement;
+    //
+    PROJECT_LIST.forEach((project) => {
+      const option = document.createElement('option');
+      option.text = project.projectName;
+      option.value = project.projectId;
+      projectSelect.options.add(option);
+    });
+
+    projectSelect.onchange = () => {
+      const index = projectSelect.selectedIndex;
+      const option = projectSelect.options[index];
+      boxData.projectName = option.text;
+      boxData.projectId = option.value;
+      editor.updateBoxData(boxData.id, {
+        ...boxData,
+      });
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const updateData = (boxData: ProjectBoxData) => {
+      projectSelect.value = boxData.projectId;
+    };
+
+    updateData(boxData);
+    //
+    return div;
+  }
+
   const projectBox = {
+    customSuggest: true,
+    insertDefaultThenEdit: true,
     createNode,
     getItems,
     handleBoxInserted,
     handleBoxClicked,
     createBoxDataFromItem,
+    createBoxData,
+    renderAutoSuggestItem,
   };
 
   boxUtils.registerBoxType(PROJECT_BOX_TYPE as BOX_TYPE, projectBox);
@@ -617,7 +667,7 @@ const CUSTOM_SUGGEST_BOX_TYPE = 'custom_render';
     return div;
   }
 
-  const customSuggestBox: Box = {
+  const customSuggestBox = {
     customSuggest: true,
     createNode,
     getItems,
@@ -1004,39 +1054,46 @@ function handleMenuItemClicked(event: Event, item: CommandItemData) {
     currentEditor.executeBlockCommand('list/indent');
   } else if (item.id === 'list/outdent') {
     currentEditor.executeBlockCommand('list/outdent');
+  } else if (item.id === 'insert-project') {
+    const block = item.data as BlockElement;
+    if (currentEditor.getSelectionDetail().startBlock !== block) {
+      currentEditor.selectBlock(block, -1, -1);
+    }
+    currentEditor.insertEmptyBox(PROJECT_BOX_TYPE as any);
   }
 }
 
-function handleGetContextMenuItems(block: BlockElement, detail: SelectionDetail): CommandItemData[] {
+function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, type: 'fixed' | 'hover' | 'menu'): CommandItemData[] {
   if (!blockUtils.isTextTypeBlock(block)) {
     return [];
   }
   //
   const ret: CommandItemData[] = [];
-  if (detail.collapsed) {
-    ret.push({
-      id: 'toHeading2',
-      text: '转换为 标题二（demo）',
-      shortCut: '',
-      disabled: false,
-      onClick: handleMenuItemClicked,
-    }, {
-      id: 'toOrderedList',
-      text: '转换为 有序列表（demo）',
-      shortCut: '',
-      disabled: false,
-      onClick: handleMenuItemClicked,
-    }, {
-      id: 'toUnorderedList',
-      text: '转换为 无序列表（demo）',
-      shortCut: '',
-      disabled: false,
-      onClick: handleMenuItemClicked,
-    });
-
+  if (type === 'menu') {
+    if (detail.collapsed) {
+      ret.push({
+        id: 'toHeading2',
+        text: '转换为 标题二（demo）',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      }, {
+        id: 'toOrderedList',
+        text: '转换为 有序列表（demo）',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      }, {
+        id: 'toUnorderedList',
+        text: '转换为 无序列表（demo）',
+        shortCut: '',
+        disabled: false,
+        onClick: handleMenuItemClicked,
+      });
+    }
     assert(detail.startBlock);
-    const type = blockUtils.getBlockType(detail.startBlock);
-    if (type === BLOCK_TYPE.LIST) {
+    const blockType = blockUtils.getBlockType(detail.startBlock);
+    if (blockType === BLOCK_TYPE.LIST) {
       ret.push({
         id: 'list/indent',
         text: '列表增加缩进（demo）',
@@ -1053,19 +1110,9 @@ function handleGetContextMenuItems(block: BlockElement, detail: SelectionDetail)
     }
     return ret;
   }
-  ret.push({
-    id: 'get-selected-text',
-    text: '获取选中文字',
-    shortCut: '',
-    disabled: false,
-    onClick: handleMenuItemClicked,
-  },
-  {
-    id: 'test id 2',
-    text: '自定义样式',
-    shortCut: '',
-    disabled: false,
-    subItems: [
+
+  if (type === 'hover') {
+    ret.push(
       {
         id: 'add-border',
         text: '添加边框',
@@ -1080,8 +1127,21 @@ function handleGetContextMenuItems(block: BlockElement, detail: SelectionDetail)
         disabled: false,
         onClick: handleMenuItemClicked,
       },
-    ],
-  });
+    );
+  }
+
+  if (type === 'fixed') {
+    ret.push({
+      id: 'insert-project',
+      text: '插入项目',
+      shortCut: '',
+      disabled: false,
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3h7zM7 9H4V5h3v4zm10 6h3v4h-3v-4zm0-10h3v4h-3V5z"></path></svg>',
+      data: block,
+      onClick: handleMenuItemClicked,
+    });
+  }
+
   return ret;
 }
 
@@ -1229,7 +1289,7 @@ async function loadDocument(docId: string, template?: any,
       onGetTagItems: fakeGetTags,
       onTagInserted: handleTagInserted,
       onTagClicked: handleTagClicked,
-      onGetContextMenuItems: handleGetContextMenuItems,
+      onGetBlockCommand: handleGetBlockCommand,
       onCommentInserted: handleCommentInserted,
       onCommentReplied: handleCommentReplied,
       // onRenderAutoSuggestItem: handleRenderAutoSuggestItem,

@@ -19,7 +19,6 @@ function hideElement(id: string) {
 hideElement('header');
 hideElement('toolbar');
 
-
 const AppId = '_LC1xOdRp';
 
 // --------------------------- mention data ----------------
@@ -119,19 +118,6 @@ function handleSave(docId: string, data: any) {
   console.log('------------------------------------------------------');
 }
 
-function handleRemoteUserChanged(docId: string, users: EditorUser[]) {
-  const userNames = [...users].map((u) => u.displayName).join(', ');
-  const curElement = document.getElementById('curUserNames');
-  assert(curElement);
-  curElement.textContent = user.displayName || '';
-
-  const otherElement = document.getElementById('otherUserNames');
-  assert(otherElement);
-  if (userNames) {
-    otherElement.textContent = `其他成员：${userNames}`;
-  }
-}
-
 function handleLoad(docId: string, data: any): void {
   console.log(`${docId} loaded`);
   assert(data);
@@ -150,18 +136,14 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string, permi
   return ret.token;
 }
 
-async function loadDocument(docId: string, template?: any,
-  templateValues?: { [index : string]: string}) {
+async function loadDocument(docId: string) {
   const options = {
     lang: LANGS.ZH_CN,
     serverUrl: WsServerUrl,
     user,
-    template,
-    templateValues,
     placeholder: '请输入笔记正文',
     callbacks: {
       onSave: handleSave,
-      onRemoteUserChanged: handleRemoteUserChanged,
       onLoad: handleLoad,
       onError: handleError,
       onGetMentionItems: fakeGetMentionItems,
