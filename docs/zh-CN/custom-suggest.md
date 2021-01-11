@@ -136,3 +136,192 @@ document.getElementById('custom-suggest')?.addEventListener('click', () => {
   });
 });
 ```
+
+
+如果要创建一个box，可以通过点击按钮直接插入这个box，并且进入编辑状态（类似飞书在任务中插入结束日期的方式），则可以按照下面的方式实现：
+
+```ts
+// -------------------- project list
+const PROJECT_BOX_TYPE = 'project';
+(() => {
+  interface ProjectBoxData extends BoxData {
+    projectId: string;
+    projectName: string;
+  };
+
+  function createNode(editor: Editor, data: BoxData): BoxNode {
+    //
+    const { projectName } = data as ProjectBoxData;
+    //
+    return {
+      classes: ['box-mention'],
+      children: [{
+        type: 'text',
+        text: projectName,
+      } as BoxTextChild],
+    };
+  }
+
+  function handleBoxInserted(editor: Editor, data: BoxData,
+    block: BlockElement, pos: number): void {
+    assert(pos >= 0);
+    const projectData = data as ProjectBoxData;
+    console.log('project box inserted:', projectData);
+  }
+
+  function handleBoxClicked(editor: Editor, data: BoxData, block: BlockElement): void {
+    const projectData = data as ProjectBoxData;
+    assert(block);
+    editor.editBox(projectData, block);
+  }
+
+  const PROJECT_LIST: {
+    projectId: string;
+    projectName: string;
+  }[] = [];
+  for (let i = 0; i < 10; i++) {
+    PROJECT_LIST.push({
+      projectId: `${i}`,
+      projectName: `项目${i}`,
+    });
+  }
+
+  async function getItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
+    assert(keywords !== undefined);
+    //
+    return [{
+      iconUrl: '',
+      text: '',
+      id: '',
+      data: '',
+    }];
+  }
+
+  function createBoxDataFromItem(editor: Editor, item: AutoSuggestData): BoxTemplateData {
+    const data: ProjectBoxData = item.data;
+    return {
+      projectId: data.projectId,
+      projectName: data.projectName,
+    };
+  }
+
+  async function createBoxData(editor: Editor) {
+    assert(editor);
+    return {
+      projectId: '',
+      projectName: 'Please select a project',
+    };
+  }
+
+  // 渲染下拉框。 我们只有一个item，在这里返回item的内容
+  function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData, options: AutoSuggestOptions): HTMLElement {
+    assert(suggestData);
+    assert(options);
+    assert(options.data);
+    assert(options.data.boxData);
+    const boxData = options.data.boxData as ProjectBoxData;
+    const boxElem = editor.getBoxById(boxData.id);
+    assert(boxElem);
+    const block = containerUtils.getParentBlock(boxElem);
+    assert(block);
+    //
+    const div = document.createElement('div');
+    domUtils.addClass(div, 'editor-project-box');
+    div.onclick = (event) => {
+      event.stopPropagation();
+    };
+    //
+    const projectSelect = domUtils.createElement('select', ['project-control'], div) as HTMLSelectElement;
+    //
+    PROJECT_LIST.forEach((project) => {
+      const option = document.createElement('option');
+      option.text = project.projectName;
+      option.value = project.projectId;
+      projectSelect.options.add(option);
+    });
+
+    projectSelect.onchange = () => {
+      const index = projectSelect.selectedIndex;
+      const option = projectSelect.options[index];
+      boxData.projectName = option.text;
+      boxData.projectId = option.value;
+      editor.updateBoxData(boxData.id, {
+        ...boxData,
+      });
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    const updateData = (boxData: ProjectBoxData) => {
+      projectSelect.value = boxData.projectId;
+    };
+
+    updateData(boxData);
+    //
+    return div;
+  }
+
+  const projectBox = {
+    customSuggest: true,
+    insertDefaultThenEdit: true, // 插入一个默认的box，然后进入编辑状态
+    createNode,
+    getItems,
+    handleBoxInserted,
+    handleBoxClicked,
+    createBoxDataFromItem,
+    createBoxData,
+    renderAutoSuggestItem,
+  };
+
+  boxUtils.registerBoxType(PROJECT_BOX_TYPE as BOX_TYPE, projectBox);
+})();
+
+
+function handleMenuItemClicked(event: Event, item: CommandItemData) {
+  console.log(item);
+  assert(currentEditor);
+  if (item.id === 'insert-project') {
+    const block = item.data as BlockElement;
+    if (currentEditor.getSelectionDetail().startBlock !== block) {
+      currentEditor.selectBlock(block, -1, -1);
+    }
+    currentEditor.insertEmptyBox(PROJECT_BOX_TYPE as any);
+  }
+}
+
+function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, type: 'fixed' | 'hover' | 'menu'): CommandItemData[] {
+  if (!blockUtils.isTextTypeBlock(block)) {
+    return [];
+  }
+  // 在text block 后面增加一个fixed的按钮，点击按钮，可以插入一个project
+  if (type === 'fixed') {
+    ret.push({
+      id: 'insert-project',
+      text: '插入项目',
+      shortCut: '',
+      disabled: false,
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M22 11V3h-7v3H9V3H2v8h7V8h2v10h4v3h7v-8h-7v3h-2V8h2v3h7zM7 9H4V5h3v4zm10 6h3v4h-3v-4zm0-10h3v4h-3V5z"></path></svg>',
+      data: block,
+      onClick: handleMenuItemClicked,
+    });
+  }
+
+  return ret;
+}
+
+// editor options
+const options = {
+  ...
+  callbacks: {
+    ...
+    onGetBlockCommand: handleGetBlockCommand,
+  },
+};
+```
+
+[完整的例子](../../h5/src/custom.ts)
+
+运行demo：
+```
+cd h5
+npm run custom
+```

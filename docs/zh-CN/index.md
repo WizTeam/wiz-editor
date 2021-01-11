@@ -22,11 +22,17 @@ localhost:9000
 
 ## 更多demo
 
-### 无ui编辑器
-
-```
+```bash
 cd h5
+# 完整的自定义扩展例子，包含外部工具栏，各种自定义组件等
+npm run custom
+# 极简编辑器，无外部UI
 npm run simple
+# 各种自定义box
+npm run calendar
+npm run date
+npm run mention
+npm run label
 ```
 
 ## 在自己的项目中使用wiz-editor
@@ -147,9 +153,9 @@ const docId = 'my-test-doc-id';
 
 [自定义box说明](./box.md)
 
-### 自定义右键菜单
+### 自定义block按钮/菜单
 
-[自定义右键菜单](./custom-context-menu.md)
+[自定义block按钮/菜单](./custom-context-menu.md)
 
 ### 自定义文字样式
 
