@@ -47,6 +47,7 @@ import {
   AutoSuggestOptions,
   domUtils,
   getCurrentCommandBlock,
+  getEditor,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -1075,6 +1076,14 @@ function handleStatusChanged(docId: string, dirty: boolean): void {
   }
 }
 
+function updateStyleCommandStatus(editor: Editor, item: CommandItemData, status: CommandStatus) {
+  if (item.id.startsWith('style-')) {
+    const i = item;
+    i.disabled = status[item.id] === 'disabled';
+    i.checked = status[item.id] === true;
+  }
+}
+
 function handleMenuItemClicked(event: Event, item: CommandItemData) {
   console.log(item);
   assert(currentEditor);
@@ -1082,9 +1091,9 @@ function handleMenuItemClicked(event: Event, item: CommandItemData) {
     const doc = selectionUtils.selectionToDoc(currentEditor, currentEditor.getSelectionDetail(), { keepComments: true });
     console.log(doc);
     alert(`selected text: ${currentEditor.getSelectedText()}`);
-  } else if (item.id === 'add-border') {
+  } else if (item.id === 'style-border') {
     currentEditor.applyTextCustomStyle('style-border');
-  } else if (item.id === 'add-strikethrough') {
+  } else if (item.id === 'style-strikethrough') {
     currentEditor.applyTextCustomStyle('style-strikethrough');
   } else if (item.id === 'toHeading2') {
     currentEditor.executeBlockCommand('toHeading2');
@@ -1109,6 +1118,8 @@ function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, typ
   if (!blockUtils.isTextTypeBlock(block)) {
     return [];
   }
+  //
+  const status = getEditor(block).getDetailCommandStatus(detail);
   //
   const ret: CommandItemData[] = [];
   if (type === 'menu') {
@@ -1156,18 +1167,22 @@ function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, typ
   if (type === 'hover') {
     ret.push(
       {
-        id: 'add-border',
+        id: 'style-border',
         text: '添加边框',
         shortCut: '',
-        disabled: false,
+        disabled: status['style-border'] === 'disabled',
+        checked: status['style-border'] === true,
         onClick: handleMenuItemClicked,
+        updateStatus: updateStyleCommandStatus,
       },
       {
-        id: 'add-strikethrough',
+        id: 'style-strikethrough',
         text: '添加删除线',
         shortCut: '',
-        disabled: false,
+        disabled: status['style-strikethrough'] === 'disabled',
+        checked: status['style-strikethrough'] === true,
         onClick: handleMenuItemClicked,
+        updateStatus: updateStyleCommandStatus,
       },
     );
   }
@@ -1295,7 +1310,6 @@ function handleCommandStatusChanged(status: CommandStatus): void {
   (document.getElementById('video-button') as HTMLButtonElement).disabled = disabledInsertBlock;
   (document.getElementById('audio-button') as HTMLButtonElement).disabled = disabledInsertBlock;
   (document.getElementById('office-button') as HTMLButtonElement).disabled = disabledInsertBlock;
-  (document.getElementById('math-block') as HTMLButtonElement).disabled = disabledInsertBlock;
   (document.getElementById('buttons') as HTMLButtonElement).disabled = disabledInsertBlock;
   (document.getElementById('complex-block') as HTMLButtonElement).disabled = disabledInsertBlock;
 
@@ -1420,6 +1434,7 @@ document.getElementById('link')?.addEventListener('click', () => {
       assert(currentEditor);
       currentEditor.insertImage(null, file, -2);
     });
+    input.files = null;
   }
 });
 
@@ -1432,6 +1447,7 @@ document.getElementById('link')?.addEventListener('click', () => {
       assert(currentEditor);
       currentEditor.insertAudio(null, file, -2);
     });
+    input.files = null;
   }
 });
 
@@ -1444,6 +1460,7 @@ document.getElementById('link')?.addEventListener('click', () => {
       assert(currentEditor);
       currentEditor.insertVideo(null, file, -2);
     });
+    input.files = null;
   }
 });
 
@@ -1456,6 +1473,7 @@ document.getElementById('link')?.addEventListener('click', () => {
       assert(currentEditor);
       currentEditor.insertOffice(null, file, -2);
     });
+    input.files = null;
   }
 });
 
@@ -1467,11 +1485,6 @@ document.getElementById('mermaid')?.addEventListener('click', () => {
 document.getElementById('math')?.addEventListener('click', () => {
   assert(currentEditor);
   currentEditor.executeTextCommand('inline-math');
-});
-
-document.getElementById('math-block')?.addEventListener('click', () => {
-  assert(currentEditor);
-  currentEditor.executeTextCommand('math');
 });
 
 document.getElementById('project')?.addEventListener('click', () => {
