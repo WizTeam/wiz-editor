@@ -1037,12 +1037,15 @@ function replaceUrl(docId: string) {
   window.history.pushState({}, '', newUrl);
 }
 
-function handleSave(docId: string, data: any) {
+async function handleSave(docId: string, data: any) {
   console.log(JSON.stringify(data, null, 2));
   const text = docData2Text(data);
   console.log('------------------- document text --------------------');
   console.log(text);
   console.log('------------------------------------------------------');
+  assert(currentEditor);
+  const html = await currentEditor?.toHtml({ inlineImage: true });
+  console.log(html);
 }
 
 function handleRemoteUserChanged(docId: string, users: EditorUser[]) {
@@ -1111,6 +1114,8 @@ function handleMenuItemClicked(event: Event, item: CommandItemData) {
       currentEditor.selectBlock(block, -1, -1);
     }
     currentEditor.insertEmptyBox(PROJECT_BOX_TYPE as any);
+  } else if (item.id === 'showVersion') {
+    currentEditor.showVersions();
   }
 }
 
@@ -1123,6 +1128,13 @@ function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, typ
   //
   const ret: CommandItemData[] = [];
   if (type === 'menu') {
+    ret.push({
+      id: 'showVersion',
+      text: '查看历史版本',
+      shortCut: '',
+      disabled: false,
+      onClick: handleMenuItemClicked,
+    });
     if (detail.collapsed) {
       ret.push({
         id: 'toHeading2',
@@ -1325,6 +1337,12 @@ function handleCheckboxChanged(text: string, blockData: BlockData, mentions: Box
 
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
+  //
+  if (currentEditor) {
+    currentEditor.destroy();
+    currentEditor = null;
+  }
+  //
   const options = {
     lang: LANGS.ZH_CN,
     serverUrl: WsServerUrl,
