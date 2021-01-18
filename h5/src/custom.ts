@@ -102,7 +102,6 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
   }
 
   function updateData(editor: Editor, embed: EmbedElement, data: EmbedData): void {
-    assert(embed instanceof HTMLHRElement);
     assert(data);
     //
     assert(embed.children.length === 1);
@@ -150,8 +149,8 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
   embedUtils.registerEmbed('buttons' as EMBED_TYPE, buttonsEmbed);
 })();
 
-const TEST_BLOCK_TYPE = 'test';
 // ------------------ create a custom complex block -------
+const TEST_BLOCK_TYPE = 'test';
 (() => {
   interface TestComplexBlockTemplateData {
     imgSrc?: string;
@@ -1526,7 +1525,7 @@ document.getElementById('comment')?.addEventListener('click', () => {
 
 document.getElementById('fullscreen')?.addEventListener('click', () => {
   assert(currentEditor);
-  currentEditor.rootElement.requestFullscreen();
+  currentEditor.fullscreen();
 });
 
 const buttons = document.querySelectorAll('.tools .toolbar-button');
