@@ -348,7 +348,7 @@ const TEST_BLOCK_TYPE = 'test';
     //
   }
 
-  function accept(type: BOX_TYPE | BLOCK_TYPE): boolean {
+  function accept(block: BlockElement, type: BOX_TYPE | BLOCK_TYPE): boolean {
     assert(type);
     // accept all non-complex blocks
     return true;
@@ -1334,6 +1334,50 @@ function handleCheckboxChanged(text: string, blockData: BlockData, mentions: Box
   console.log(`checkbox changed: ${text}, ${JSON.stringify(blockData)}, ${JSON.stringify(mentions)}, ${JSON.stringify(calendars)}`);
 }
 
+async function handleGetChartData(editor: Editor, id: string) {
+  const number = Number.parseInt(id.substr(id.lastIndexOf('_') + 1), 10);
+  console.log(`get chart data: ${number}`);
+  const dataArray = [{
+    type: 'line',
+    data: {
+      datasets: [{
+        label: 'First dataset',
+        data: [0, 20, 40, 50],
+      }],
+      labels: ['January', 'February', 'March', 'April'],
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            suggestedMin: 50,
+            suggestedMax: 100,
+          },
+        }],
+      },
+    },
+  }, {
+    // The type of chart we want to create
+    type: 'line',
+
+    // The data for our dataset
+    data: {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [{
+        label: 'My First dataset',
+        backgroundColor: 'rgb(255, 99, 132)',
+        borderColor: 'rgb(255, 99, 132)',
+        data: [0, 10, 5, 2, 20, 30, 45],
+      }],
+    },
+    // Configuration options go here
+    options: {},
+  }];
+  const data = dataArray[number % 2];
+  console.log(data);
+  return data;
+}
+
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
   //
@@ -1368,6 +1412,7 @@ async function loadDocument(docId: string, template?: any,
       // onRenderAutoSuggestItem: handleRenderAutoSuggestItem,
       onCommandStatusChanged: handleCommandStatusChanged,
       onCheckboxChanged: handleCheckboxChanged,
+      onGetChartJsData: handleGetChartData,
     },
   };
 
@@ -1496,8 +1541,17 @@ document.getElementById('link')?.addEventListener('click', () => {
 
 document.getElementById('mermaid')?.addEventListener('click', () => {
   assert(currentEditor);
-  currentEditor.insertMermaid(-2, MermaidText);
+  currentEditor.insertMermaid(null, -2, MermaidText);
 });
+
+document.getElementById('chart')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.insertChart(null, -2, `callback:chart_id_${new Date().valueOf()}`, {
+    width: 600,
+    // height: 480,
+  });
+});
+
 
 document.getElementById('math')?.addEventListener('click', () => {
   assert(currentEditor);
