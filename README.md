@@ -179,3 +179,7 @@ const docId = 'my-test-doc-id';
 [wiz-editor 服务端适配](./server.md)
 
 [wiz-editor 服务端架构介绍](./server-architecture.md)
+
+
+## 完全作为本地编辑器使用，无需依赖服务端
+[local demo](./local)
