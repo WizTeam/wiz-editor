@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+    <title>wiz-editor demo</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="apple-touch-icon" sizes="76x76" href="./apple-icon.png?v=2">
+    <style type="text/css">
+    html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #fbfbfb;
+  font-family: "Open Sans","Noto Sans SC",Menlo,"Ubuntu Mono",Consolas,"Courier New","Microsoft Yahei","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;
+}
+
+#main-layer {
+  position: relative;
+  flex-grow: 1;  
+}
+
+#main {
+  display: flex;
+  flex-direction: row;
+  overflow-y: auto;
+}
+
+.editor-frame {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px 16px;
+  box-sizing: border-box;
+  align-self: flex-start;
+}
+
+.demo-editor {
+  padding: 0;
+  margin: auto;
+  margin-top: 64px;
+  width: 100%;
+  box-sizing: border-box;
+  /* margin-bottom: 32px; */
+  /* border: 1px solid #cccccc; */
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  align-self: flex-start;
+}
+
+.header-container {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  height: 64px;
+  z-index: 1000000;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header-container-blur {
+  position: fixed;
+  right: 0;
+  left: 0;
+  top: 0;
+  height: 64px;
+  background-color: #fbfbfb;
+  z-index: 100000;
+  border-bottom: 1px solid #f0f0f0;
+  opacity: 0.8;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.header {
+  display: flex;
+  margin-right: 30px;
+  /* flex-direction: row-reverse; */
+  max-width: min(800px,100%);
+  box-sizing: border-box;
+  width: 800px;
+  margin: auto;
+  padding-top: 16px;
+  padding-left: 16px;
+}
+
+#userContainer {
+  display: flex;
+  flex-grow: 1;
+}
+
+.userFace {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #fff;
+  border-radius: 16px;
+  background-color: #C4C4C4;
+  margin-left: -5px;
+  box-sizing: border-box;
+  position: relative;
+}
+.userFace::after {
+  content: '';
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #FFEF5C;
+  transform: translateX(10%);
+}
+
+.faceImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 16px;
+}
+
+
+.shareBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: #448AFF;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+}
+
+.shareBtn .icon {
+  margin-right: 3px;
+}
+
+@media only screen and (max-device-width : 640px) {
+  .editor-frame {
+    padding: 0;
+  }
+}
+
+.comment-group-layer {
+  backdrop-filter: blur(2px);
+  border: 1px solid #f0f0f0 !important;
+}
+
+.comment-group-container.active .comment-group-layer {
+  border-color: #cecece !important;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="main-layer">
+      <div id="main">
+        <div id="editor-frame" class="editor-frame">
+          <div class="header-container-blur"></div>
+          <div class="header-container">
+            <div class="header">
+              <div id="userContainer"></div>
+              <div style="display: flex; align-items: center; margin: 0 16px;">
+                <div style="margin-right: 8px; height: 20px;"><svg class="octicon octicon-mark-github v-align-middle" height="20" viewBox="0 0 16 16" version="1.1" width="20" aria-hidden="true"><path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg></div>
+                <a id="github" href="https://github.com/WizTeam/wizeditor" target="_blank">GitHub</a>
+              </div>
+            </div>
+          </div>
+          <div id="editor" class="demo-editor"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+  </script>
+</html>
