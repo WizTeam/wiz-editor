@@ -140,45 +140,45 @@ const docId = 'my-test-doc-id';
 
 ## 扩展编辑器功能
 
-[编辑器结构](./docs/zh-cn/editor-structure.md)
+[编辑器结构](./docs/zh-CN/editor-structure.md)
 
 ### 自定义@xxx提醒用户功能
 
-[增加插入提醒功能](./docs/zh-cn/mention.md)
+[增加插入提醒功能](./docs/zh-CN/mention.md)
 
 ### 响应评论消息
 
-[响应评论消息](./docs/zh-cn/comment.md)
+[响应评论消息](./docs/zh-CN/comment.md)
 
 ### 自定义inline的模块（box）
 
-[自定义box说明](./docs/zh-cn/box.md)
+[自定义box说明](./docs/zh-CN/box.md)
 
 ### 自定义block按钮/菜单
 
-[自定义block按钮/菜单](./docs/zh-cn/custom-context-menu.md)
+[自定义block按钮/菜单](./docs/zh-CN/custom-context-menu.md)
 
 ### 自定义文字样式
 
-[自定义文字样式](./docs/zh-cn/custom-style.md)
+[自定义文字样式](./docs/zh-CN/custom-style.md)
 
 ### 自定义模版
 
-[自定义文档模版](./docs/zh-cn/custom-template.md)
+[自定义文档模版](./docs/zh-CN/custom-template.md)
 
 ### 自定义block
 
-[编辑器结构](./docs/zh-cn/editor-structure.md)
+[编辑器结构](./docs/zh-CN/editor-structure.md)
 
-[自定义Embed类型block](./docs/zh-cn/embed-block.md)
+[自定义Embed类型block](./docs/zh-CN/embed-block.md)
 
-[自定义Complex类型block](./docs/zh-cn/complex-block.md)
+[自定义Complex类型block](./docs/zh-CN/complex-block.md)
 
 ## 服务端
 
-[wiz-editor 服务端适配](./docs/zh-cn/server.md)
+[wiz-editor 服务端适配](./docs/zh-CN/server.md)
 
-[wiz-editor 服务端架构介绍](./docs/zh-cn/server-architecture.md)
+[wiz-editor 服务端架构介绍](./docs/zh-CN/server-architecture.md)
 
 
 ## 完全作为本地编辑器使用，无需依赖服务端
