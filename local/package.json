@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --config webpack.dev.js",
-    "start": "webpack serve --mode=development --config webpack.dev.js"
+    "start": "webpack-dev-server --config webpack.dev.js"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.1",
