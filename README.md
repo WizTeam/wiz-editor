@@ -136,50 +136,50 @@ const docId = 'my-test-doc-id';
 通过上面的代码，就可以在自己的应用中，创建一个多人实时协同编辑器。
 上面的代码，可以通过在h5例子下面，运行npm run simple来查看效果。
 
-[查看源码](../../h5/src/simple.ts)
+[查看源码](./h5/src/simple.ts)
 
 ## 扩展编辑器功能
 
-[编辑器结构](./editor-structure.md)
+[编辑器结构](./docs/zh-cn/editor-structure.md)
 
 ### 自定义@xxx提醒用户功能
 
-[增加插入提醒功能](./mention.md)
+[增加插入提醒功能](./docs/zh-cn/mention.md)
 
 ### 响应评论消息
 
-[响应评论消息](./comment.md)
+[响应评论消息](./docs/zh-cn/comment.md)
 
 ### 自定义inline的模块（box）
 
-[自定义box说明](./box.md)
+[自定义box说明](./docs/zh-cn/box.md)
 
 ### 自定义block按钮/菜单
 
-[自定义block按钮/菜单](./custom-context-menu.md)
+[自定义block按钮/菜单](./docs/zh-cn/custom-context-menu.md)
 
 ### 自定义文字样式
 
-[自定义文字样式](./custom-style.md)
+[自定义文字样式](./docs/zh-cn/custom-style.md)
 
 ### 自定义模版
 
-[自定义文档模版](./custom-template.md)
+[自定义文档模版](./docs/zh-cn/custom-template.md)
 
 ### 自定义block
 
-[编辑器结构](./editor-structure.md)
+[编辑器结构](./docs/zh-cn/editor-structure.md)
 
-[自定义Embed类型block](./embed-block.md)
+[自定义Embed类型block](./docs/zh-cn/embed-block.md)
 
-[自定义Complex类型block](./complex-block.md)
+[自定义Complex类型block](./docs/zh-cn/complex-block.md)
 
 ## 服务端
 
-[wiz-editor 服务端适配](./server.md)
+[wiz-editor 服务端适配](./docs/zh-cn/server.md)
 
-[wiz-editor 服务端架构介绍](./server-architecture.md)
+[wiz-editor 服务端架构介绍](./docs/zh-cn/server-architecture.md)
 
 
 ## 完全作为本地编辑器使用，无需依赖服务端
-[local demo](./local)
+[local demo](/local)
