@@ -8,7 +8,10 @@ https://cdn.jsdelivr.net/npm/wiz-editor@0.0.22/client/src/index.js
 
 ## 代码
 
-```js
+```html
+<script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.22/client/src/index.js' charset="utf-8"></script>
+
+<script>
 const {
   EditorUser,
   Editor,
@@ -27,4 +30,5 @@ const {
   SelectionDetail,
   EditorDoc,
 } = window.WizEditor;
+</script>
 ```
