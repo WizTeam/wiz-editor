@@ -183,3 +183,6 @@ const docId = 'my-test-doc-id';
 
 ## 完全作为本地编辑器使用，无需依赖服务端
 [local demo](/local)
+
+## 通过cdn使用编辑器代码
+[local demo](/cdn)

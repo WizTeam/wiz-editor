@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Live Editor Demo</title>
+  <script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.22/client/src/index.js' charset="utf-8"></script>
+</head>
+<body>
+  <div id="editor"></div>
+</body>
+<script>
+const {
+  EditorUser,
+  Editor,
+  createEditorPromise,
+  assert,
+  BlockElement,
+  blockUtils,
+  containerUtils,
+  CommandItemData,
+  MenuItem,
+  domUtils,
+  getEditor,
+  AuthMessage,
+  OnProgress,
+  EditorOptions,
+  SelectionDetail,
+  EditorDoc,
+} = window.WizEditor;
+
+const AppId = '';
+
+const user1 = {
+  avatarUrl: '',
+  userId: 'test',
+  displayName: 'test',
+};
+
+// --------------------------- mention data ----------------
+
+function createLoadDataMenuItem(block) {
+  const menuItem = MenuItem.createElement(document.documentElement, {
+    id: '',
+    text: 'Load data...',
+  });
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json';
+  domUtils.addClass(input, 'menu-item-input');
+  //
+  menuItem.appendChild(input);
+  //
+  input.onchange = (event) => {
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    assert(block);
+    const editor = getEditor(block);
+    const container = containerUtils.getParentContainer(block);
+    const index = containerUtils.getBlockIndex(block);
+    if (!blockUtils.isEmptyTextBlock(block)) {
+      // eslint-disable-next-line no-param-reassign
+      block = editor.insertTextBlock(container, index + 1, '');
+    }
+    //
+    assert(event.target);
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file);
+      reader.onload = () => {
+        const data = JSON.parse(reader.result);
+        // eslint-disable-next-line no-use-before-define
+        loadDocument(document.getElementById('editor'), user1, '', data);
+      };
+      input.files = null;
+    }
+  };
+  return menuItem;
+}
+
+function handleGetBlockCommand(block, detail, type) {
+  if (type === 'menu') {
+    //
+    const loadDataMenuItem = createLoadDataMenuItem(block);
+    //
+    return [{
+      id: '',
+      text: 'Load data',
+      order: 200,
+      element: loadDataMenuItem,
+      onClick: () => {},
+    }];
+  }
+  return [];
+}
+
+function replaceUrl(docId) {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  const now = window.location.href;
+  if (now.endsWith(docId)) return;
+  //
+  const newUrl = `${window.location.origin}${window.location.pathname}?id=${docId}`;
+  window.history.pushState({}, '', newUrl);
+  //
+  localStorage.setItem('lastDocId', docId);
+}
+
+function handleUploadResource(file) {
+  return domUtils.fileToDataUrl(file);
+}
+//
+
+async function loadDocument(element, user, docId, initLocalData) {
+  //
+  const auth = {
+    appId: AppId,
+    userId: user.userId,
+    permission: 'w',
+    docId,
+    token: '',
+  };
+
+  //
+  const options = {
+    local: true,
+    initLocalData,
+    serverUrl: '',
+    user,
+    placeholder: 'Please enter document title',
+    // markdownOnly: true,
+    lineNumber: true,
+    titleInEditor: true,
+    hideComments: true,
+    callbacks: {
+      onGetBlockCommand: handleGetBlockCommand,
+      onUploadResource: handleUploadResource,
+    },
+  };
+  const editor = await createEditorPromise(element, options, auth);
+  assert(editor);
+  return editor;
+}
+
+loadDocument(document.getElementById('editor'), user1, '').then((editor) => {
+  replaceUrl(editor.auth.docId);
+});
+
+</script>
+</html>
