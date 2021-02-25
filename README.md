@@ -185,4 +185,4 @@ const docId = 'my-test-doc-id';
 [local demo](/local)
 
 ## 通过cdn使用编辑器代码
-[local demo](/cdn)
+[CDN demo](/cdn)
