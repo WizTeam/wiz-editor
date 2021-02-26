@@ -138,6 +138,36 @@ const docId = 'my-test-doc-id';
 
 [查看源码](./h5/src/simple.ts)
 
+## react 组件
+[wiz-editor-react](https://github.com/WizTeam/wiz-editor-react)
+
+## 直接在浏览器里面使用（无需npm）
+
+```html
+<script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.22/client/src/index.js' charset="utf-8"></script>
+
+<script>
+const {
+  EditorUser,
+  Editor,
+  createEditorPromise,
+  assert,
+  BlockElement,
+  blockUtils,
+  containerUtils,
+  CommandItemData,
+  MenuItem,
+  domUtils,
+  getEditor,
+  AuthMessage,
+  OnProgress,
+  EditorOptions,
+  SelectionDetail,
+  EditorDoc,
+} = window.WizEditor;
+</script>
+```
+
 ## 扩展编辑器功能
 
 [编辑器结构](./docs/zh-CN/editor-structure.md)
