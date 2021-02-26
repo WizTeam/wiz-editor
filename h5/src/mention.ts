@@ -8,6 +8,8 @@ import {
   MentionBoxData,
   blockUtils,
   BlockElement,
+  EditorOptions,
+  Editor,
 } from 'wiz-editor/client';
 import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
@@ -87,7 +89,7 @@ NAMES.forEach((name) => {
 });
 
 
-async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]> {
+async function fakeGetMentionItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
   assert(keywords !== undefined);
   console.log(keywords);
   if (!keywords) {
@@ -96,19 +98,19 @@ async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]>
   return ALL_USERS.filter((user) => user.text.toLowerCase().indexOf(keywords.toLowerCase()) !== -1);
 }
 
-function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos: number) {
+function handleMentionInserted(editor: Editor, boxData: MentionBoxData, block: BlockElement, pos: number) {
   console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
   const leftText = blockUtils.toText(block, 0, pos);
   const rightText = blockUtils.toText(block, pos + 1, -1);
   alert(`context text:\n\n${leftText}\n\n${rightText}`);
 }
 
-function handleMentionClicked(boxData: MentionBoxData) {
+function handleMentionClicked(editor: Editor, boxData: MentionBoxData) {
   alert(`you clicked ${boxData.text} (${boxData.mentionId})`);
 }
 
 // 设置编辑器选项
-const options = {
+const options: EditorOptions = {
   serverUrl: WsServerUrl,
   user,
   callbacks: {

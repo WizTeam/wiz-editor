@@ -22,6 +22,6 @@
     "webpack-cli": "3.3.12",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.7.3",
-    "wiz-editor": "^0.0.21"
+    "wiz-editor": "^0.0.28"
   }
 }

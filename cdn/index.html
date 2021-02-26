@@ -2,7 +2,7 @@
 <html>
 <head>
   <title>Wiz Editor Demo</title>
-  <script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.22/client/src/index.js' charset="utf-8"></script>
+  <script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.28/client/src/index.js' charset="utf-8"></script>
 </head>
 <body>
   <div id="editor"></div>
@@ -76,7 +76,7 @@ function createLoadDataMenuItem(block) {
   return menuItem;
 }
 
-function handleGetBlockCommand(block, detail, type) {
+function handleGetBlockCommand(editor, block, detail, type) {
   if (type === 'menu') {
     //
     const loadDataMenuItem = createLoadDataMenuItem(block);
@@ -103,7 +103,7 @@ function replaceUrl(docId) {
   localStorage.setItem('lastDocId', docId);
 }
 
-function handleUploadResource(file) {
+function handleUploadResource(editor, file) {
   return domUtils.fileToDataUrl(file);
 }
 //

@@ -69,7 +69,7 @@ function createLoadDataMenuItem(block: BlockElement) {
   return menuItem;
 }
 
-function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, type: 'fixed' | 'hover' | 'menu'): CommandItemData[] {
+function handleGetBlockCommand(editor: Editor, block: BlockElement, detail: SelectionDetail, type: 'fixed' | 'hover' | 'menu'): CommandItemData[] {
   if (type === 'menu') {
     //
     const loadDataMenuItem = createLoadDataMenuItem(block);
@@ -108,7 +108,7 @@ function replaceUrl(docId: string) {
   localStorage.setItem('lastDocId', docId);
 }
 
-function handleUploadResource(file: File, onProgress: OnProgress): Promise<string> {
+function handleUploadResource(editor: Editor, file: File, onProgress: OnProgress): Promise<string> {
   onProgress!;
   return domUtils.fileToDataUrl(file);
 }
