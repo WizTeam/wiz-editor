@@ -68,7 +68,7 @@ NAMES.forEach((name) => {
 
 // 模拟从用户的应用服务器获取用户列表。如果没有关键字，默认返回全部数据
 // 在用户输入过程中，会不断的调用该方法。应用应该通过keywords进行过滤
-async function fakeGetMentionItems(keywords: string): Promise<AutoSuggestData[]> {
+async function fakeGetMentionItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
   assert(keywords !== undefined);
   console.log(keywords);
   if (!keywords) {
@@ -101,7 +101,7 @@ const options = {
 同样，可以在创建编辑器的时候，设置相应的回调方法：
 
 ```ts
-function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos: number) {
+function handleMentionInserted(editor: Editor, boxData: MentionBoxData, block: BlockElement, pos: number) {
   console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
   // 提醒前面的文字
   const leftText = blockUtils.toText(block, 0, pos);
@@ -112,7 +112,7 @@ function handleMentionInserted(boxData: MentionBoxData, block: BlockElement, pos
   alert(`anchor id: ${anchorId}\n\ncontext text:\n\n${leftText}\n\n${rightText}`);
 }
 
-function handleMentionClicked(boxData: MentionBoxData) {
+function handleMentionClicked(editor: Editor, boxData: MentionBoxData) {
   alert(`you clicked ${boxData.text} (${boxData.mentionId})`);
 }
 

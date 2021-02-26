@@ -288,7 +288,7 @@ function handleMenuItemClicked(event: Event, item: CommandItemData) {
   }
 }
 
-function handleGetBlockCommand(block: BlockElement, detail: SelectionDetail, type: 'fixed' | 'hover' | 'menu'): CommandItemData[] {
+function handleGetBlockCommand(editor: Editor, block: BlockElement, detail: SelectionDetail, type: 'fixed' | 'hover' | 'menu'): CommandItemData[] {
   if (!blockUtils.isTextTypeBlock(block)) {
     return [];
   }
