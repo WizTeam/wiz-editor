@@ -285,3 +285,6 @@ const {
 
 ## 响应编辑器事件
 [响应编辑器事件](./docs/zh-CN/handle-message.md)
+
+## 给在线用户发送自定义消息
+[发送自定义消息](./docs/zh-CN/post-custom-message.md)
