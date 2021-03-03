@@ -282,3 +282,6 @@ const {
 
 ## 自定义UI
 [自定义浮动工具栏](./docs/zh-CN/custom-text-toolbar.md)
+
+## 响应编辑器事件
+[响应编辑器事件](./docs/zh-CN/handle-message.md)
