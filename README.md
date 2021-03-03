@@ -278,3 +278,7 @@ const {
 
 ## 通过cdn使用编辑器代码
 [CDN demo](/cdn)
+
+
+## 自定义UI
+[自定义浮动工具栏](./docs/zh-CN/custom-text-toolbar.md)
