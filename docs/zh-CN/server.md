@@ -68,17 +68,11 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string): Prom
 const { startServer } = require('wiz-editor/server');
 const path = require('path');
 
+// 参考node_modules/wiz-editor/config/server.json 文件
 const options = {
   enableFakeTokenApi: true,
   serveStatic: true,
   staticDir: path.resolve('./dist'),
-  storage: {
-    webhook: {
-      enable: true,
-      latestVersionDelay: 20,
-      latestVersionURL: 'http://localhost:9000', // 推送文档内容到搜索引擎
-    },
-  },
 };
 
 console.log(options);
