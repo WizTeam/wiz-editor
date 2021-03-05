@@ -57,6 +57,7 @@ wiz-editor是一个支持多人实时协同编辑的网页富文本编辑。
 * 支持导入/导出markdown
 * 支持导出html
 * 支持导入docx文件
+* 支持focus模式，支持打字机模式
 
 ## 运行demo 
 
