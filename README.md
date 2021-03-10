@@ -208,7 +208,7 @@ const docId = 'my-test-doc-id';
 ## 直接在浏览器里面使用（无需npm）
 
 ```html
-<script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.39/client/src/index.js' charset="utf-8"></script>
+<script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.44/client/src/index.js' charset="utf-8"></script>
 
 <script>
 const {

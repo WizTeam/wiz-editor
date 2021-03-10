@@ -21,6 +21,7 @@ const App = () => {
     local: true,
     initLocalData: docData ? docData : undefined,
     titleInEditor: true,
+    allowDarkMode: false,
     serverUrl: '',
     user: {
       userId: 'test-user',
