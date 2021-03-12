@@ -64,6 +64,7 @@ function createLoadDataMenuItem(block: BlockElement) {
         loadDocument(document.getElementById('editor') as HTMLElement, user1, '', data);
       };
       input.files = null;
+      input.value = '';
     }
   };
   return menuItem;
