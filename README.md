@@ -5,6 +5,8 @@ wiz-editor是一个支持多人实时协同编辑的网页富文本编辑。
 1. 官网：[https://wiz-editor.com/](https://wiz-editor.com/)
 2. 在线演示：[https://api.wiz-editor.com/demo.html](https://api.wiz-editor.com/demo.html)
 
+https://user-images.githubusercontent.com/2747978/110880323-6d884400-8319-11eb-88ba-2313d07ef346.mp4
+
 
 ## 编辑器主要特性
 
@@ -88,6 +90,12 @@ wiz-editor提供了完整的markdown功能，可以利用markdown语法直接编
 * 支持focus模式，支持打字机模式
 * 支持将列表作为思维导图显示
 * 支持theme，支持夜间模式（可自动切换，可禁用）
+
+![1](https://user-images.githubusercontent.com/2747978/110880234-42055980-8319-11eb-9083-4d7f7c801914.png)
+
+![2](https://user-images.githubusercontent.com/2747978/110880241-4762a400-8319-11eb-9b80-29902deef93c.gif)
+
+
 
 ## 运行demo 
 
