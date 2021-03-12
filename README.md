@@ -2,6 +2,12 @@
 
 wiz-editor是一个支持多人实时协同编辑的网页富文本编辑。
 
+1. 官网：[https://wiz-editor.com/](https://wiz-editor.com/)
+2. 在线演示：[https://api.wiz-editor.com/demo.html](https://api.wiz-editor.com/demo.html)
+
+
+## 编辑器主要特性
+
 1. 支持多人实时协同编辑，单一文档可以支持多达1000人同时编辑器。
 2. 支持扩展各种业务模块。可以自定义行内/行间模块。
 3. 可以接入业务用户系统及权限，文档权限完全由业务控制。
@@ -59,6 +65,7 @@ wiz-editor是一个支持多人实时协同编辑的网页富文本编辑。
 * 支持导入docx文件
 * 支持focus模式，支持打字机模式
 * 支持将列表作为思维导图显示
+* 支持theme，支持夜间模式（可自动切换，可禁用）
 
 ## 运行demo 
 
