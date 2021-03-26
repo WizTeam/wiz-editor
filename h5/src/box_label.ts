@@ -12,6 +12,7 @@ import {
   Editor,
   AutoSuggestData,
   BOX_TYPE,
+  EditorOptions,
 } from 'wiz-editor/client';
 import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
@@ -115,12 +116,12 @@ const WsServerUrl = window.location.protocol !== 'https:'
 const user = {
   userId: `${new Date().valueOf()}`,
   displayName: 'test user',
+  avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
 };
 
 // 设置编辑器选项
-const options = {
+const options: EditorOptions = {
   serverUrl: WsServerUrl,
-  user,
 };
 
 // 从应用服务器获取一个AccessToken。应用服务器需要负责验证用户对文档的访问权限。
@@ -174,7 +175,7 @@ const docId = 'my-test-doc-id-box-label';
   // 生成编辑服务需要的认证信息
   const auth: AuthMessage = {
     appId: AppId,
-    userId: user.userId,
+    ...user,
     docId,
     token,
     permission: 'w',

@@ -3,14 +3,13 @@
 <head>
   <title>Wiz Editor Demo</title>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-  <script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.44/client/src/index.js' charset="utf-8"></script>
+  <script src='https://cdn.jsdelivr.net/npm/wiz-editor@0.0.101/client/src/index.js' charset="utf-8"></script>
 </head>
 <body>
   <div id="editor"></div>
 </body>
 <script>
 const {
-  EditorUser,
   Editor,
   createEditorPromise,
   assert,
@@ -31,7 +30,7 @@ const {
 const AppId = '';
 
 const user1 = {
-  avatarUrl: '',
+  avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: 'test',
   displayName: 'test',
 };
@@ -69,7 +68,7 @@ function createLoadDataMenuItem(block) {
       reader.onload = () => {
         const data = JSON.parse(reader.result);
         // eslint-disable-next-line no-use-before-define
-        loadDocument(document.getElementById('editor'), user1, '', data);
+        loadDocument(document.getElementById('editor'), '', data);
       };
       input.files = null;
       input.value = '';
@@ -110,11 +109,11 @@ function handleUploadResource(editor, file) {
 }
 //
 
-async function loadDocument(element, user, docId, initLocalData) {
+async function loadDocument(element, docId, initLocalData) {
   //
   const auth = {
     appId: AppId,
-    userId: user.userId,
+    ...user1,
     permission: 'w',
     docId,
     token: '',
@@ -125,7 +124,6 @@ async function loadDocument(element, user, docId, initLocalData) {
     local: true,
     initLocalData,
     serverUrl: '',
-    user,
     placeholder: 'Please enter document title',
     // markdownOnly: true,
     lineNumber: true,

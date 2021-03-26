@@ -4,7 +4,6 @@ import EncryptJWT from 'jose/jwt/encrypt';
 import {
   Box,
   BOX_TYPE,
-  EditorUser,
   BLOCK_TYPE,
   LANGS,
   createEditor,
@@ -49,6 +48,7 @@ import {
   getCurrentCommandBlock,
   getEditor,
   EditorOptions,
+  OnlineUser,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -73,7 +73,7 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
   };
   //
 
-  function createElement(editor: Editor, data: EmbedData): EmbedElement {
+  function createElement(editor: Editor, embedContainer: BlockContentElement, data: EmbedData): EmbedElement {
     assert(data);
     const div = document.createElement('div');
     const child = document.createElement('div');
@@ -110,7 +110,7 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
     child.innerHTML = '';
     //
     const buttonsData = data;
-    const count = buttonsData.count || 10;
+    const count: number = buttonsData.count as number || 10;
     //
     for (let i = 0; i < count; i++) {
       const button = document.createElement('button');
@@ -1015,7 +1015,7 @@ const WsServerUrl = window.location.protocol !== 'https:'
   ? `ws://${window.location.host}`
   : `wss://${window.location.host}`;
 
-const user: EditorUser = {
+const user = {
   avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: `${new Date().valueOf()}`,
   displayName: NAMES[new Date().valueOf() % NAMES.length],
@@ -1048,7 +1048,7 @@ async function handleSave(editor: Editor, data: any) {
   console.log(html);
 }
 
-function handleRemoteUserChanged(editor: Editor, users: EditorUser[]) {
+function handleRemoteUserChanged(editor: Editor, users: OnlineUser[]) {
   const userNames = [...users].map((u) => u.displayName).join(', ');
   const curElement = document.getElementById('curUserNames');
   assert(curElement);
@@ -1390,7 +1390,6 @@ async function loadDocument(docId: string, template?: any,
   const options: EditorOptions = {
     lang: LANGS.ZH_CN,
     serverUrl: WsServerUrl,
-    user,
     template,
     templateValues,
     placeholder: '请输入笔记正文',
@@ -1420,10 +1419,10 @@ async function loadDocument(docId: string, template?: any,
   const token = await fakeGetAccessTokenFromServer(user.userId, docId, 'w');
   const auth: AuthMessage = {
     appId: AppId,
-    userId: user.userId,
     permission: 'w',
     docId,
     token,
+    ...user,
   };
 
   const editor = createEditor(document.getElementById('editor') as HTMLElement, options, auth);

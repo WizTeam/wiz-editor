@@ -35,6 +35,7 @@ const WsServerUrl = window.location.protocol !== 'https:'
 // 定义一个用户。该用户应该是有应用服务器自动获取当前用户身份
 // 编辑服务需要提供用户id以及用户的显示名。
 const user = {
+  avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: `${new Date().valueOf()}`,
   displayName: 'test user',
 };
@@ -112,7 +113,6 @@ function handleMentionClicked(editor: Editor, boxData: MentionBoxData) {
 // 设置编辑器选项
 const options: EditorOptions = {
   serverUrl: WsServerUrl,
-  user,
   callbacks: {
     onGetMentionItems: fakeGetMentionItems,
     onMentionInserted: handleMentionInserted,
@@ -171,7 +171,7 @@ const docId = 'my-test-doc-id-mention';
   // 生成编辑服务需要的认证信息
   const auth: AuthMessage = {
     appId: AppId,
-    userId: user.userId,
+    ...user,
     docId,
     token,
     permission: 'w',

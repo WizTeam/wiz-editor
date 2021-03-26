@@ -23,10 +23,6 @@ const App = () => {
     titleInEditor: true,
     allowDarkMode: false,
     serverUrl: '',
-    user: {
-      userId: 'test-user',
-      displayName: 'Test User',
-    },
     callbacks: {
       onUploadResource: handleUploadResource,
     }
@@ -71,6 +67,9 @@ const App = () => {
       appId={appId}
       docId={docId}
       options={options}
+      userId={'test-user'}
+      displayName={'Test User'}
+      avatarUrl={'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg'}
       permission={'w'}
       accessToken=""
       onCreate={handleCreated}
