@@ -62,13 +62,13 @@ const WsServerUrl = window.location.protocol !== 'https:'
 // 编辑服务需要提供用户id以及用户的显示名。
 const user = {
   userId: `${new Date().valueOf()}`,
+  avatarUrl: 'xxx',
   displayName: 'test user',
 };
 
 // 设置编辑器选项
 const options = {
   serverUrl: WsServerUrl,
-  user,
 };
 
 // 从应用服务器获取一个AccessToken。应用服务器需要负责验证用户对文档的访问权限。

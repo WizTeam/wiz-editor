@@ -85,7 +85,6 @@ async function fakeGetMentionItems(editor: Editor, keywords: string): Promise<Au
 // 设置编辑器选项
 const options = {
   serverUrl: WsServerUrl,
-  user,
   callbacks: {
     onGetMentionItems: fakeGetMentionItems,
   },
@@ -119,7 +118,6 @@ function handleMentionClicked(editor: Editor, boxData: MentionBoxData) {
 // 设置编辑器选项
 const options = {
   serverUrl: WsServerUrl,
-  user,
   callbacks: {
     onGetMentionItems: fakeGetMentionItems,
     onMentionInserted: handleMentionInserted,

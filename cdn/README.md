@@ -13,7 +13,6 @@ https://cdn.jsdelivr.net/npm/wiz-editor@0.0.44/client/src/index.js
 
 <script>
 const {
-  EditorUser,
   Editor,
   createEditorPromise,
   assert,

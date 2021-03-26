@@ -17,7 +17,6 @@ function handleCustomMessage(editor: Editor, data: string) {
 
 const options: EditorOptions = {
   serverUrl: WsServerUrl,
-  user,
   callbacks: {
     // 编辑器成功加载文档
     onLoad: handleLoad,

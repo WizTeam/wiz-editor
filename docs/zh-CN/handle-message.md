@@ -7,7 +7,6 @@
 export interface EditorOptions {
   lang?: LANGS;
   serverUrl: string;
-  user: EditorUser;
   ...
   callbacks?: {
     onLoad?: (editor: Editor, data: EditorDoc) => void;

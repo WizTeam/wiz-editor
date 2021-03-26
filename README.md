@@ -167,12 +167,12 @@ const WsServerUrl = window.location.protocol !== 'https:'
 const user = {
   userId: `${new Date().valueOf()}`,
   displayName: 'test user',
+  avatarUrl: 'xxx',
 };
 
 // 设置编辑器选项
 const options = {
   serverUrl: WsServerUrl,
-  user,
 };
 
 // 从应用服务器获取一个AccessToken。应用服务器需要负责验证用户对文档的访问权限。
@@ -226,6 +226,8 @@ const docId = 'my-test-doc-id';
   const auth = {
     appId: AppId,
     userId: user.userId,
+    displayName: 'name'
+    avatarUrl: 'xxx',
     docId,
     token,
     permission: 'w',
@@ -252,7 +254,6 @@ const docId = 'my-test-doc-id';
 
 <script>
 const {
-  EditorUser,
   Editor,
   createEditorPromise,
   assert,
