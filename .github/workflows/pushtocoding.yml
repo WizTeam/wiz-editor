@@ -26,5 +26,5 @@ jobs:
       - name: push to coding
         run: |
           git remote add coding https://ptieseaziubt:e82ab7cfb2a8001137a14d7572b0279c93771636@e.coding.net/oldhu/wiz-editor/wiz-editor.git
-          git push coding HEAD:master
+          git push coding HEAD:main -f
           echo done
