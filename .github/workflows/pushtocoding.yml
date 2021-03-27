@@ -27,6 +27,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: push to coding
         run: |
-          git remote add coding https://ptieseaziubt:e82ab7cfb2a8001137a14d7572b0279c93771636@e.coding.net/oldhu/wiz-editor/wiz-editor.git
+          git remote add coding https://ptjc0djpnv6v:15558ea3b09b11427eeb70c3df940d0d1c07e787@e.coding.net/wizteam/wizeditor/demo.git
           git push coding HEAD:main -f
           echo done
