@@ -1,42 +1,6 @@
-.App {
-  text-align: center;
+.editor-main .editor-container.root-container {
+  max-width: unset;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 
 #root header {
   width: 100%;
@@ -60,4 +24,50 @@
   cursor: pointer;
   padding: 5px 10px;
   font-weight: 600;
+}
+
+#root header .btn-create-doc:hover {
+  background-color: #98adf7;
+}
+
+.btn-create-doc span, .btn-share-doc span {
+  margin-left: 5px;
+}
+
+.remote-user-container {
+  margin-left: auto;
+  display: flex;
+}
+
+.remote-user-container .avatar {
+  margin: 0 5px;
+}
+
+.remote-user-container .avatar img {
+  width: 28px;
+}
+
+.btn-share-doc {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 120px 0 80px;
+}
+
+.tool-container {
+  width: 100%;
+  height: 64px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tool-container .split-line {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e5e5;
+  margin: 0 25px;
 }
