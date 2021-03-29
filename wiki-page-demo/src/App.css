@@ -69,5 +69,38 @@
   width: 1px;
   height: 24px;
   background-color: #e5e5e5;
-  margin: 0 25px;
+  margin: 0 20px;
+}
+
+.tool-container .split-line:last-child {
+  display: none;
+}
+
+nav .toolbar-icon {
+  fill: #505F79;
+  cursor: pointer;
+  margin: 0 5px;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+nav .toolbar-icon:focus {
+  outline: none;
+}
+
+nav .toolbar-icon:hover:not(.disabled) {
+  background-color: #ECEFF4;
+}
+
+nav .toolbar-icon.disabled {
+  fill: #C6CFDE;
+  cursor: no-drop;
+}
+
+nav .toolbar-icon.active {
+  fill: #5177FF;
 }
