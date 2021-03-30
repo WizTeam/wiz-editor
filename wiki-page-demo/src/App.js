@@ -1,24 +1,33 @@
 import React, { useEffect, useMemo, useCallback } from 'react'
-import { WizEditor, genId } from 'wiz-editor-react';
+import { WizEditor, genId, EMBED_TYPE } from 'wiz-editor-react';
+import { makeStyles } from '@material-ui/core/styles';
 import isEqual from 'lodash.isequal';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import './App.css';
 
 const AppId = '_LC1xOdRp';
 
+const useStyles = makeStyles((theme) => ({
+}));
+
 function App() {
+  const classes = useStyles();
   const [docId, setDocId] = React.useState('');
   const [token, setToken] = React.useState('');
   const [remoteUsers, setRemoteUsers] = React.useState([]);
   const [toolStatus, setToolStatus] = React.useState({});
+  const [activeStatus, setActiveStatus] = React.useState({});
   const wizEditorRef = React.useRef(null);
   const lastStatus = React.useRef(null);
+  const focusedBlock = React.useRef(null);
 
   const toolbars = [
     ['undo', 'redo'],
     ['heading'],
     ['fontFamily'],
     ['color', 'background'],
-    ['style-bold', 'style-italic', 'style-underline', 'style-strikethrough', 'link'],
+    ['style-bold', 'style-italic', 'style-underline', 'style-strikethrough', 'quote', 'link'],
     ['toOrderedList', 'toUnorderedList'],
     ['image', 'file', 'table', 'code'],
   ];
@@ -88,7 +97,60 @@ function App() {
         </svg>
       </button>
     ),
+    image: (props) => (
+      <span {...props}>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.0312 3.79688H4.96875C4.32187 3.79688 3.79688 4.32187 3.79688 4.96875V19.0312C3.79688 19.6781 4.32187 20.2031 4.96875 20.2031H19.0312C19.6781 20.2031 20.2031 19.6781 20.2031 19.0312V4.96875C20.2031 4.32187 19.6781 3.79688 19.0312 3.79688ZM7.89844 6.14062C8.86875 6.14062 9.65625 6.92812 9.65625 7.89844C9.65625 8.86875 8.86875 9.65625 7.89844 9.65625C6.92812 9.65625 6.14062 8.86875 6.14062 7.89844C6.14062 6.92812 6.92812 6.14062 7.89844 6.14062ZM17.8594 17.8594H6.14062L8.48438 14.3438L10.8281 16.6875L14.3438 10.8281L17.8594 16.6875V17.8594Z"/>
+        </svg>
+      </span>
+    ),
+    file: (props) => (
+      <span {...props}>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.7575 11.2969C12.2803 10.7664 12.278 9.92296 11.7575 9.40246C11.238 8.88299 10.3959 8.88011 9.86308 9.40246L5.59979 13.6639C4.29322 14.9819 4.2966 17.0965 5.59979 18.3998C6.90362 19.7036 9.01822 19.7069 10.3358 18.3998L18.3869 10.3487C19.6939 9.04154 19.6939 6.91996 18.3869 5.61278C17.0802 4.30622 14.9581 4.3057 13.6509 5.61278L13.4151 5.85056C13.023 6.24267 12.3864 6.24267 11.9942 5.85056C11.6027 5.45882 11.6021 4.8228 11.9942 4.42971L12.2302 4.19205C14.3311 2.10152 17.7195 2.10389 19.8077 4.19205C21.8958 6.2801 21.899 9.6677 19.8077 11.7695L11.7561 19.8201C9.66238 21.8977 6.27899 21.893 4.19282 19.8068C2.10714 17.7212 2.10191 14.3373 4.18009 12.244L8.44236 7.98166C9.75704 6.6746 11.874 6.67745 13.1783 7.98166C14.4825 9.28597 14.4854 11.4029 13.1783 12.7176L9.15273 16.7432C8.76062 17.1353 8.12413 17.1353 7.732 16.7432C7.33989 16.351 7.33989 15.7145 7.732 15.3224L11.7575 11.2969Z"/>
+        </svg>
+      </span>
+    ),
+    code: (props) => (
+      <span {...props}>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.1953 11.1492L17.5383 6.49688C17.0672 6.02578 16.3031 6.02578 15.8344 6.49688C15.3656 6.96797 15.3656 7.72735 15.8344 8.19844L19.6383 12L15.832 15.8016C15.3633 16.2727 15.3633 17.0344 15.8344 17.5055C16.3031 17.9766 17.0672 17.9766 17.5359 17.5055L22.1953 12.8508C22.4156 12.6281 22.5469 12.3188 22.5469 12C22.5469 11.6813 22.418 11.3742 22.1953 11.1492ZM8.13281 6.49688C7.66406 6.02578 6.90469 6.02578 6.43828 6.49688L1.80234 11.1492C1.58203 11.3742 1.45312 11.6813 1.45312 12C1.45312 12.3164 1.58203 12.6258 1.80234 12.8508L6.43594 17.5032C6.90469 17.9742 7.66406 17.9742 8.13047 17.5032C8.59922 17.0321 8.59922 16.2727 8.13281 15.7992L4.34766 12L8.13281 8.19844C8.59922 7.72735 8.59922 6.96797 8.13281 6.49688ZM13.5516 6.22969C12.9281 6.06328 12.2812 6.44531 12.1102 7.08516L9.62812 16.3477C9.45703 16.9875 9.825 17.6414 10.4484 17.8078C11.0719 17.9742 11.7188 17.5922 11.8898 16.9524L14.3719 7.68985C14.543 7.05235 14.1773 6.39609 13.5516 6.22969Z"/>
+        </svg>
+      </span>
+    ),
+    table: (props) => (
+      <span {...props}>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M17.8594 3.79688H6.14062C4.84687 3.79688 3.79688 4.84687 3.79688 6.14062V17.8594C3.79688 19.1531 4.84687 20.2031 6.14062 20.2031H17.8594C19.1531 20.2031 20.2031 19.1531 20.2031 17.8594V6.14062C20.2031 4.84687 19.1531 3.79688 17.8594 3.79688ZM17.8594 6.14062V10.8281H13.1719V6.14062H17.8594ZM10.8281 6.14062V10.8281H6.14062V6.14062H10.8281ZM6.14062 17.8594V13.1719H10.8281V17.8594H6.14062ZM13.1719 17.8594V13.1719H17.8594V17.8594H13.1719Z"/>
+        </svg>
+      </span>
+    ),
+    quote: (props) => (
+      <span  {...props}>
+        <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.31719 4.96875C5.37188 4.96875 3.79688 6.54375 3.79688 8.48438C3.79688 10.425 5.37188 12 7.31719 12C7.75547 12 8.58516 11.9648 8.56406 11.7703C8.62266 12.3211 8.63437 13.6617 7.72969 15.375C6.9 16.943 4.89141 17.2734 4.67813 17.2734C4.19297 17.2734 3.79922 17.6672 3.79922 18.1523C3.79922 18.6375 4.21641 19.0312 4.67813 19.0312C9.19922 19.0312 10.8375 14.7047 10.8375 8.48438C10.8352 6.54375 9.26016 4.96875 7.31719 4.96875ZM16.6828 4.96875C14.7398 4.96875 13.1625 6.54375 13.1625 8.48438C13.1625 10.425 14.7375 12 16.6828 12C17.1234 12 17.9508 11.9648 17.9297 11.7703C17.9883 12.3211 18 13.6617 17.0953 15.375C16.2656 16.943 14.257 17.2734 14.0438 17.2734C13.5586 17.2734 13.1648 17.6672 13.1648 18.1523C13.1648 18.6375 13.582 19.0312 14.0438 19.0312C18.5648 19.0312 20.2031 14.7047 20.2031 8.48438C20.2031 6.54375 18.6281 4.96875 16.6828 4.96875Z"/>
+        </svg>
+      </span>
+    ),
   };
+
+  const handleBlockFocusChanged = (editor, block, focused) => {
+    if (wizEditorRef.current) {
+      const quote = wizEditorRef.current.isBlockQuoted(block);
+      setActiveStatus({ ...activeStatus, quote });
+    }
+    
+    if (focused) {
+      focusedBlock.current = block;
+    }
+  }
+
+  const handleSelectChanged = (editor, detail, mouseDown) => {
+    // console.log('handleSelectChanged', detail);
+    // if (detail.startBlock === detail.endBlock) {
+
+    // }
+  }
 
   const handleCommandStatusChanged = (editor, status) => {
     console.log(status);
@@ -122,6 +184,8 @@ function App() {
       onReauth: fakeGetAccessTokenFromServer,
       onRemoteUserChanged: handleRemoteUserChanged,
       onCommandStatusChanged: handleCommandStatusChanged,
+      onBlockFocusChanged: handleBlockFocusChanged,
+      onSelectionChanged: handleSelectChanged,
     },
   }), [userId]);
 
@@ -139,6 +203,59 @@ function App() {
     window.location.replace(`/?id=${docId}`);
   }
 
+  const handleInsertFIle = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+
+    input.addEventListener('change', (event) => {
+      if (input.files) {
+        Array.from(input.files).forEach((file) => {
+          let embedType = EMBED_TYPE.OFFICE;
+          //
+          if (/image/.test(file.type)) {
+            embedType = EMBED_TYPE.IMAGE;
+          } else if (/audio/.test(file.type)) {
+            embedType = EMBED_TYPE.AUDIO;
+          } else if (/video/.test(file.type)) {
+            embedType = EMBED_TYPE.VIDEO;
+          }
+          //
+          wizEditorRef.current.insertMediaFile(null, file, -2, embedType, {
+            breakText: true,
+          });
+        });
+        input.files = null;
+        input.value = '';
+      }
+      //
+      input.remove();
+    });
+
+    input.click();
+  }
+
+  const handleInsertImage = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept='image/*';
+
+    input.addEventListener('change', (event) => {
+      if (input.files) {
+        Array.from(input.files).forEach((file) => {
+          wizEditorRef.current.insertImage(null, file, -2, {
+            breakText: true,
+          });
+        });
+        input.files = null;
+        input.value = '';
+      }
+      //
+      input.remove();
+    });
+
+    input.click();
+  }
+
   const handleFeatClick = (event, feat) => {
     if (wizEditorRef.current === null) return;
 
@@ -154,6 +271,26 @@ function App() {
       wizEditorRef.current.executeBlockCommand('toOrderedList');
     } else if (feat === 'toUnorderedList') {
       wizEditorRef.current.executeBlockCommand('toUnorderedList');
+    } else if (feat === 'image') {
+      handleInsertImage();
+    } else if (feat === 'file') {
+      handleInsertFIle();
+    } else if (feat === 'code') {
+      wizEditorRef.current.insertCode(-2, '');
+    } else if (feat === 'table') {
+      wizEditorRef.current.insertTable(-2, 3, 3);
+    } else if (feat === 'quote') {
+      if (focusedBlock.current) {
+        const quoted = !wizEditorRef.current.isBlockQuoted(focusedBlock.current);
+        wizEditorRef.current.setBlockQuoted(focusedBlock.current, quoted);
+        setActiveStatus({ ...activeStatus, quote: quoted });
+      }
+    }
+  }
+
+  const handleHeadingChange = (event, child) => {
+    if (wizEditorRef.current) {
+      wizEditorRef.current.executeBlockCommand(child.props.value);
     }
   }
 
@@ -196,14 +333,40 @@ function App() {
     );
   }
 
+  const HeadingSelect = () => {
+    return (
+      <Select
+        disabled={toolStatus.textStyle === 'disabled'}
+        onChange={handleHeadingChange}
+        displayEmpty
+        renderValue={() => '正文'}
+        value="">
+        <MenuItem value="toBodyText">正文</MenuItem>
+        <MenuItem value="toHeading1">h1</MenuItem>
+        <MenuItem value="toHeading2">h2</MenuItem>
+        <MenuItem value="toHeading3">h3</MenuItem>
+        <MenuItem value="toHeading4">h4</MenuItem>
+        <MenuItem value="toHeading5">h5</MenuItem>
+      </Select>
+    );
+  }
+
   const renderFeat = (feat) => {
     let className = 'toolbar-icon';
     //
+    if (feat === 'heading') {
+      return <HeadingSelect key={feat} />
+    }
     if (Icons[feat]) {
       const Temp = Icons[feat];
+      const isBlockFeat = feat === 'image' || feat === 'file';
       //
-      if (toolStatus[feat] === 'disabled') {
+      if (toolStatus[feat] === 'disabled' || (toolStatus.insertBlock === 'disabled' && isBlockFeat)) {
         className += ' disabled';
+      }
+      //
+      if (activeStatus[feat] || toolStatus[feat] === true) {
+        className += ' active';
       }
       //
       return <Temp onClick={(event) => handleFeatClick(event, feat)} key={feat} className={className} />
