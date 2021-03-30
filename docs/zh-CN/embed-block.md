@@ -1,6 +1,6 @@
 # 创建自定义的 embed block
 
-wiz-editor支持增加自定义的embed类型的block。这种block类似与图片，视频, Office文件等这样的block，用户可以将光标定位在这种block前面后者后面，但是不能将光标定位在block里面。
+wiz-editor支持增加自定义的embed类型的block。这种block类似于图片，视频, Office文件等这样的block，用户可以将光标定位在这种block前面后者后面，但是不能将光标定位在block里面。
 
 block内容是一个任意的HTMLElement，里面也可以包含任意元素。
 
