@@ -49,6 +49,8 @@ import {
   getEditor,
   EditorOptions,
   OnlineUser,
+  EditorDocTocNode,
+  EditorDocToc,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -1379,6 +1381,31 @@ async function handleGetChartData(editor: Editor, id: string) {
   return data;
 }
 
+
+function handleUpdateToc(editor: Editor, toc: EditorDocToc) {
+  const container = document.getElementById('toc');
+  assert(container);
+  container.innerHTML = '';
+  //
+  const createTocElements = (parent: HTMLElement, nodes: EditorDocTocNode[]) => {
+    nodes.forEach((node) => {
+      if (node.children.length > 0) {
+        const detail = domUtils.createElement('details', [], parent);
+        const summary = domUtils.createElement('summary', [], detail);
+        const a = domUtils.createElement('a', [], summary, node.text) as HTMLAnchorElement;
+        a.href = `#${node.blockId}`;
+        createTocElements(detail, node.children);
+      } else {
+        const div = domUtils.createElement('div', [], parent);
+        const a = domUtils.createElement('a', [], div, node.text) as HTMLAnchorElement;
+        a.href = `#${node.blockId}`;
+      }
+    });
+  };
+  //
+  createTocElements(container, toc);
+}
+
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
   //
@@ -1393,6 +1420,7 @@ async function loadDocument(docId: string, template?: any,
     template,
     templateValues,
     placeholder: '请输入笔记正文',
+    titleInEditor: true,
     callbacks: {
       onSave: handleSave,
       onRemoteUserChanged: handleRemoteUserChanged,
@@ -1413,6 +1441,7 @@ async function loadDocument(docId: string, template?: any,
       onCommandStatusChanged: handleCommandStatusChanged,
       onCheckboxChanged: handleCheckboxChanged,
       onGetChartJsData: handleGetChartData,
+      onUpdateToc: handleUpdateToc,
     },
   };
 
@@ -1611,6 +1640,16 @@ document.getElementById('complex-block')?.addEventListener('click', () => {
     focusToBlock: true,
     localAction: true,
   });
+});
+
+document.getElementById('focus-mode')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.setFocusMode(!currentEditor.isFocusMode());
+});
+
+document.getElementById('typewriter-mode')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.setTypewriterMode(!currentEditor.isTypewriterMode());
 });
 
 loadDocument(pageId);

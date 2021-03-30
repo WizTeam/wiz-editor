@@ -2,10 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>wiz-editor demo</title>
+    <title><%= htmlWebpackPlugin.options.title %> demo</title>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js" id="wiz-editor-mermaid"></script>
-    <script>mermaid.initialize({startOnLoad:true});</script>    
     <style type="text/css">
     html {
   height: 100%;
@@ -14,29 +12,24 @@
 body {
   min-height: 100%;
   max-height: 100%;
-  overflow: hidden;
-  display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   background-color: #fbfbfb;
   font-family: "Open Sans","Noto Sans SC",Menlo,"Ubuntu Mono",Consolas,"Courier New","Microsoft Yahei","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;
+  max-height: 100%;
+  height: 100%;
+  display: flex;
 }
 
 #main-layer {
   position: relative;
-  flex-grow: 1;  
+  overflow-y: auto;
 }
 #main {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   flex-direction: row;
-  overflow-y: auto;
 }
 
 .editor-frame {
@@ -87,11 +80,13 @@ body {
   border-bottom: 1px solid #eee;
   background: #fff;
   height: 40px;
+  width: 100%;
 }
 
 #toolbar {
   justify-content: center;
   background-color: #fbfbfb;
+  width: 100%;
 }
 
 .tools {
@@ -99,7 +94,7 @@ body {
   align-items: center;
   flex-wrap: wrap;
   padding: 8px 16px;
-  z-index: 11000;
+  box-sizing: border-box;
 }
 
 .tools * {
@@ -211,6 +206,34 @@ body {
 .project-control {
   flex-grow: 1;
   height: 24px;
+}
+
+#toc {
+  padding-top: 100px;
+  padding-left: 32px;
+  position: fixed;
+  z-index: 10;
+}
+
+#toc > div {
+  padding-left: 16px;
+}
+
+details {
+  /* margin-left: -16px; */
+}
+
+details > div {
+  padding-left: 16px;
+}
+
+details > details {
+  padding-left: 16px;
+}
+
+
+details > summary {
+  padding-left: 0;
 }
 
     </style>
@@ -329,6 +352,15 @@ body {
       </button>
 
       <div class='split-line'></div>
+      
+      <button id="focus-mode" class="toolbar-button icon-button" title="焦点模式">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M511.715556 331.548444a184.035556 184.035556 0 0 0-184.206223 183.466667 184.035556 184.035556 0 0 0 184.206223 183.466667 184.035556 184.035556 0 0 0 184.206222-183.466667 184.035556 184.035556 0 0 0-184.206222-183.466667z m0 306.631112a123.448889 123.448889 0 0 1-123.619556-123.164445 123.448889 123.448889 0 0 1 123.619556-123.107555 123.448889 123.448889 0 0 1 123.562666 123.107555 123.448889 123.448889 0 0 1-123.562666 123.107556z"></path><path d="M1008.526222 504.604444h-53.589333a439.523556 439.523556 0 0 0-129.763556-301.795555 442.595556 442.595556 0 0 0-298.837333-129.137778V15.246222a14.620444 14.620444 0 0 0-29.297778 0v58.424889c-54.613333 1.706667-107.747556 13.255111-157.923555 34.531556a441.457778 441.457778 0 0 0-140.856889 94.606222 440.661333 440.661333 0 0 0-95.004445 140.344889 436.508444 436.508444 0 0 0-34.759111 161.450666H14.791111a14.620444 14.620444 0 0 0-14.620444 14.563556c0 8.078222 6.542222 14.620444 14.620444 14.620444h53.930667a439.523556 439.523556 0 0 0 129.479111 293.546667 442.595556 442.595556 0 0 0 298.780444 129.137778v52.679111a14.620444 14.620444 0 0 0 29.297778 0v-52.679111a439.068444 439.068444 0 0 0 157.923556-34.531556 441.457778 441.457778 0 0 0 140.913777-94.663111 440.661333 440.661333 0 0 0 95.004445-140.288 437.077333 437.077333 0 0 0 34.417778-153.201778h53.930666a14.620444 14.620444 0 1 0 0-29.297777z m-482.190222 391.395556v-47.957333a14.620444 14.620444 0 0 0-29.297778 0v47.900444c-197.973333-7.395556-358.001778-165.489778-367.559111-362.211555H176.355556a14.620444 14.620444 0 0 0 14.677333-14.563556 14.620444 14.620444 0 0 0-14.677333-14.620444H129.137778c5.404444-200.590222 167.139556-362.951111 367.957333-370.460445v42.097778a14.620444 14.620444 0 0 0 29.297778 0v-42.097778c200.817778 7.566222 362.552889 169.984 368.014222 370.460445h-47.388444a14.620444 14.620444 0 0 0-14.620445 14.620444c0 8.021333 6.542222 14.563556 14.620445 14.563556h46.990222c-9.500444 196.721778-169.528889 354.759111-367.616 362.211555z"></path></svg>
+      </button>
+      <button id="typewriter-mode" class="toolbar-button icon-button" title="打字机模式">
+        <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><path d="M194.3 394.9h626.6v24.5H194.3zM200 604.9h616.2v24.5H200z"></path><path d="M937.2 934.8H78.1V768.1l104-153v-280h651.1v280l104 153v166.7z m-834.6-24.5h810.2V775.7l-104-153v-263H206.6v263l-104 153v134.6z"></path><path d="M93.5 855.3h828.3v24.5H93.5zM239.2 654.4h73.4v24.5h-73.4zM355.1 654.4h73.4v24.5h-73.4zM470.9 654.4h73.4v24.5h-73.4zM586.8 654.4h73.4v24.5h-73.4zM702.7 654.4h73.4v24.5h-73.4z"></path><path d="M184.9 702.8h73.4v24.5h-73.4zM299.3 702.8h73.4v24.5h-73.4zM413.7 702.8h73.4v24.5h-73.4zM528.2 702.8h73.4v24.5h-73.4zM642.6 702.8H716v24.5h-73.4zM757 702.8h73.4v24.5H757z"></path><path d="M140.3 754.9h73.4v24.5h-73.4zM250.5 754.9h73.4v24.5h-73.4zM360.7 754.9h73.4v24.5h-73.4zM470.9 754.9h73.4v24.5h-73.4zM581.2 754.9h73.4v24.5h-73.4zM691.4 754.9h73.4v24.5h-73.4zM801.6 754.9H875v24.5h-73.4z"></path><path d="M507.7 581.6c-96.2 0-174.5-78.3-174.5-174.5h24.5c0 82.7 67.3 150 150 150s150-67.3 150-150h24.5c0 96.2-78.3 174.5-174.5 174.5z"></path><path d="M507.7 468.5c32.7 0 59.1-26.5 59.1-59.1H448.5c0 32.7 26.5 59.1 59.2 59.1z"></path><path d="M549.91 443.08l13.115-20.696 90.637 57.438-13.115 20.695z"></path><path d="M508.91 450.932l19.367-15.006 76.746 99.05-19.367 15.006z"></path><path d="M499.8 440.7h24.5v127h-24.5z"></path><path d="M421.135 535.59l71.905-105.17 20.224 13.828-71.904 105.17z"></path><path d="M359.104 473.322l115.052-61.379 11.532 21.616-115.051 61.38z"></path><path d="M730 347.4h-24.5V105.5H309.8v241.9h-24.4V81H730zM266.9 323.4h-90.6v-61.6h-48.2v-73.4h138.8v135z m-66.2-24.5h41.7v-86h-89.9v24.5h48.2v61.5zM839.1 323.4h-90.6v-135h138.8v73.4h-48.2v61.6z m-66.2-24.5h41.7v-61.6h48.2v-24.5h-89.9v86.1z"></path></svg>
+      </button>
+
+      <div class='split-line'></div>
 
       <button id="fullscreen" class="toolbar-button icon-button" title="全屏演示">
         <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path></svg>
@@ -345,6 +377,7 @@ body {
 
     </div>
     <div id="main-layer">
+      <div id="toc"></div>
       <div id="main">
         <div id="editor-frame" class="editor-frame"><div id="editor" class="demo-editor"></div></div>
       </div>
