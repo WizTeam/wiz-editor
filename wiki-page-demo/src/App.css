@@ -1,3 +1,28 @@
+:root {
+  --style-color-0: #d83931;
+  --style-color-1: #de7802;
+  --style-color-2: #dc9b04;
+  --style-color-3: #2ea121;
+  --style-color-4: #245bdb;
+  --style-color-5: #6425d0;
+  --style-color-6: #8f959e;
+
+  --style-bg-color-0: rgb(251, 191, 188);
+  --style-bg-color-1: rgba(254, 212, 164, 0.8);
+  --style-bg-color-2: rgba(255, 246, 122, 0.8);
+  --style-bg-color-3: rgba(183, 237, 177, 0.8);
+  --style-bg-color-4: rgba(186, 206, 253, 0.7);
+  --style-bg-color-5: rgba(205, 178, 250, 0.7);
+  --style-bg-color-6: rgba(222, 224, 227, 0.8);
+  --style-bg-color-7: rgb(247, 105, 100);
+  --style-bg-color-8: rgb(255, 165, 61);
+  --style-bg-color-9: rgb(255, 233, 40);
+  --style-bg-color-10: rgb(98, 210, 86);
+  --style-bg-color-11: rgba(78, 131, 253, 0.55);
+  --style-bg-color-12: rgba(147, 90, 246, 0.55);
+  --style-bg-color-13: rgb(187, 191, 196);
+}
+
 .editor-main .editor-container.root-container {
   max-width: unset;
 }

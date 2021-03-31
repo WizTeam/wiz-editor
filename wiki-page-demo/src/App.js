@@ -4,11 +4,42 @@ import { makeStyles } from '@material-ui/core/styles';
 import isEqual from 'lodash.isequal';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@material-ui/core/IconButton';
+import Popover from '@material-ui/core/Popover';
 import './App.css';
 
 const AppId = '_LC1xOdRp';
 
 const useStyles = makeStyles((theme) => ({
+  headingSelect: {
+    '&:before': {
+      display: 'none',
+    },
+    '&:after': {
+      display: 'none',
+    },
+    '&:hover': {
+      backgroundColor: '#ECEFF4',
+    },
+    borderRadius: 4,
+    padding: '0 5px',
+  },
+  selectContainer: {
+    borderRadius: 4,
+    '&:hover': {
+      backgroundColor: '#ECEFF4',
+    }
+  },
+  selectButton: {
+    padding: '5px 0',
+    borderRadius: 0,
+  },
+  colorBlock: {
+    width: 15,
+    height: 15,
+    margin: 5,
+    cursor: 'pointer',
+  },
 }));
 
 function App() {
@@ -18,14 +49,16 @@ function App() {
   const [remoteUsers, setRemoteUsers] = React.useState([]);
   const [toolStatus, setToolStatus] = React.useState({});
   const [activeStatus, setActiveStatus] = React.useState({});
+  const [openFontColorPopover, setOpenFontColorPopover] = React.useState(false);
   const wizEditorRef = React.useRef(null);
   const lastStatus = React.useRef(null);
   const focusedBlock = React.useRef(null);
+  const fontColorBlock = React.useRef(null);
 
   const toolbars = [
     ['undo', 'redo'],
     ['heading'],
-    ['fontFamily'],
+    // ['fontFamily'],
     ['color', 'background'],
     ['style-bold', 'style-italic', 'style-underline', 'style-strikethrough', 'quote', 'link'],
     ['toOrderedList', 'toUnorderedList'],
@@ -294,6 +327,27 @@ function App() {
     }
   }
 
+  const handleChangeFontColor = () => {
+    if (wizEditorRef.current) {
+      wizEditorRef.current.executeTextCommand('style-color-1');
+    }
+  }
+
+  const handleChangeFontBackground = () => {
+    if (wizEditorRef.current) {
+      wizEditorRef.current.executeTextCommand('style-bg-color-1');
+    }
+  }
+
+  const handleOpenFontColorPopover = () => {
+    setOpenFontColorPopover(true);
+    console.log(fontColorBlock.current);
+  }
+
+  const handlePopoverClose = () => {
+    setOpenFontColorPopover(false);
+  }
+
   const handleCreate = useCallback((editor) => {
     wizEditorRef.current = editor;
   }, []);
@@ -333,11 +387,88 @@ function App() {
     );
   }
 
+  const DownIcon = () => (
+    <svg width="20" height="12" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4.14922 5.59687L0.664051 2.10938C0.192956 1.63828 0.192956 0.874219 0.664051 0.405469C1.13515 -0.0656248 1.89452 -0.0656242 2.36796 0.403126L5 3.0375L7.63439 0.403126C8.10548 -0.0656242 8.86486 -0.0656242 9.33595 0.403126C9.80705 0.874219 9.80705 1.63828 9.33595 2.10703L5.85079 5.59687C5.62579 5.81719 5.31641 5.94844 4.99766 5.94844C4.68125 5.94844 4.37188 5.81953 4.14922 5.59687Z" fill="#505F79"/>
+    </svg>
+  );
+
+  const ColorSelectIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16.6875 17.8594H19.0313L13.4063 3.79688C13.0472 3.15797 12.7767 2.625 12 2.625C11.2233 2.625 10.8853 3.14531 10.5938 3.79688L4.95822 17.8641L7.31252 17.8594L8.65619 14.3438H15.3438L16.6875 17.8594ZM9.55197 12L12 5.59453L14.4481 12H9.55197Z" fill="#505F79"/>
+      <path d="M19.0312 20.2031H4.96875C4.32164 20.2031 3.79688 20.7279 3.79688 21.375V22.5469C3.79688 23.194 4.32164 23.7188 4.96875 23.7188H19.0312C19.6784 23.7188 20.2031 23.194 20.2031 22.5469V21.375C20.2031 20.7279 19.6784 20.2031 19.0312 20.2031Z" fill="#505F79"/>
+    </svg>
+  );
+
+  const BackgroundSelectIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20.1963 7.2804C17.1138 5.69555 13.9856 4.08703 12.3436 3.24258C11.4169 2.79445 10.9214 3.16805 10.5359 3.88617C9.45821 6.00867 7.38329 10.095 7.38329 10.095L9.42259 11.1434L8.37704 13.1883L9.39681 13.7124L7.30548 17.8024L12.4299 17.8545L13.4754 15.8095L14.4952 16.3338L15.5407 14.2889L17.5798 15.3375C17.5798 15.3375 19.695 11.1722 20.7633 9.06821C21.127 8.30227 20.978 7.79016 20.1963 7.2804ZM11.7363 16.6913L9.15798 16.6971L10.4159 14.2369L12.4552 15.2852L11.7363 16.6913Z" fill="#505F79"/>
+      <path d="M19.0312 20.2031H4.96875C4.32164 20.2031 3.79688 20.7279 3.79688 21.375V22.5469C3.79688 23.194 4.32164 23.7188 4.96875 23.7188H19.0312C19.6784 23.7188 20.2031 23.194 20.2031 22.5469V21.375C20.2031 20.7279 19.6784 20.2031 19.0312 20.2031Z" fill="#505F79"/>
+    </svg>
+  );
+
+  const SubMenuIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M11.1492 14.5969L7.66405 11.1094C7.19296 10.6383 7.19296 9.87422 7.66405 9.40547C8.13515 8.93438 8.89452 8.93438 9.36796 9.40313L12 12.0375L14.6344 9.40313C15.1055 8.93438 15.8649 8.93438 16.336 9.40313C16.8071 9.87422 16.8071 10.6383 16.336 11.107L12.8508 14.5969C12.6258 14.8172 12.3164 14.9484 11.9977 14.9484C11.6813 14.9484 11.3719 14.8195 11.1492 14.5969Z" fill="#505F79"/>
+    </svg>
+  );
+
+  const FontColor = () => {
+    return (
+      <div ref={fontColorBlock} className={classes.selectContainer}>
+        <IconButton
+          onClick={handleChangeFontColor}
+          className={classes.selectButton}
+          disableRipple
+          style={{
+            paddingLeft: 3,
+            paddingRight: 3,
+          }}
+        >
+          <ColorSelectIcon />
+        </IconButton>
+        <IconButton
+          // onClick={handleOpenFontColorPopover}
+          className={classes.selectButton}
+          disableRipple
+        >
+          <SubMenuIcon />
+        </IconButton>
+      </div>
+    );
+  }
+
+  const FontBackground = () => {
+    return (
+      <div className={classes.selectContainer}>
+        <IconButton
+          onClick={handleChangeFontBackground}
+          className={classes.selectButton}
+          disableRipple
+          style={{
+            paddingLeft: 3,
+            paddingRight: 3,
+          }}
+        >
+          <BackgroundSelectIcon />
+        </IconButton>
+        <IconButton
+          className={classes.selectButton}
+          disableRipple
+        >
+          <SubMenuIcon />
+        </IconButton>
+      </div>
+    );
+  }
+
   const HeadingSelect = () => {
     return (
       <Select
+        className={classes.headingSelect}
         disabled={toolStatus.textStyle === 'disabled'}
         onChange={handleHeadingChange}
+        IconComponent={DownIcon}
         displayEmpty
         renderValue={() => '正文'}
         value="">
@@ -356,6 +487,12 @@ function App() {
     //
     if (feat === 'heading') {
       return <HeadingSelect key={feat} />
+    }
+    if (feat === 'color') {
+      return <FontColor key={feat} />
+    }
+    if (feat === 'background') {
+      return <FontBackground key={feat} />
     }
     if (Icons[feat]) {
       const Temp = Icons[feat];
@@ -421,6 +558,27 @@ function App() {
           }}
         />
       )}
+      <Popover
+        anchorEl={fontColorBlock.current}
+        open={openFontColorPopover}
+        onClose={handlePopoverClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        {[0,1,2,3,4,5,6].map((color) => (
+          <div
+            key={`color-${color}`}
+            className={classes.colorBlock}
+            style={{ backgroundColor: `var(--style-color-${color})`}}
+          />
+        ))}
+      </Popover>
     </div>
   );
 }
