@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wiz-editor": "^0.0.105"
+    "wiz-editor": "^0.0.109"
   },
   "devDependencies": {
     "html-webpack-plugin": "^5.3.1",

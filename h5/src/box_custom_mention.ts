@@ -181,8 +181,15 @@ function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData, opt
   //
   return mentionBoxElement;
 }
+
+function handleAutoSuggestHidden() {
+  if (mentionBoxElement) {
+    mentionBoxElement.innerText = '';
+  }
+}
+
 const customMentionBox = {
-  prefix: '+',
+  prefix: '@',
   customSuggest: true,
   createNode,
   getItems,
@@ -190,6 +197,7 @@ const customMentionBox = {
   handleBoxInserted,
   handleBoxClicked,
   renderAutoSuggestItem,
+  handleAutoSuggestHidden,
 };
 
 boxUtils.registerBoxType(CUSTOM_MENTION_BOX_TYPE as BOX_TYPE, customMentionBox);
