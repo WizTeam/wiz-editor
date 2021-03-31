@@ -188,13 +188,6 @@ function App() {
     }
   }
 
-  const handleSelectChanged = (editor, detail, mouseDown) => {
-    // console.log('handleSelectChanged', detail);
-    // if (detail.startBlock === detail.endBlock) {
-
-    // }
-  }
-
   const handleCommandStatusChanged = (editor, status) => {
     if (!isEqual(lastStatus.current, status)) {
       lastStatus.current = status;
@@ -203,7 +196,9 @@ function App() {
   }
 
   const handleRemoteUserChanged = (editor, remoteUsers) => {
-    setRemoteUsers(remoteUsers);
+    setTimeout(() => {
+      setRemoteUsers(remoteUsers);
+    }, 0);
   }
 
   const getUserId = () => {
@@ -227,8 +222,8 @@ function App() {
       onRemoteUserChanged: handleRemoteUserChanged,
       onCommandStatusChanged: handleCommandStatusChanged,
       onBlockFocusChanged: handleBlockFocusChanged,
-      onSelectionChanged: handleSelectChanged,
     },
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [userId]);
 
   async function fakeGetAccessTokenFromServer(userId, docId) {
