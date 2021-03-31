@@ -315,30 +315,30 @@ function App() {
     input.click();
   }
 
-  const handleFeatClick = (event, feat) => {
+  const handleFeatureClick = (event, feature) => {
     if (wizEditorRef.current === null) return;
 
-    if (feat === 'undo') {
+    if (feature === 'undo') {
       wizEditorRef.current.undo();
-    } else if (feat === 'redo') {
+    } else if (feature === 'redo') {
       wizEditorRef.current.redo();
-    } else if (feat.startsWith('style-')) {
-      wizEditorRef.current.executeTextCommand(feat);
-    } else if (feat === 'link') {
+    } else if (feature.startsWith('style-')) {
+      wizEditorRef.current.executeTextCommand(feature);
+    } else if (feature === 'link') {
       wizEditorRef.current.executeTextCommand('link', {});
-    } else if (feat === 'toOrderedList') {
+    } else if (feature === 'toOrderedList') {
       wizEditorRef.current.executeBlockCommand('toOrderedList');
-    } else if (feat === 'toUnorderedList') {
+    } else if (feature === 'toUnorderedList') {
       wizEditorRef.current.executeBlockCommand('toUnorderedList');
-    } else if (feat === 'image') {
+    } else if (feature === 'image') {
       handleInsertImage();
-    } else if (feat === 'file') {
+    } else if (feature === 'file') {
       handleInsertFIle();
-    } else if (feat === 'code') {
+    } else if (feature === 'code') {
       wizEditorRef.current.insertCode(-2, '');
-    } else if (feat === 'table') {
+    } else if (feature === 'table') {
       wizEditorRef.current.insertTable(-2, 3, 3);
-    } else if (feat === 'quote') {
+    } else if (feature === 'quote') {
       if (focusedBlock.current) {
         const quoted = !wizEditorRef.current.isBlockQuoted(focusedBlock.current);
         wizEditorRef.current.setBlockQuoted(focusedBlock.current, quoted);
@@ -554,40 +554,40 @@ function App() {
     );
   }
 
-  const renderFeat = (feat) => {
+  const renderFeature = (feature) => {
     let className = 'toolbar-icon';
     //
-    if (feat === 'heading') {
-      return <HeadingSelect key={feat} />
+    if (feature === 'heading') {
+      return <HeadingSelect key={feature} />
     }
-    if (feat === 'color') {
-      return <FontColor key={feat} />
+    if (feature === 'color') {
+      return <FontColor key={feature} />
     }
-    if (feat === 'background') {
-      return <FontBackground key={feat} />
+    if (feature === 'background') {
+      return <FontBackground key={feature} />
     }
-    if (Icons[feat]) {
-      const Temp = Icons[feat];
-      const isBlockFeat = feat === 'image' || feat === 'file';
+    if (Icons[feature]) {
+      const Temp = Icons[feature];
+      const isBlockFeature = feature === 'image' || feature === 'file';
       //
-      if (toolStatus[feat] === 'disabled' || (toolStatus.insertBlock === 'disabled' && isBlockFeat)) {
+      if (toolStatus[feature] === 'disabled' || (toolStatus.insertBlock === 'disabled' && isBlockFeature)) {
         className += ' disabled';
       }
       //
-      if (activeStatus[feat] || toolStatus[feat] === true) {
+      if (activeStatus[feature] || toolStatus[feature] === true) {
         className += ' active';
       }
       //
       return <Temp
         // 防止焦点转移
         onMouseDown={(event) => event.preventDefault()}
-        onClick={(event) => handleFeatClick(event, feat)}
-        key={feat}
+        onClick={(event) => handleFeatureClick(event, feature)}
+        key={feature}
         className={className}
       />
     }
     //
-    return <div key={feat}>{feat}</div>;
+    return <div key={feature}>{feature}</div>;
   };
 
   return (
@@ -612,8 +612,8 @@ function App() {
       </header>
       <nav className="tool-container">
         {toolbars.map((item, index) => (
-          <React.Fragment key={`split-feat-${index}`}>
-            {item.map((feat) => renderFeat(feat))}
+          <React.Fragment key={`split-feature-${index}`}>
+            {item.map((feature) => renderFeature(feature))}
             <span className="split-line"></span>
           </React.Fragment>
         ))}
@@ -631,8 +631,8 @@ function App() {
           accessToken={token}
           containerStyle={{
             maxWidth: '100%',
-            minHeight: 800,
-            margin: '130px 50px 0'
+            height: '100%',
+            padding: '130px 50px 0'
           }}
         />
       )}
