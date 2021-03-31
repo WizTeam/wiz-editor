@@ -417,14 +417,14 @@ function App() {
 
   useEffect(() => {
     const getToken = async () => {
-      if (docId) {
-        const t = await fakeGetAccessTokenFromServer('test-user', docId);
+      if (docId && userId) {
+        const t = await fakeGetAccessTokenFromServer(userId, docId);
         setToken(t);
       }
     }
 
     getToken();
-  }, [docId]);
+  }, [docId, userId]);
 
   const OnlineUser = (props) => {
     const src = props.user ? props.user.avatarUrl : '';
