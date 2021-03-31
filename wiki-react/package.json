@@ -20,7 +20,7 @@
     "eject": "react-scripts eject",
     "start": "npm-run-all  --parallel server watch",
     "server": "node ./server --enable-fake-token-api",
-    "watch": "cra-build-watch"
+    "watch": "cra-build-watch --output-filename=js/bundle-[hash].js"
   },
   "eslintConfig": {
     "extends": [
