@@ -65,6 +65,16 @@ function App() {
   const currentFontColor = React.useRef('style-color-0');
   const currentFontBackground = React.useRef('style-bg-color-0');
 
+  const AVATAR_URLS = [
+    'https://live-editor.com/wp-content/new-uploads/2f4c76a6-db63-4de1-a5c0-28cf36384b7e.png',
+    'https://live-editor.com/wp-content/new-uploads/fc728217-55e3-4d09-b034-07a9960a6b39.png',
+    'https://live-editor.com/wp-content/new-uploads/a0919cb4-d3c2-4027-b64d-35a4c2dc8e23.png',
+    'https://live-editor.com/wp-content/new-uploads/edd02e17-0311-42f2-b6e4-f2182c9af669.png',
+    'https://live-editor.com/wp-content/new-uploads/466fd22b-efa2-4aa9-afa2-2e7fd7e877c4.png',
+    'https://live-editor.com/wp-content/new-uploads/ba347c05-ec29-4ebf-bca0-d95670c93df0.png',
+    'https://live-editor.com/wp-content/new-uploads/200598ee-a746-403f-9908-a91949bc41c2.png',
+  ];
+
   const toolbars = [
     ['undo', 'redo'],
     ['heading'],
@@ -205,7 +215,19 @@ function App() {
     return new Date().getTime().toString(16).slice(5);
   }
 
-  const userId = useMemo(() => getUserId(), []);
+  // const userId = useMemo(() => getUserId(), []);
+
+  const user = useMemo(() => {
+    const userId = getUserId();
+    const avaIndex = (new Date().getTime()) % AVATAR_URLS.length;
+    const avatarUrl = AVATAR_URLS[avaIndex];
+    return {
+      userId,
+      displayName: userId,
+      avatarUrl
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const options = useMemo(() => ({
     local: false,
@@ -214,8 +236,8 @@ function App() {
     titlePlaceholder: '标题',
     serverUrl: 'ws://localhost:9000',
     user: {
-      userId,
-      displayName: userId,
+      userId: user.userId,
+      displayName: user.displayName,
     },
     callbacks: {
       onReauth: fakeGetAccessTokenFromServer,
@@ -224,7 +246,7 @@ function App() {
       onBlockFocusChanged: handleBlockFocusChanged,
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }), [userId]);
+  }), [user]);
 
   async function fakeGetAccessTokenFromServer(userId, docId) {
     const res = await fetch(`//${window.location.host}/token/${AppId}/${docId}/${userId}`);
@@ -399,6 +421,7 @@ function App() {
 
   const handleCreate = useCallback((editor) => {
     wizEditorRef.current = editor;
+    window.wizE = editor;
   }, []);
 
   useEffect(() => {
@@ -417,14 +440,13 @@ function App() {
 
   useEffect(() => {
     const getToken = async () => {
-      if (docId && userId) {
-        const t = await fakeGetAccessTokenFromServer(userId, docId);
+      if (docId && user.userId) {
+        const t = await fakeGetAccessTokenFromServer(user.userId, docId);
         setToken(t);
       }
     }
-
     getToken();
-  }, [docId, userId]);
+  }, [docId, user]);
 
   const OnlineUser = (props) => {
     const src = props.user ? props.user.avatarUrl : '';
@@ -556,7 +578,13 @@ function App() {
         className += ' active';
       }
       //
-      return <Temp onClick={(event) => handleFeatClick(event, feat)} key={feat} className={className} />
+      return <Temp
+        // 防止焦点转移
+        onMouseDown={(event) => event.preventDefault()}
+        onClick={(event) => handleFeatClick(event, feat)}
+        key={feat}
+        className={className}
+      />
     }
     //
     return <div key={feat}>{feat}</div>;
@@ -593,9 +621,9 @@ function App() {
       {token && AppId && docId && (
         <WizEditor
           onCreate={handleCreate}
-          userId={userId}
-          displayName={userId}
-          avatarUrl={'https://www.live-editor.com/wp-content/new-uploads/a0919cb4-d3c2-4027-b64d-35a4c2dc8e23.png'}
+          userId={user.userId}
+          displayName={user.displayName}
+          avatarUrl={user.avatarUrl}
           appId={AppId}
           docId={docId}
           options={options}
@@ -604,7 +632,7 @@ function App() {
           containerStyle={{
             maxWidth: '100%',
             minHeight: 800,
-            margin: '0px 50px'
+            margin: '130px 50px 0'
           }}
         />
       )}

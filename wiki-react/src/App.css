@@ -33,6 +33,10 @@
   background-color: #2F323E;
   display: flex;
   align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99;
 }
 
 #root header .logo {
@@ -88,6 +92,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 64px;
+  z-index: 99;
 }
 
 .tool-container .split-line {
