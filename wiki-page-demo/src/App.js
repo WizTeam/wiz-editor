@@ -39,6 +39,13 @@ const useStyles = makeStyles((theme) => ({
     height: 15,
     margin: 5,
     cursor: 'pointer',
+    border: 0,
+  },
+  colorContainer: {
+    display: 'flex',
+    flexFlow: 'wrap',
+    width: 100,
+    padding: 5,
   },
 }));
 
@@ -49,11 +56,14 @@ function App() {
   const [remoteUsers, setRemoteUsers] = React.useState([]);
   const [toolStatus, setToolStatus] = React.useState({});
   const [activeStatus, setActiveStatus] = React.useState({});
-  const [openFontColorPopover, setOpenFontColorPopover] = React.useState(false);
+  const [fontColorPosition, setFontColorPosition] = React.useState(null);
+  const [fontBackgroundPosition, setFontBackgroundPosition] = React.useState(null);
   const wizEditorRef = React.useRef(null);
   const lastStatus = React.useRef(null);
   const focusedBlock = React.useRef(null);
   const fontColorBlock = React.useRef(null);
+  const currentFontColor = React.useRef('style-color-0');
+  const currentFontBackground = React.useRef('style-bg-color-0');
 
   const toolbars = [
     ['undo', 'redo'],
@@ -327,25 +337,49 @@ function App() {
     }
   }
 
+  const handleCurrentFontColorChange = (color) => {
+    currentFontColor.current = color;
+    handleChangeFontColor();
+    handlePopoverClose();
+  }
+
+  const handleCurrentFontBackgroundChange = (color) => {
+    currentFontBackground.current = color;
+    handleChangeFontBackground();
+    handlePopoverClose();
+  }
+
   const handleChangeFontColor = () => {
     if (wizEditorRef.current) {
-      wizEditorRef.current.executeTextCommand('style-color-1');
+      wizEditorRef.current.executeTextCommand(currentFontColor.current);
     }
   }
 
   const handleChangeFontBackground = () => {
     if (wizEditorRef.current) {
-      wizEditorRef.current.executeTextCommand('style-bg-color-1');
+      wizEditorRef.current.executeTextCommand(currentFontBackground.current);
     }
   }
 
-  const handleOpenFontColorPopover = () => {
-    setOpenFontColorPopover(true);
-    console.log(fontColorBlock.current);
+  const handleOpenBackgroundPopover = (event) => {
+    const rect = event.target.getBoundingClientRect();
+    setFontBackgroundPosition({
+      left: rect.left,
+      top: rect.top + 24,
+    });
+  }
+
+  const handleOpenFontColorPopover = (event) => {
+    const rect = event.target.getBoundingClientRect();
+    setFontColorPosition({
+      left: rect.left,
+      top: rect.top + 24,
+    });
   }
 
   const handlePopoverClose = () => {
-    setOpenFontColorPopover(false);
+    setFontColorPosition(null);
+    setFontBackgroundPosition(null);
   }
 
   const handleCreate = useCallback((editor) => {
@@ -428,7 +462,7 @@ function App() {
           <ColorSelectIcon />
         </IconButton>
         <IconButton
-          // onClick={handleOpenFontColorPopover}
+          onClick={handleOpenFontColorPopover}
           className={classes.selectButton}
           disableRipple
         >
@@ -453,6 +487,7 @@ function App() {
           <BackgroundSelectIcon />
         </IconButton>
         <IconButton
+          onClick={handleOpenBackgroundPopover}
           className={classes.selectButton}
           disableRipple
         >
@@ -559,25 +594,39 @@ function App() {
         />
       )}
       <Popover
-        anchorEl={fontColorBlock.current}
-        open={openFontColorPopover}
+        open={!!fontColorPosition}
+        anchorReference="anchorPosition"
+        anchorPosition={fontColorPosition}
         onClose={handlePopoverClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
       >
-        {[0,1,2,3,4,5,6].map((color) => (
-          <div
-            key={`color-${color}`}
-            className={classes.colorBlock}
-            style={{ backgroundColor: `var(--style-color-${color})`}}
-          />
-        ))}
+        <div className={classes.colorContainer}>
+          {[0,1,2,3,4,5,6].map((color) => (
+            <button
+              key={`color-${color}`}
+              onClick={() => handleCurrentFontColorChange(`style-color-${color}`)}
+              className={classes.colorBlock}
+              style={{ backgroundColor: `var(--style-color-${color})`}}
+            />
+          ))}
+        </div>
+      </Popover>
+
+      <Popover
+        open={!!fontBackgroundPosition}
+        anchorReference="anchorPosition"
+        anchorPosition={fontBackgroundPosition}
+        onClose={handlePopoverClose}
+      >
+        <div className={classes.colorContainer}>
+          {[0,1,2,3,4,5,6,7,8,9,10,11,12,13].map((color) => (
+            <button
+              key={`background-${color}`}
+              onClick={() => handleCurrentFontBackgroundChange(`style-bg-color-${color}`)}
+              className={classes.colorBlock}
+              style={{ backgroundColor: `var(--style-bg-color-${color})`}}
+            />
+          ))}
+        </div>
       </Popover>
     </div>
   );
