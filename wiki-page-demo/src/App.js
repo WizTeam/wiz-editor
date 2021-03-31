@@ -196,7 +196,6 @@ function App() {
   }
 
   const handleCommandStatusChanged = (editor, status) => {
-    console.log(status);
     if (!isEqual(lastStatus.current, status)) {
       lastStatus.current = status;
       setToolStatus({ ...status });
@@ -329,6 +328,27 @@ function App() {
         setActiveStatus({ ...activeStatus, quote: quoted });
       }
     }
+  }
+
+  const handleShareWiki = () => {
+    const copyText = window.location.href;
+    const el = document.createElement('textarea');
+    el.value = copyText;
+    el.setAttribute('readonly', '');
+    el.style = `
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+    `;
+    //
+    el.addEventListener('copy', () => {
+      alert('copy success');
+    });
+    //
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
   }
 
   const handleHeadingChange = (event, child) => {
@@ -560,7 +580,7 @@ function App() {
         <div className="remote-user-container">
           {remoteUsers.map((user) => (<OnlineUser key={user.userId} user={user} />))}
         </div>
-        <div className="btn-share-doc">
+        <div className="btn-share-doc" onClick={handleShareWiki}>
           <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 11.5781C7.41406 11.5781 7.74219 11.25 7.74219 10.8516V3.48438L7.67969 2.39062L8.11719 2.94531L9.10938 4C9.23438 4.14062 9.41406 4.21875 9.60156 4.21875C9.95312 4.21875 10.25 3.96094 10.25 3.58594C10.25 3.39844 10.1797 3.25781 10.0469 3.125L7.57031 0.742188C7.38281 0.554688 7.20312 0.492188 7 0.492188C6.80469 0.492188 6.625 0.554688 6.4375 0.742188L3.96094 3.125C3.82812 3.25781 3.75 3.39844 3.75 3.58594C3.75 3.96094 4.04688 4.21875 4.39844 4.21875C4.58594 4.21875 4.77344 4.14062 4.89844 4L5.89062 2.94531L6.32812 2.39062L6.26562 3.48438V10.8516C6.26562 11.25 6.59375 11.5781 7 11.5781ZM2.73438 17.5312H11.2578C12.8906 17.5312 13.7422 16.6797 13.7422 15.0703V7.85156C13.7422 6.24219 12.8906 5.39062 11.2578 5.39062H9.29688V6.99219H11.1328C11.7812 6.99219 12.1484 7.32812 12.1484 8.01562V14.9062C12.1484 15.5938 11.7812 15.9297 11.1328 15.9297H2.86719C2.21094 15.9297 1.85156 15.5938 1.85156 14.9062V8.01562C1.85156 7.32812 2.21094 6.99219 2.86719 6.99219H4.72656V5.39062H2.73438C1.11719 5.39062 0.25 6.24219 0.25 7.85156V15.0703C0.25 16.6797 1.11719 17.5312 2.73438 17.5312Z" fill="white"/>
           </svg>
