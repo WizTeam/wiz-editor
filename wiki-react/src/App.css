@@ -1,0 +1,152 @@
+:root {
+  --style-color-0: #d83931;
+  --style-color-1: #de7802;
+  --style-color-2: #dc9b04;
+  --style-color-3: #2ea121;
+  --style-color-4: #245bdb;
+  --style-color-5: #6425d0;
+  --style-color-6: #8f959e;
+
+  --style-bg-color-0: rgb(251, 191, 188);
+  --style-bg-color-1: rgba(254, 212, 164, 0.8);
+  --style-bg-color-2: rgba(255, 246, 122, 0.8);
+  --style-bg-color-3: rgba(183, 237, 177, 0.8);
+  --style-bg-color-4: rgba(186, 206, 253, 0.7);
+  --style-bg-color-5: rgba(205, 178, 250, 0.7);
+  --style-bg-color-6: rgba(222, 224, 227, 0.8);
+  --style-bg-color-7: rgb(247, 105, 100);
+  --style-bg-color-8: rgb(255, 165, 61);
+  --style-bg-color-9: rgb(255, 233, 40);
+  --style-bg-color-10: rgb(98, 210, 86);
+  --style-bg-color-11: rgba(78, 131, 253, 0.55);
+  --style-bg-color-12: rgba(147, 90, 246, 0.55);
+  --style-bg-color-13: rgb(187, 191, 196);
+}
+
+.editor-main .editor-container.root-container {
+  max-width: 1024px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.scroll-container {
+  width: 100%;
+  height: calc(100vh - 128px);
+  overflow: auto;
+  margin-top: 128px;
+}
+
+#root header {
+  width: 100%;
+  height: 64px;
+  background-color: #2F323E;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 99;
+}
+
+#root header .logo {
+  font-size: 20px;
+  color: #fbfbfb;
+  margin: 0 33px 0 26px;
+}
+
+#root header .btn-create-doc {
+  background-color: #5177FF;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #ffffff;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-weight: 600;
+}
+
+#root header .btn-create-doc:hover {
+  background-color: #98adf7;
+}
+
+.btn-create-doc span, .btn-share-doc span {
+  margin-left: 5px;
+}
+
+.remote-user-container {
+  margin-left: auto;
+  display: flex;
+}
+
+.remote-user-container .avatar {
+  margin: 0 5px;
+}
+
+.remote-user-container .avatar img {
+  width: 28px;
+}
+
+.btn-share-doc {
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0 120px 0 80px;
+}
+
+.tool-container {
+  width: 100%;
+  height: 64px;
+  background-color: #ffffff;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  left: 0;
+  top: 64px;
+  z-index: 99;
+}
+
+.tool-container .split-line {
+  width: 1px;
+  height: 24px;
+  background-color: #e5e5e5;
+  margin: 0 20px;
+}
+
+.tool-container .split-line:last-child {
+  display: none;
+}
+
+nav .toolbar-icon {
+  fill: #505F79;
+  cursor: pointer;
+  margin: 0 5px;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+nav .toolbar-icon:focus {
+  outline: none;
+}
+
+nav .toolbar-icon:hover:not(.disabled) {
+  background-color: #ECEFF4;
+}
+
+nav .toolbar-icon.disabled {
+  fill: #C6CFDE;
+  cursor: no-drop;
+}
+
+nav .toolbar-icon.active {
+  fill: #5177FF;
+}
