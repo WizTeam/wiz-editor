@@ -6,6 +6,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
+import SvgIcon from '@material-ui/core/SvgIcon';
 import './App.css';
 
 const AppId = '_LC1xOdRp';
@@ -23,6 +24,14 @@ const useStyles = makeStyles((theme) => ({
     },
     borderRadius: 4,
     padding: '0 5px',
+  },
+  headingSelectText: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    lineHeight: '32px',
+    '&:focus': {
+      backgroundColor: 'unset',
+    },
   },
   selectContainer: {
     borderRadius: 4,
@@ -47,6 +56,11 @@ const useStyles = makeStyles((theme) => ({
     width: 100,
     padding: 5,
   },
+  headingItem: {
+    padding: 0,
+    margin: 0,
+    lineHeight: '1',
+  }
 }));
 
 function App() {
@@ -211,11 +225,15 @@ function App() {
     }, 0);
   }
 
+  const originTitle = useMemo(() => document.title, []);
+
+  const handleTitleChanged = (editor, docId, title) => {
+    document.title = `${title} - ${originTitle}`;
+  }
+
   const getUserId = () => {
     return new Date().getTime().toString(16).slice(5);
   }
-
-  // const userId = useMemo(() => getUserId(), []);
 
   const user = useMemo(() => {
     const userId = getUserId();
@@ -244,6 +262,7 @@ function App() {
       onRemoteUserChanged: handleRemoteUserChanged,
       onCommandStatusChanged: handleCommandStatusChanged,
       onBlockFocusChanged: handleBlockFocusChanged,
+      onTitleChanged: handleTitleChanged,
     },
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [user]);
@@ -421,8 +440,13 @@ function App() {
 
   const handleCreate = useCallback((editor) => {
     wizEditorRef.current = editor;
-    window.wizE = editor;
-  }, []);
+    if (options.titleInEditor) {
+      const title = editor.titleFromEditor();
+      if (title) {
+        document.title = `${title} - ${originTitle}`;
+      }
+    }
+  }, [options, originTitle]);
 
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
@@ -458,10 +482,10 @@ function App() {
     );
   }
 
-  const DownIcon = () => (
-    <svg width="20" height="12" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+  const DownIcon = (props) => (
+    <SvgIcon viewBox="0 0 10 6" {...props} style={{ width: 12, right: 5 }}>
       <path d="M4.14922 5.59687L0.664051 2.10938C0.192956 1.63828 0.192956 0.874219 0.664051 0.405469C1.13515 -0.0656248 1.89452 -0.0656242 2.36796 0.403126L5 3.0375L7.63439 0.403126C8.10548 -0.0656242 8.86486 -0.0656242 9.33595 0.403126C9.80705 0.874219 9.80705 1.63828 9.33595 2.10703L5.85079 5.59687C5.62579 5.81719 5.31641 5.94844 4.99766 5.94844C4.68125 5.94844 4.37188 5.81953 4.14922 5.59687Z" fill="#505F79"/>
-    </svg>
+    </SvgIcon>
   );
 
   const ColorSelectIcon = () => (
@@ -538,18 +562,33 @@ function App() {
     return (
       <Select
         className={classes.headingSelect}
+        classes={{
+          select: classes.headingSelectText,
+        }}
         disabled={toolStatus.textStyle === 'disabled'}
         onChange={handleHeadingChange}
         IconComponent={DownIcon}
         displayEmpty
         renderValue={() => '正文'}
         value="">
-        <MenuItem value="toBodyText">正文</MenuItem>
-        <MenuItem value="toHeading1">h1</MenuItem>
-        <MenuItem value="toHeading2">h2</MenuItem>
-        <MenuItem value="toHeading3">h3</MenuItem>
-        <MenuItem value="toHeading4">h4</MenuItem>
-        <MenuItem value="toHeading5">h5</MenuItem>
+        <MenuItem value="toBodyText">
+          <span className={classes.headingItem}>正文</span>
+        </MenuItem>
+        <MenuItem value="toHeading1">
+          <h1 className={classes.headingItem}>h1</h1>
+        </MenuItem>
+        <MenuItem value="toHeading2">
+          <h2 className={classes.headingItem}>h2</h2>
+        </MenuItem>
+        <MenuItem value="toHeading3">
+          <h3 className={classes.headingItem}>h3</h3>
+        </MenuItem>
+        <MenuItem value="toHeading4">
+          <h4 className={classes.headingItem}>h4</h4>
+        </MenuItem>
+        <MenuItem value="toHeading5">
+          <h5 className={classes.headingItem}>h5</h5>
+        </MenuItem>
       </Select>
     );
   }

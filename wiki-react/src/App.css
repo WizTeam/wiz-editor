@@ -95,6 +95,8 @@ body {
   font-weight: 600;
   cursor: pointer;
   margin: 0 120px 0 80px;
+  display: flex;
+  align-items: center;
 }
 
 .tool-container {
