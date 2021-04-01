@@ -92,7 +92,6 @@ class CustomTextToolbar extends TextToolbar {
 ```ts
 const options: EditorOptions = {
   serverUrl: WsServerUrl,
-  user,
   template,
   templateValues,
   textToolbar: new CustomTextToolbar(),

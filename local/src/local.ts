@@ -2,7 +2,6 @@
 // eslint-disable-next-line import/no-unresolved
 import { saveAs } from 'file-saver';
 import {
-  EditorUser,
   Editor,
   createEditorPromise,
   assert,
@@ -22,8 +21,8 @@ import {
 
 const AppId = '';
 
-const user1: EditorUser = {
-  avatarUrl: '',
+const user1 = {
+  avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: 'test',
   displayName: 'test',
 };
@@ -61,7 +60,7 @@ function createLoadDataMenuItem(block: BlockElement) {
       reader.onload = () => {
         const data = JSON.parse(reader.result as string);
         // eslint-disable-next-line no-use-before-define
-        loadDocument(document.getElementById('editor') as HTMLElement, user1, '', data);
+        loadDocument(document.getElementById('editor') as HTMLElement, '', data);
       };
       input.files = null;
       input.value = '';
@@ -115,11 +114,11 @@ function handleUploadResource(editor: Editor, file: File, onProgress: OnProgress
 }
 //
 
-async function loadDocument(element: HTMLElement, user: EditorUser, docId: string, initLocalData?: EditorDoc): Promise<Editor> {
+async function loadDocument(element: HTMLElement, docId: string, initLocalData?: EditorDoc): Promise<Editor> {
   //
   const auth: AuthMessage = {
     appId: AppId,
-    userId: user.userId,
+    ...user1,
     permission: 'w',
     docId,
     token: '',
@@ -130,7 +129,6 @@ async function loadDocument(element: HTMLElement, user: EditorUser, docId: strin
     local: true,
     initLocalData,
     serverUrl: '',
-    user,
     placeholder: 'Please enter document title',
     // markdownOnly: true,
     lineNumber: true,
@@ -146,6 +144,6 @@ async function loadDocument(element: HTMLElement, user: EditorUser, docId: strin
   return editor;
 }
 
-loadDocument(document.getElementById('editor') as HTMLElement, user1, '').then((editor) => {
+loadDocument(document.getElementById('editor') as HTMLElement, '').then((editor) => {
   replaceUrl(editor.auth.docId);
 });

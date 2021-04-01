@@ -1,13 +1,12 @@
 # 响应编辑器事件
 
-在创建编辑器的时候，可以现象编辑器事件：
+在创建编辑器的时候，可以响应编辑器事件：
 
 ```ts
 
 export interface EditorOptions {
   lang?: LANGS;
   serverUrl: string;
-  user: EditorUser;
   ...
   callbacks?: {
     onLoad?: (editor: Editor, data: EditorDoc) => void;

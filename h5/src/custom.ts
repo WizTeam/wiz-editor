@@ -4,7 +4,6 @@ import EncryptJWT from 'jose/jwt/encrypt';
 import {
   Box,
   BOX_TYPE,
-  EditorUser,
   BLOCK_TYPE,
   LANGS,
   createEditor,
@@ -49,6 +48,9 @@ import {
   getCurrentCommandBlock,
   getEditor,
   EditorOptions,
+  OnlineUser,
+  EditorDocTocNode,
+  EditorDocToc,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -73,7 +75,7 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
   };
   //
 
-  function createElement(editor: Editor, data: EmbedData): EmbedElement {
+  function createElement(editor: Editor, embedContainer: BlockContentElement, data: EmbedData): EmbedElement {
     assert(data);
     const div = document.createElement('div');
     const child = document.createElement('div');
@@ -110,7 +112,7 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
     child.innerHTML = '';
     //
     const buttonsData = data;
-    const count = buttonsData.count || 10;
+    const count: number = buttonsData.count as number || 10;
     //
     for (let i = 0; i < count; i++) {
       const button = document.createElement('button');
@@ -1015,7 +1017,7 @@ const WsServerUrl = window.location.protocol !== 'https:'
   ? `ws://${window.location.host}`
   : `wss://${window.location.host}`;
 
-const user: EditorUser = {
+const user = {
   avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: `${new Date().valueOf()}`,
   displayName: NAMES[new Date().valueOf() % NAMES.length],
@@ -1048,7 +1050,7 @@ async function handleSave(editor: Editor, data: any) {
   console.log(html);
 }
 
-function handleRemoteUserChanged(editor: Editor, users: EditorUser[]) {
+function handleRemoteUserChanged(editor: Editor, users: OnlineUser[]) {
   const userNames = [...users].map((u) => u.displayName).join(', ');
   const curElement = document.getElementById('curUserNames');
   assert(curElement);
@@ -1379,6 +1381,31 @@ async function handleGetChartData(editor: Editor, id: string) {
   return data;
 }
 
+
+function handleUpdateToc(editor: Editor, toc: EditorDocToc) {
+  const container = document.getElementById('toc');
+  assert(container);
+  container.innerHTML = '';
+  //
+  const createTocElements = (parent: HTMLElement, nodes: EditorDocTocNode[]) => {
+    nodes.forEach((node) => {
+      if (node.children.length > 0) {
+        const detail = domUtils.createElement('details', [], parent);
+        const summary = domUtils.createElement('summary', [], detail);
+        const a = domUtils.createElement('a', [], summary, node.text) as HTMLAnchorElement;
+        a.href = `#${node.blockId}`;
+        createTocElements(detail, node.children);
+      } else {
+        const div = domUtils.createElement('div', [], parent);
+        const a = domUtils.createElement('a', [], div, node.text) as HTMLAnchorElement;
+        a.href = `#${node.blockId}`;
+      }
+    });
+  };
+  //
+  createTocElements(container, toc);
+}
+
 async function loadDocument(docId: string, template?: any,
   templateValues?: { [index : string]: string}) {
   //
@@ -1390,10 +1417,10 @@ async function loadDocument(docId: string, template?: any,
   const options: EditorOptions = {
     lang: LANGS.ZH_CN,
     serverUrl: WsServerUrl,
-    user,
     template,
     templateValues,
     placeholder: '请输入笔记正文',
+    titleInEditor: true,
     callbacks: {
       onSave: handleSave,
       onRemoteUserChanged: handleRemoteUserChanged,
@@ -1414,16 +1441,17 @@ async function loadDocument(docId: string, template?: any,
       onCommandStatusChanged: handleCommandStatusChanged,
       onCheckboxChanged: handleCheckboxChanged,
       onGetChartJsData: handleGetChartData,
+      onUpdateToc: handleUpdateToc,
     },
   };
 
   const token = await fakeGetAccessTokenFromServer(user.userId, docId, 'w');
   const auth: AuthMessage = {
     appId: AppId,
-    userId: user.userId,
     permission: 'w',
     docId,
     token,
+    ...user,
   };
 
   const editor = createEditor(document.getElementById('editor') as HTMLElement, options, auth);
@@ -1612,6 +1640,16 @@ document.getElementById('complex-block')?.addEventListener('click', () => {
     focusToBlock: true,
     localAction: true,
   });
+});
+
+document.getElementById('focus-mode')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.setFocusMode(!currentEditor.isFocusMode());
+});
+
+document.getElementById('typewriter-mode')?.addEventListener('click', () => {
+  assert(currentEditor);
+  currentEditor.setTypewriterMode(!currentEditor.isTypewriterMode());
 });
 
 loadDocument(pageId);

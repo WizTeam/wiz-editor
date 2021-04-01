@@ -7,9 +7,15 @@ import {
   AutoSuggestData,
   MentionBoxData,
   blockUtils,
+  boxUtils,
   BlockElement,
   EditorOptions,
   Editor,
+  BoxData,
+  BoxNode,
+  BoxTextChild,
+  BOX_TYPE,
+  AutoSuggestOptions,
 } from 'wiz-editor/client';
 import { AuthMessage } from 'wiz-editor/commons/auth-message';
 
@@ -90,33 +96,117 @@ NAMES.forEach((name) => {
 });
 
 
-async function fakeGetMentionItems(editor: Editor, keywords: string): Promise<AutoSuggestData[]> {
-  assert(keywords !== undefined);
-  console.log(keywords);
-  if (!keywords) {
-    return ALL_USERS;
+
+// -------------------create a custom calendar item----------
+const CUSTOM_MENTION_BOX_TYPE = 'custom-mention';
+
+interface CustomMentionData extends BoxData {
+  customType: 'mention' | 'document',
+  text: string;
+};
+
+function createNode(editor: Editor, data: BoxData): BoxNode {
+  //
+  const { customType, text } = data as CustomMentionData;
+  //
+  if (customType === 'document') {
+    return {
+      classes: ['box-custom-mention'],
+      children: [{
+        type: 'text',
+        text: 'this is online document: ',
+      } as BoxTextChild, {
+        type: 'text',
+        text,
+      } as BoxTextChild],
+    }
   }
-  return ALL_USERS.filter((user) => user.text.toLowerCase().indexOf(keywords.toLowerCase()) !== -1);
+  //
+  return {
+    classes: ['box-custom-mention'],
+    children: [{
+      type: 'text',
+      text: 'this is mention: ',
+    } as BoxTextChild, {
+      type: 'text',
+      text,
+    } as BoxTextChild],
+};
 }
 
-function handleMentionInserted(editor: Editor, boxData: MentionBoxData, block: BlockElement, pos: number) {
-  console.log(`mention ${JSON.stringify(boxData)} inserted at ${pos}`);
-  const leftText = blockUtils.toText(block, 0, pos);
-  const rightText = blockUtils.toText(block, pos + 1, -1);
-  alert(`context text:\n\n${leftText}\n\n${rightText}`);
+function handleBoxInserted(editor: Editor, data: BoxData): void {
+  const calendarData = data as CustomMentionData;
+  console.log('custom mention box inserted:', calendarData);
 }
 
-function handleMentionClicked(editor: Editor, boxData: MentionBoxData) {
-  alert(`you clicked ${boxData.text} (${boxData.mentionId})`);
+function handleBoxClicked(editor: Editor, data: BoxData): void {
+  const calendarData = data as CustomMentionData;
+  alert(`custom mention clicked: ${calendarData.text}`);
 }
+
+async function getItems(editor: Editor, keywords: string) {
+  console.log(keywords);
+  const elem = document.getElementById('custom-mention-item');
+  if (elem) {
+    elem.innerText = keywords;
+  }
+  // 响应键盘消息，如果返回空数组，autoSuggest将会关闭。
+  //
+  return [{
+    iconUrl: '',
+    text: '',
+    id: 'custom-mention-item',
+    data: '',
+  }];
+}
+
+function handleBoxItemSelected(editor: Editor, item: AutoSuggestData): void {
+}
+
+
+let mentionBoxElement: HTMLElement | null = null;
+
+// 渲染下拉框。 我们只有一个item，在这里返回item的内容
+function renderAutoSuggestItem(editor: Editor, suggestData: AutoSuggestData, options: AutoSuggestOptions): HTMLElement {
+  //
+  if (!mentionBoxElement) {
+    const elem = document.createElement('div');
+    elem.style.width = '300px';
+    elem.style.height = '300px';
+    elem.style.border = '1px solid #ccc';
+    elem.style.backgroundColor = '#f0f0f0';
+    elem.id = 'custom-mention-item';
+    mentionBoxElement = elem;
+  }
+  //
+  return mentionBoxElement;
+}
+
+function handleAutoSuggestHidden() {
+  if (mentionBoxElement) {
+    mentionBoxElement.innerText = '';
+  }
+}
+
+const customMentionBox = {
+  prefix: '@',
+  customSuggest: true,
+  createNode,
+  getItems,
+  handleBoxItemSelected,
+  handleBoxInserted,
+  handleBoxClicked,
+  renderAutoSuggestItem,
+  handleAutoSuggestHidden,
+};
+
+boxUtils.registerBoxType(CUSTOM_MENTION_BOX_TYPE as BOX_TYPE, customMentionBox);
 
 // 设置编辑器选项
 const options: EditorOptions = {
   serverUrl: WsServerUrl,
+  disableMentions: true,
   callbacks: {
-    onGetMentionItems: fakeGetMentionItems,
-    onMentionInserted: handleMentionInserted,
-    onMentionClicked: handleMentionClicked,
   },
 };
 

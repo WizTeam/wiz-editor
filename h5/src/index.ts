@@ -1,7 +1,6 @@
 /* eslint-disable no-alert */
 // eslint-disable-next-line import/no-unresolved
 import {
-  EditorUser,
   LANGS,
   createEditor,
   assert,
@@ -98,7 +97,7 @@ const WsServerUrl = window.location.protocol !== 'https:'
   ? `ws://${window.location.host}`
   : `wss://${window.location.host}`;
 
-const user: EditorUser = {
+const user = {
   avatarUrl: 'https://www.wiz.cn/wp-content/new-uploads/2285af20-4006-11eb-8f21-01eb48012b63.jpeg',
   userId: `${new Date().valueOf()}`,
   displayName: NAMES[new Date().valueOf() % NAMES.length],
@@ -142,7 +141,6 @@ async function loadDocument(docId: string) {
   const options: EditorOptions = {
     lang: LANGS.ZH_CN,
     serverUrl: WsServerUrl,
-    user,
     placeholder: '请输入笔记正文',
     callbacks: {
       onSave: handleSave,
@@ -154,6 +152,7 @@ async function loadDocument(docId: string) {
 
   const token = await fakeGetAccessTokenFromServer(user.userId, docId, 'w');
   const auth: AuthMessage = {
+    ...user,
     appId: AppId,
     userId: user.userId,
     permission: 'w',
