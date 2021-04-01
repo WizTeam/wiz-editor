@@ -440,12 +440,14 @@ function App() {
 
   const handleCreate = useCallback((editor) => {
     wizEditorRef.current = editor;
-    if (options.titleInEditor) {
-      const title = editor.titleFromEditor();
-      if (title) {
-        document.title = `${title} - ${originTitle}`;
+    setTimeout(() => {
+      if (options.titleInEditor) {
+        const title = editor.titleFromEditor();
+        if (title) {
+          document.title = `${title} - ${originTitle}`;
+        }
       }
-    }
+    }, 300);
   }, [options, originTitle]);
 
   useEffect(() => {
