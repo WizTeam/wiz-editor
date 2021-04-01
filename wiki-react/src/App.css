@@ -24,7 +24,7 @@
 }
 
 .editor-main .editor-container.root-container {
-  max-width: unset;
+  max-width: 1024px;
 }
 
 body {
