@@ -591,7 +591,7 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="scroll-container">
       <header>
         <div className="logo">Wiki</div>
         <div className="btn-create-doc" onClick={handleCreateDoc}>
@@ -632,7 +632,7 @@ function App() {
           containerStyle={{
             maxWidth: '100%',
             height: '100%',
-            padding: '130px 50px 0'
+            padding: '0 50px 0'
           }}
         />
       )}

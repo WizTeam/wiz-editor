@@ -31,8 +31,13 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100vh;
+}
+
+.scroll-container {
+  width: 100%;
+  height: calc(100vh - 128px);
   overflow: auto;
+  margin-top: 128px;
 }
 
 #root header {
