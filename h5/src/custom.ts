@@ -319,12 +319,15 @@ const TEST_BLOCK_TYPE = 'test';
     return {
       textBlock: false,
       complexBlock: true,
-      menuItems: [{
-        id: '',
-        text: 'Test Complex Block',
-        onClick: handleInsertTestComplexBlock,
-      }],
     };
+  }
+
+  function getBlockMenuItems() {
+    return [{
+      id: '',
+      text: 'Test Complex Block',
+      onClick: handleInsertTestComplexBlock,
+    }];
   }
 
   function replaceChildrenId(editorDoc: EditorDoc, blockData: DocBlock): void {
@@ -359,6 +362,7 @@ const TEST_BLOCK_TYPE = 'test';
 
   const TestComplex: Block = {
     getBlockOptions,
+    getBlockMenuItems,
     createBlockTemplateData,
     createBlockContent,
     updateBlockData,
@@ -1046,7 +1050,7 @@ async function handleSave(editor: Editor, data: any) {
   console.log(text);
   console.log('------------------------------------------------------');
   assert(currentEditor);
-  const html = await currentEditor?.toHtml({ inlineImage: true });
+  const html = await currentEditor?.toHtml();
   console.log(html);
 }
 
@@ -1093,7 +1097,7 @@ function handleMenuItemClicked(event: Event, item: CommandItemData) {
   console.log(item);
   assert(currentEditor);
   if (item.id === 'get-selected-text') {
-    const doc = selectionUtils.selectionToDoc(currentEditor, currentEditor.getSelectionDetail(), { keepComments: true });
+    const doc = currentEditor.getSelectedText();
     console.log(doc);
     alert(`selected text: ${currentEditor.getSelectedText()}`);
   } else if (item.id === 'style-border') {
@@ -1415,7 +1419,7 @@ async function loadDocument(docId: string, template?: any,
   }
   //
   const options: EditorOptions = {
-    lang: LANGS.ZH_CN,
+    lang: 'zh-CN',
     serverUrl: WsServerUrl,
     template,
     templateValues,

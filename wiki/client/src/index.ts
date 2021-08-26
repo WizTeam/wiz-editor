@@ -99,7 +99,7 @@ async function handleSave(editor: Editor, data: any) {
   console.log(text);
   console.log('------------------------------------------------------');
   assert(currentEditor);
-  const html = await currentEditor?.toHtml({ inlineImage: true });
+  const html = await currentEditor?.toHtml();
   console.log(html);
 }
 
@@ -226,7 +226,7 @@ async function loadDocument(docId: string, template?: any,
   }
   //
   const options: EditorOptions = {
-    lang: LANGS.ZH_CN,
+    lang: 'zh-CN',
     serverUrl: WsServerUrl,
     template,
     templateValues,

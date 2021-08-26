@@ -139,7 +139,7 @@ async function fakeGetAccessTokenFromServer(userId: string, docId: string, permi
 
 async function loadDocument(docId: string) {
   const options: EditorOptions = {
-    lang: LANGS.ZH_CN,
+    lang: 'zh-CN',
     serverUrl: WsServerUrl,
     placeholder: '请输入笔记正文',
     callbacks: {
