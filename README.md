@@ -11,7 +11,7 @@ https://user-images.githubusercontent.com/2747978/110881767-da9cd900-831b-11eb-8
 
 
 ## 升级日志
-[发送自定义消息](./CHANGES.md)
+[wiz-editor升级日志](./CHANGES.md)
 
 ## 编辑器主要特性
 
