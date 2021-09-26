@@ -106,7 +106,7 @@ wiz-editor提供了完整的markdown功能，可以利用markdown语法直接编
 
 直接从git clone或者下载代码，解压缩到磁盘。
 
-注意：**需要nodejs 14或者更高的版本**
+注意：**需要nodejs 13或者更高的版本**
 
 ## 运行原生js例子
 
