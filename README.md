@@ -10,6 +10,8 @@ wiz-editor是一个支持多人实时协同编辑的网页富文本编辑。
 https://user-images.githubusercontent.com/2747978/110881767-da9cd900-831b-11eb-8d18-8498a3dc3be2.mp4
 
 
+## 升级日志
+[发送自定义消息](./CHANGES.md)
 
 ## 编辑器主要特性
 
