@@ -5,6 +5,8 @@ wiz-editor是一个支持多人实时协同编辑的网页富文本编辑。
 1. 官网：[https://wiz-editor.com/](https://wiz-editor.com/)
 2. 在线演示：[https://api.wiz-editor.com/demo.html](https://api.wiz-editor.com/demo.html)
 
+**注意：在线演示的内容，因为监管问题，会定期自动清空，请勿用于内容发布。**
+
 视频演示
 
 https://user-images.githubusercontent.com/2747978/110881767-da9cd900-831b-11eb-8d18-8498a3dc3be2.mp4
@@ -12,6 +14,9 @@ https://user-images.githubusercontent.com/2747978/110881767-da9cd900-831b-11eb-8
 
 ## 升级日志
 [wiz-editor升级日志](./CHANGES.md)
+
+## 应用
+为知笔记重构版，为知笔记Lite已经全面使用该编辑器。
 
 ## 编辑器主要特性
 
