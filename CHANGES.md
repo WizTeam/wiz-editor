@@ -1,11 +1,117 @@
 # WizEditor辑器更新历史
 
+## 427
+1. 修复可以将图片拖入code的问题
+2. 优化拖动图片到表格操作
+2. 鼠标选择文本过程中，不显示block menu button以及菜单
+2. 兼容微信文章的code
+2. 有右键菜单的时候，不显示文字工具栏。
+2. 选中内容改编的时候，关闭右键菜单
+2. 优化block快照
+
+## 426
+1. 复制列表包含前面的数字
+2. 优化mathjax显示
+2. 修复调整表格宽度问题
+2. 优化微信聊天记录导入
+2. 编辑器选项，更改enableContextMenu为disableContextMenu。默认显示右键菜单
+2. 优化文字下划线样式
+2. 更改wiki链接，支持添加id等
+2. 复制block，取消选中状态
+2. 增加animateScrollToBlock方法
+2. 添加appId，docId到剪贴板数据中
+2. 增加onGetBlockCommand回调参数，添加当前的menu data
+
+## 425
+1. 避免android无法显示复制菜单
+2. 复制出来的markdown，将clike语言转换为cpp，兼容vscode
+2. bug fix: 判断光标的位置。当光标在一个box和一段文字之间的时候，获取的rect可能是空的。兼容这种情况
+2. auto suggest 阻止esc冒泡
+2. \[服务端\] fix: 不在更新keepAlive的时候清理startup，避免在多个服务启动时，交替删除对方
+2. 优化编辑内部分block编辑样式
+2. 优化微信文章，转换html的时候，去掉隐藏的元素
+2. 为兼容低版本浏览器，同时设置两个cookie，一个sameSite=None，另一个不设置sameSite
+2. 优化表格右键菜单
+
+## 424
+1. 支持编辑服务在子路径下面
+2. 表格增加row title， column title功能，增加stripe style样式
+2. 支持plantuml插入（\`\`\`uml）
+2. list block支持quote
+2. code里面强制使用纯文本粘贴
+2. markdown表格工具栏优化
+2. markdown表格内空的checkbox识别问题修复
+2. 支持数学公式block
+2. 优化表格工具栏
+2. 增加flowchart支持
+2. 隐藏表格删除按钮
+2. 优化加载速度，延迟渲染code language，将code高亮代码放在worker里面执行
+2. 整合layout表格。任何表格都可以设置是否显示表格线
+
+## 423
+1. toc 内点击 超链接时，不去设置光标，避免锚点跳转异常
+2. toOrderedList 指令执行后，不再选中 block 内全体文本，避免误操作
+
+## 422
+1. 移动端不显示text toolbar，右键菜单
+2. 修复无法复制excel表格内容的问题
+2. 修复移动光标可能出错的问题
+2. 修复导出text only list导出markdown错误的问题
+2. 修复ios插入ocr文字的问题
+2. 修复可以给code设置样式的问题
+2. 在code里面全选，优先选择整个code，再选择整个文档
+2. 修复可以在code里面插入markdown的问题
+
+## 421
+1. 兼容掘金内容复制粘贴
+2. 修复url里面可能包含错误的字符的问题
+2. bug fix：光标移动错误的问题
+2. bug fix: 插入code 保留回车之后的内容
+2. 优化html2markdown
+2. 优化github代码粘贴，去掉行号单元格，保持前面的空格
+2. 阅读模式光标在底部时，不自动滚动 & 光标必须在编辑器内部时才进行滚动
+2. 避免输入时，光标紧贴在最低端；修正 打字机模式居中位置算法；统一使用 getRangeRect 方法
+2. 修正 markdown 下 table 100% 的样式
+2. 粘贴html，保持行首的空格
+2. 修复表格滚动问题
+2. 添加保存图片回调
+2. markdown笔记，增加复制为纯文本功能
+2. 屏蔽表格右侧点击事件，避免光标跳动
+
+## 420
+1. 修复搜狗输入法兼容问题
+2. 设置 全局 button 样式 & 调整 修改编号 对话框内 样式
+2. 兼容某些版本markdown的表格语法
+2. 列表：如果当前是一个heading，那么转换列表的时候，尝试找到前一个heading的list block
+
 ## 419
-1. 修复粘贴excel无法粘贴文字的问题
-2. 兼容空的表格
+1. 增加播放历史操作功能
+2. 优化删除表格行/列的问题
+2. 允许插入远程的图片
+2. 修复复制的纯文本/html包含code language select的问题
+2. 调整修改序号功能
+2. handleBlockInserted 应用到complex block的子block，这样可以让表格里面的图片进行本地化
+2. bug fix: 粘贴表格可能丢失文字的问题
+2. 调整弹出框/菜单样式
+2. 优化markdown粘贴功能
+2. 粘贴纯文本继承样式
+2. 修复在表格内移动光标不能自动滚动的问题
+2. 在最后一个单元格，按下tab的时候，自动增加新行
 
 ## 418
-1. 修复粘贴表格可能丢失文字的问题
+1. 修改block 点击消息处理；去掉drawio选中状态，统一使用embed的选中状态
+2. 有序列表增加修改编号的功能
+2. 允许给图片设置对齐方式
+2. 增加图片loading样式
+2. 识别markdown图片语法
+2. \[服务端\]支持无redis启动
+2. \[服务端\]支持S3存储
+2. 优化code粘贴
+2. 图片错误，仅显示新加入的图片
+2. 复制：markdownonly的时候默认复制markdown源代码，粘贴的时候默认按照markdown粘贴
+2. 粘贴前转换data url
+2. 优化markdowwn复制粘贴
+2. 代码高亮增加bash和R语言
 
 ## 417
 1. 允许appId长度为2个字符
