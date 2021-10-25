@@ -12,7 +12,7 @@
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1",
-    "wiz-editor-react": "^v0.0.418"
+    "wiz-editor-react": "^v0.0.428"
   },
   "scripts": {
     "build": "react-scripts build",

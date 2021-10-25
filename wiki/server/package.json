@@ -11,6 +11,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "wiz-editor": "^v0.0.418"
+    "wiz-editor": "^v0.0.428"
   }
 }
