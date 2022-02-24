@@ -20,7 +20,7 @@ https://user-images.githubusercontent.com/2747978/110881767-da9cd900-831b-11eb-8
 
 ## 编辑器主要特性
 
-1. 支持多人实时协同编辑，单一文档可以支持多达1000人同时编辑器。
+1. 支持多人实时协同编辑，单一文档可以支持多达1000人同时编辑。
 2. 支持扩展各种业务模块。可以自定义行内/行间模块。
 3. 可以接入业务用户系统及权限，文档权限完全由业务控制。
 4. 纯h5原生开发，可以直接嵌入各种web应用中
@@ -149,7 +149,9 @@ npm run label
 ## 在自己的项目中使用wiz-editor
 
 ### 通过npm安装wiz-editor
+```bash
 npm i wiz-editor
+```
 
 ### 在项目中使用wiz-editor
 
@@ -233,7 +235,7 @@ const docId = 'my-test-doc-id';
   const auth = {
     appId: AppId,
     userId: user.userId,
-    displayName: 'name'
+    displayName: 'name',
     avatarUrl: 'xxx',
     docId,
     token,
