@@ -51,6 +51,7 @@ import {
   OnlineUser,
   EditorDocTocNode,
   EditorDocToc,
+  embedBlockUtils,
 } from 'wiz-editor/client';
 import { AuthMessage, AuthPermission } from 'wiz-editor/commons/auth-message';
 
@@ -70,8 +71,21 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
   }
 
   function handleButtonClick(event: Event) {
+    assert(currentEditor);
     const button = event.target as HTMLButtonElement;
     alert(`you clicked button ${button.innerText}`);
+    const block = containerUtils.getParentBlock(button);
+    assert(block);
+    const oldData = currentEditor.getEmbedBlockEmbedData(block) as EmbedButtonsData;
+    const oldCount = oldData.count ?? 1;
+    const newData = {
+      count: oldCount + 1,
+    };
+    currentEditor.updateEmbedData(block, newData, {
+      fromUndo: false,
+      updateBlock: true,
+      partial: true,
+    });
   };
   //
 
@@ -113,6 +127,7 @@ const CALENDAR_IMAGE_URL = 'https://www.wiz.cn/wp-content/new-uploads/b75725f0-4
     //
     const buttonsData = data;
     const count: number = buttonsData.count as number || 10;
+    embed.setAttribute('data-count', `${count}`);
     //
     for (let i = 0; i < count; i++) {
       const button = document.createElement('button');
@@ -1121,7 +1136,7 @@ function handleMenuItemClicked(event: Event, item: CommandItemData) {
     }
     currentEditor.insertEmptyBox(PROJECT_BOX_TYPE as any);
   } else if (item.id === 'showVersion') {
-    currentEditor.showVersions();
+    currentEditor.showVersions(null);
   }
 }
 
